@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const InventoryManagerSchema = new mongoose.Schema({
   role: {
     type: String,
-    default: "InventoryManager",
+    default: "inventoryManager",
   },
   username: {
     type: String,
@@ -21,6 +21,22 @@ const InventoryManagerSchema = new mongoose.Schema({
     required: [true, "Please provide a password"],
     minlength: 6,
     select: false,
+  },
+  profilePicture: {
+    imagePublicId: {
+      type: String,
+      required: [
+        true,
+        "Error with cloudinary service! Can not find the paper URL.",
+      ],
+    },
+    imageSecURL: {
+      type: String,
+      required: [
+        true,
+        "Error with cloudinary service! Can not find the paper URL.",
+      ],
+    },
   },
 });
 
@@ -49,6 +65,9 @@ InventoryManagerSchema.methods.getSignedToken = function () {
   });
 };
 
-const InventoryManager = mongoose.model("inventoryManager", InventoryManagerSchema);
+const InventoryManager = mongoose.model(
+  "inventoryManager",
+  InventoryManagerSchema
+);
 
 module.exports = InventoryManager;

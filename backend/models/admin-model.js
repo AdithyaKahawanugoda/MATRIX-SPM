@@ -22,7 +22,7 @@ const AdminSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
-  profileImage: {
+  profilePicture: {
     imagePublicId: {
       type: String,
       required: [
