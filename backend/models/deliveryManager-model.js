@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const DeliveryManagerSchema = new mongoose.Schema({
   role: {
     type: String,
-    default: "DeliveryManager",
+    default: "deliveryManager",
   },
   username: {
     type: String,
@@ -16,7 +16,7 @@ const DeliveryManagerSchema = new mongoose.Schema({
     required: [true, "Please provide a email"],
     unique: true,
   },
-  mobileNumber: {
+  phone: {
     type: Number,
     required: [true, "Please provide a Mobile Number"],
     unique: true,
@@ -27,7 +27,7 @@ const DeliveryManagerSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
-  profileImage: {
+  profilePicture: {
     imagePublicId: {
       type: String,
       required: [
