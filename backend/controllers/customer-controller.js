@@ -1,5 +1,5 @@
 const CustomerModel = require("../models/customer-model");
-const DeletedCustomerModel = require("../models/deleteProfileCustomer-model");
+const DeletedCustomerModel = require("../models/deletedCustomer-model");
 const { cloudinary } = require("../utils/cloudinary");
 const sendEmail = require("../utils/SendEmail");
 const OrderModel = require("../models/order-model");
