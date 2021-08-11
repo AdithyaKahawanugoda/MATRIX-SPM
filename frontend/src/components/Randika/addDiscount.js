@@ -3,7 +3,7 @@ import React from 'react'
 const addDiscount = () => {
     return (
         <div>
-            hi
+            hello
         </div>
     )
 }
