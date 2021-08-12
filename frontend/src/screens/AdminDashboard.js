@@ -1,7 +1,10 @@
 import React from "react";
+import AdminNavBar from "../components/Randika/AdminNavBar";
 
 const AdminDashboard = () => {
-  return <div></div>;
+  return <div>
+    <AdminNavBar />
+  </div>;
 };
 
 export default AdminDashboard;
