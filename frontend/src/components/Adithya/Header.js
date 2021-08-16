@@ -6,7 +6,7 @@ import LoginModal from "./LoginModal";
 
 const Header = () => {
   const [mobileView, setMobileView] = useState(false);
-
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const toggleMobileMenu = () => {
     setMobileView((prevState) => !prevState);
   };
@@ -95,7 +95,7 @@ const Header = () => {
               <button
                 className="py-1 px-2 rounded bg-gamboge  hover:bg-halloweenOrange hover:text-white font-semibold "
                 onClick={() => {
-                  alert("SIGN IN");
+                  setLoginModalOpen(true);
                 }}
               >
                 <p>Sign in</p>
@@ -161,6 +161,13 @@ const Header = () => {
           </ul>
         </div>
       </nav>
+
+      {loginModalOpen && (
+        <LoginModal
+          modalVisible={loginModalOpen}
+          setModalVisible={setLoginModalOpen}
+        />
+      )}
     </>
   );
 };
