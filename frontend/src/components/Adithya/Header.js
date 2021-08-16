@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import CartSVG from "../../svg/shopping-cart";
 import ProfileSVG from "../../svg/profile-avatar";
+import LoginModal from "./LoginModal";
 
 const Header = () => {
   const [mobileView, setMobileView] = useState(false);
@@ -13,6 +14,7 @@ const Header = () => {
   return (
     <>
       <nav className="bg-white shadow-lg py-1">
+        {/* <!-- Horizontal navbar --> */}
         <div className={`${mobileView && " mb-6"} py-2 max-w-6xl mx-auto px-4`}>
           <div className="flex justify-between">
             <div className="flex">
@@ -24,7 +26,7 @@ const Header = () => {
               />
               <div className="flex items-center py-4 px-6 mr-12">
                 <NavLink
-                  className="font-thinKidFont font-semibold text-4xl sm:text-2xl"
+                  className="font-thinKidFont font-semibold text-4xl md:text-2xl sm:text-xl"
                   to="/"
                 >
                   APURU POTH
@@ -63,7 +65,7 @@ const Header = () => {
             </div>
 
             {/* <!-- Secondary Navbar items --> */}
-            <div className="sm:hidden md:hidden flex items-center space-x-3">
+            <div className="sm:hidden flex items-center space-x-3">
               <NavLink
                 className="py-2 px-2 border-b-4 border-transparent"
                 to="/cart"
@@ -75,7 +77,13 @@ const Header = () => {
                   <CartSVG />
                 </div>
               </NavLink>
-              <NavLink className="py-4 px-2" to="/customer">
+              <NavLink
+                className="py-4 px-2 border-b-4 border-transparent"
+                to="/customer"
+                activeStyle={{
+                  borderColor: "orange",
+                }}
+              >
                 <ProfileSVG width={40} height={40} />
               </NavLink>
               <NavLink
@@ -125,7 +133,7 @@ const Header = () => {
           </div>
         </div>
         {/* <!-- Mobile menu --> */}
-        <div className={`${!mobileView && "hidden"} md:hidden lg:hidden`}>
+        <div className={`${!mobileView && "hidden"} lg:hidden`}>
           <ul onClick={toggleMobileMenu}>
             <NavLink to="/books">
               <li className="block text-lg px-2 py-4 pl-4 hover:bg-halloweenOrange transition duration-300">
