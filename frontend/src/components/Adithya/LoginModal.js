@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
 const validationSchema = Yup.object({
-  email: Yup.string().email().required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  email: Yup.string()
+    .email("Please enter a valid email")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Please enter a valid password (min. 6 chars)")
+    .required("Password is required"),
 });
 
 const LoginModal = ({ setModalVisible, modalVisible }) => {
@@ -20,7 +24,7 @@ const LoginModal = ({ setModalVisible, modalVisible }) => {
         modal: {
           border: "3px solid  black",
           borderRadius: "8px",
-          maxWidth: "500px",
+          maxWidth: "300px",
           width: "50%",
         },
       }}
@@ -31,7 +35,7 @@ const LoginModal = ({ setModalVisible, modalVisible }) => {
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            alert(values);
+            console.log(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
