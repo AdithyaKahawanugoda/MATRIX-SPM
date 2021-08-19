@@ -4,6 +4,8 @@ import { BrowserRouter as BRouter, Switch, Route } from "react-router-dom";
 //imported components
 import Header from "./components/Adithya/Header";
 import Footer from "./components/Adithya/Footer";
+
+
 //imported screens
 import Home from "./screens/Home";
 import AboutUs from "./screens/AboutUs";
@@ -22,7 +24,10 @@ import SingleProduct from "./screens/SingleProduct";
 import Support from "./screens/Support";
 import AdminLogin from "./screens/AdminLogin";
 
+
+
 const App = () => {
+ 
   return (
     <BRouter>
       <Header />
@@ -45,6 +50,7 @@ const App = () => {
           <Route exact path="/support" component={Support} />
           <Route exact path="/login/admin" component={AdminLogin} />
         </Switch>
+     
       </main>
       <Footer />
     </BRouter>

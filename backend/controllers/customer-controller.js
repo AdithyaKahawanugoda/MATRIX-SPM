@@ -66,7 +66,7 @@ exports.updateProfilePicture = async (req, res) => {
   
     try {
       const destroyedImage = await cloudinary.uploader.destroy(
-        req.user.profileImage.imagePublicId
+        req.user.profilePicture.imagePublicId
       );
       if (destroyedImage) {
         try {
@@ -213,5 +213,27 @@ exports.getCartItems = async(req,res) =>{
         });
     })
 };
+
+//fetch orders placed by a specific customer
+exports.getOrders = async (req, res, next) => {
+  let orders;
+
+  try {
+    orders = await OrderModel.find(
+      { buyerID: req.user._id },
+      "_id billAmount deliveryAddress deliveryStatus orderData"
+    );
+
+    res.status(200).send({ orders: orders });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Internal Server Error",
+    });
+  }
+};
+
+
+
 
 
