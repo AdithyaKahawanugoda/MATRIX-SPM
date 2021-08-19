@@ -91,8 +91,9 @@ const ProductSchema = new mongoose.Schema({
     required: false,
   },
   discountPercentage: {
-    regular: { type: Number, default: 0, label: String },
+    regular: { type: Number, default: 0 },
     bulk: { type: Number, default: 0 },
+    label: { type: String },
   },
   charges: {
     coverCost: {
