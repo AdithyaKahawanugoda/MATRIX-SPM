@@ -1,44 +1,36 @@
-import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import Avatar from '@material-ui/core/Avatar';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import Avatar from "@material-ui/core/Avatar";
+
+import DeliveryManagementNav from "../components/Shevon/DeliveryManagementNav";
+import DeliveryCostNav from "../components/Shevon/DeliveryCostNav";
+import DeliveryPersonManagement from "../components/Shevon/DeliveryPersonManagement";
+import FAQmanagement from "../components/Shevon/FAQmanagement";
+import InquiriesManagement from "../components/Shevon/InquiriesManagement";
+import DeliveryManagerProfile from "../components/Shevon/DeliveryManagerProfile";
 
 
-
-import AllOrders from "../components/Shevon/AllOrders";
-import RetailDeliveryCost from "../components/Shevon/RetailDeliveryCost";
-
-//import DeliveryPersonProfile from "../components/Shevon/DeliveryPersonProfile";
-// import DeliveryManagerProfile from "../components/Shevon/DeliveryManagerProfile"
-//import BulkDeliveryCost from "../components/Shevon/BulkDeliveryCost";
-// import DeliveredOrders from "../components/Shevon/DeliveredOrders"
-//import DeliveredOrdersDP from "../components/Shevon/DeliveredOrdersDP"
-// import InTransitOrders from "../components/Shevon/InTransitOrders"
-// import InTransitOrdersDP from "../components/Shevon/InTransitOrdersDP"
-// import PendingOrders from "../components/Shevon/PendingOrders";
-// import TrainCost from "../components/Shevon/TrainCost"
-
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const DeliveryDashboard = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: "#042B58",
-
   },
   drawer: {
     width: drawerWidth,
@@ -48,10 +40,9 @@ const DeliveryDashboard = makeStyles((theme) => ({
     width: drawerWidth,
   },
   drawerContainer: {
-    overflow: 'auto',
+    overflow: "auto",
     backgroundColor: "#D3DCDE",
     height: "1000px",
-    
   },
   content: {
     flexGrow: 1,
@@ -62,13 +53,20 @@ const DeliveryDashboard = makeStyles((theme) => ({
 export default function ClippedDrawer() {
   const classes = DeliveryDashboard();
 
+  const [deliveryManagementNavOpen, setDeliveryManagementNavOpen] = useState(true);
+  const [deliveryCostNavOpen, setDeliveryCostNavOpen] = useState(false);
+  const [deliveryPersonManagementOpen, setDeliveryPersonManagementOpen] = useState(false);
+  const [faqManagementOpen, setFaqManagementOpen] = useState(false);
+  const [inquiriesMnagementOpen, setInquiriesMnagementOpen] = useState(false);
+  const [profileManagementOpen, setProfileManagementOpen] = useState(false);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar} >
-        <Toolbar >
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
           <Typography variant="h6" noWrap>
-           Delivery Manager
+            Delivery Manager
           </Typography>
         </Toolbar>
       </AppBar>
@@ -80,59 +78,117 @@ export default function ClippedDrawer() {
         }}
       >
         <Toolbar />
-        <div className={classes.drawerContainer} >
-
-<div class="mt-10 mx-16 mb-3"><Avatar  style={{width:"100px", height:"100px" }} src="/broken-image.jpg" />
-
-</div>
-<div class="mt-2 mx-5 mb-8"><Typography  variant="h6" noWrap>
-           Mr. Shevon Krishmal
-          </Typography>
-
-
-</div>
-        <div style={{marginTop:"50px"}} >
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
+        <div className={classes.drawerContainer}>
+          <div class="mt-10 mx-16 mb-3">
+            <Avatar
+              style={{ width: "100px", height: "100px" }}
+              src="/broken-image.jpg"
+            />
+          </div>
+          <div class="mt-2 mx-5 mb-8">
+            <Typography variant="h6" noWrap>
+              Mr. Shevon Krishmal
+            </Typography>
+          </div>
+          <div style={{ marginTop: "50px" }}>
+            <List>
+              <ListItem button>
+                <ListItemText
+                  primary={"Delivery Management"}
+                  onClick={() => {
+                    setDeliveryManagementNavOpen(true);
+                    setDeliveryCostNavOpen(false);
+                    setProfileManagementOpen(false);
+                    setFaqManagementOpen(false);
+                    setInquiriesMnagementOpen(false);
+                    setDeliveryPersonManagementOpen(false);
+                  }}
+                />
               </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
+              <Divider />
+              <ListItem button>
+                <ListItemText
+                  primary={"Delivery Cost Management"}
+                  onClick={() => {
+                    setDeliveryManagementNavOpen(false);
+                    setDeliveryCostNavOpen(true);
+                    setProfileManagementOpen(false);
+                    setFaqManagementOpen(false);
+                    setInquiriesMnagementOpen(false);
+                    setDeliveryPersonManagementOpen(false);
+                  }}
+                />
               </ListItem>
-            ))}
-          </List>
+              <Divider />
+              <ListItem button>
+                <ListItemText
+                  primary={"Delivery Person Management"}
+                  onClick={() => {
+                    setDeliveryManagementNavOpen(false);
+                    setDeliveryCostNavOpen(false);
+                    setProfileManagementOpen(false);
+                    setFaqManagementOpen(false);
+                    setInquiriesMnagementOpen(false);
+                    setDeliveryPersonManagementOpen(true);
+                  }}
+                />
+              </ListItem>
+              <Divider />
+              <ListItem button>
+                <ListItemText
+                  primary={"FAQ Management"}
+                  onClick={() => {
+                    setDeliveryManagementNavOpen(false);
+                    setDeliveryCostNavOpen(false);
+                    setProfileManagementOpen(false);
+                    setFaqManagementOpen(true);
+                    setInquiriesMnagementOpen(false);
+                    setDeliveryPersonManagementOpen(false);
+                  }}
+                />
+              </ListItem>
+              <Divider />
+              <ListItem button>
+                <ListItemText
+                  primary={"Inquiries Management"}
+                  onClick={() => {
+                    setDeliveryManagementNavOpen(false);
+                    setDeliveryCostNavOpen(false);
+                    setProfileManagementOpen(false);
+                    setFaqManagementOpen(false);
+                    setInquiriesMnagementOpen(true);
+                    setDeliveryPersonManagementOpen(false);
+                  }}
+                />
+              </ListItem>
+              <Divider />
+              <ListItem button>
+                <ListItemText
+                  primary={"Profile Infromation"}
+                  onClick={() => {
+                    setDeliveryManagementNavOpen(false);
+                    setDeliveryCostNavOpen(false);
+                    setProfileManagementOpen(true);
+                    setFaqManagementOpen(false);
+                    setInquiriesMnagementOpen(false);
+                    setDeliveryPersonManagementOpen(false);
+                  }}
+                />
+              </ListItem>
+            </List>
           </div>
         </div>
       </Drawer>
       <main className={classes.content}>
-      <Toolbar />
+        <Toolbar />
 
-
-
-
-
-
-       <AllOrders/>
-      
-
-
-
-
-
-
-
-
+        {deliveryManagementNavOpen && <DeliveryManagementNav />}
+        {deliveryCostNavOpen && <DeliveryCostNav />}
+        {deliveryPersonManagementOpen && <DeliveryPersonManagement />}
+        {faqManagementOpen && <FAQmanagement />}
+        {inquiriesMnagementOpen && <InquiriesManagement />}
+        {profileManagementOpen && <DeliveryManagerProfile />}
       </main>
     </div>
   );
 }
-
-

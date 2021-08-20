@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import Grid from "@material-ui/core/Grid";
+
 
 
 const columns = [
@@ -266,38 +266,10 @@ const DeliveredOrders = () => {
 
   return (
     <div>
-      <Grid item xs={12}>
-        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-          <header class="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
-            Delivery Managment
-          </header>
-          <hr></hr>
-
-          <div class="grid grid-cols-3 gap-x-0">
-            <div>
-              <button class="mt-5  mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-4 rounded-full">
-                All Orders
-              </button>{" "}
-            </div>
-
-            <div>
-              <button class="mt-5 mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-4 rounded-full">
-                In Transit Orders
-              </button>
-            </div>
-
-            <div>
-              <button class="mt-5 mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-4 rounded-full">
-                Pending Delivered Orders
-              </button>
-            </div>
-          </div>
-        </Paper>
-      </Grid>
-
+      
       <div class=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
         <header class="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
-          Delivered Order History
+          DELIVERD ORDER HISTORY
         </header>
 
         <div class="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
