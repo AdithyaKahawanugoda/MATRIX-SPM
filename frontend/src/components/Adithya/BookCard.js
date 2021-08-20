@@ -8,12 +8,18 @@ import Typography from "@material-ui/core/Typography";
 
 const BookCard = (props) => {
   return (
-    <>
+    <div
+      className={`${props.shadow === "2xl" && "shadow-2xl"} 
+      ${props.shadow === "xl" && "shadow-xl"}
+      ${props.shadow === "lg" && "shadow-lg"}
+      ${props.shadow === "md" && "shadow-md"}
+      `}
+    >
       <Card style={{ maxWidth: props.maxWidth | 250 }}>
         <CardActionArea>
           {props?.imgSrc && (
             <CardMedia
-              style={{ height: props.height | 500 }}
+              style={{ height: props.imgHeight | 300 }}
               image={props.imgSrc}
               title="bookCardImage"
             />
@@ -21,30 +27,40 @@ const BookCard = (props) => {
           <CardContent>
             {props?.title && (
               <Typography gutterBottom variant="h5" component="h2">
-                {props.title}
+                <p className="font-medievalFont font-bold">{props.title}</p>
               </Typography>
             )}
             {props?.description && (
               <Typography variant="body2" color="textSecondary" component="p">
-                {props.description}
+                <p className=" font-contentFont font-bold">
+                  {props.description}
+                </p>
               </Typography>
             )}
           </CardContent>
         </CardActionArea>
+
         <CardActions>
           {props?.label1 && (
             <Typography variant="button" display="block" gutterBottom>
-              {props.label1}
+              <p className="ml-4 text-lg font-black font-boldTallFont">
+                {props.label1}
+              </p>
             </Typography>
           )}
           {props?.label2 && (
-            <Typography variant="overline" display="block" gutterBottom>
+            <Typography
+              variant="overline"
+              display="block"
+              gutterBottom
+              className="rounded-full bg-ferrariRed text-white px-2"
+            >
               {props.label2}
             </Typography>
           )}
         </CardActions>
       </Card>
-    </>
+    </div>
   );
 };
 
