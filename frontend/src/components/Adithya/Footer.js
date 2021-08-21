@@ -27,12 +27,18 @@ const Footer = () => {
 
   return (
     <>
-      <Grid container spacing={1} className=" lg:px-32 md:px-10 sm:px-4">
+      <Grid
+        container
+        spacing={1}
+        className=" bg-lightSilver lg:px-32 md:px-10 sm:px-4 lg:py-10 md:py-8 sm:py-2"
+      >
         <Grid item xs={12} sm={6} md={9}>
-          <div className=" ">
-            <div>Apuru Poth</div>
+          <div>
+            <div className=" font-medievalFont font-black text-2xl ">
+              Apuru Poth
+            </div>
             <Grid item xs={12} sm={11} md={6}>
-              <div className=" ">
+              <div className=" font-contentFont text-sm text-gray-500">
                 “Sometimes, you read a book and it fills you with this weird
                 evangelical zeal, and you become convinced that the shattered
                 world will never be put back together unless and until all
@@ -43,10 +49,10 @@ const Footer = () => {
           </div>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <div className=" ">
+          <div className=" font-semibold ">
             {footer.footerSitemapLinks?.map((item, index) => {
               return (
-                <div key={index} className="text-md mb-3">
+                <div key={index} className="text-md mb-3 hover:text-gamboge">
                   <Link to={item.path}>{item.labelName}</Link>
                 </div>
               );
@@ -54,31 +60,29 @@ const Footer = () => {
           </div>
         </Grid>
         <Grid item xs={12}>
-          <div className="">
-            <hr />
-          </div>
+          <hr className="border w-10/12 m-auto lg:my-8 sm:my-6" />
         </Grid>
         <Grid item xs={12} md={4}>
-          <div className=" ">
-            <div className="lg:flex justify-between">
-              <div>
+          <div>
+            <div className="lg:flex justify-between font-semibold">
+              <div className="text-md mb-3 hover:text-gamboge">
                 <Link to="/terms-and-conditions">Terms and Conditions</Link>
               </div>
-              <div>
+              <div className="text-md mb-3 hover:text-gamboge">
                 <Link to="/privacy">Privacy Policy</Link>
               </div>
-              <div>
+              <div className="text-md mb-3 hover:text-gamboge">
                 <Link to="#">Cookie Policy</Link>
               </div>
             </div>
           </div>
         </Grid>
         <Grid item xs={12} md={5}>
-          <div className=" "></div>
+          <div></div>
         </Grid>
         <Grid item xs={12} md={3}>
-          <div className=" ">
-            <div className="md:ml-4 md:w-1/4 lg:w-1/5">
+          <div>
+            <div className="md:ml-4 sm:w-1/4 lg:w-2/5">
               <Link to="/">
                 <div className="cursor-pointer inline-block">
                   <img
@@ -93,7 +97,9 @@ const Footer = () => {
           </div>
         </Grid>
         <Grid item xs={12} md={4}>
-          <div className=" ">Copyright &copy; MATRIX-Apuru Poth 2021</div>
+          <div className=" font-mono text-sm ">
+            Copyright&copy; MATRIX-Apuru Poth 2021
+          </div>
         </Grid>
         <Grid item xs={12} md={5}>
           <div className=" "></div>
