@@ -1,10 +1,12 @@
 import React,{useState} from "react";
 import EditIcon from '@material-ui/icons/Edit';
-import RetailCostEdit from "./modals/RetailCostEdit";
+import RetailCostEdit from "./modals/RetailCostEditModal";
+import RetailExCostModal from "./modals/RetailExCostModal"
 
 
 const RetailDeliveryCost = () => {
-    const [RetailCostEditOpen, setRetailCostEditOpen] = useState(false);
+    const [retailCostEditOpen, setRetailCostEditOpen] = useState(false);
+    const[retailExCostOpen, setRetailExCostEditOpen] = useState(false);
 
   return <div>
 
@@ -17,11 +19,12 @@ const RetailDeliveryCost = () => {
                 <div>
                      <h5 class ="text-black" >Express pecentage :</h5>
                 </div>
-                <div class ="text-black " > 
+                <div class ="font-black " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14"> 10% </h5> </div>
                     <div class="text-right " onClick={() => {
-                  setRetailCostEditOpen(true);
+                  setRetailCostEditOpen(false);
+                  setRetailExCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
                 </div>
@@ -39,6 +42,7 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.100.00 </h5> </div>
                     <div class="text-right " onClick={() => {
+                  setRetailExCostEditOpen(false);
                   setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
@@ -57,6 +61,7 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.500.00 </h5> </div>
                     <div class="text-right " onClick={() => {
+                  setRetailExCostEditOpen(false);
                   setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
@@ -74,6 +79,7 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.300.00 </h5> </div>
                     <div class="text-right " onClick={() => {
+                  setRetailExCostEditOpen(false);
                   setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
@@ -91,7 +97,8 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.200.00 </h5> </div>
                     <div class="text-right " onClick={() => {
-                  setRetailCostEditOpen(true);
+                 setRetailExCostEditOpen(false);
+                 setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
                 </div>
@@ -108,7 +115,8 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.200.00 </h5> </div>
                     <div class="text-right " onClick={() => {
-                  setRetailCostEditOpen(true);
+                 setRetailExCostEditOpen(false);
+                 setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
                 </div>
@@ -126,6 +134,7 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.200.00 </h5> </div>
                     <div class="text-right " onClick={() => {
+                  setRetailExCostEditOpen(false);
                   setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
@@ -144,7 +153,8 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.400.00 </h5> </div>
                     <div class="text-right " onClick={() => {
-                  setRetailCostEditOpen(true);
+                 setRetailExCostEditOpen(false);
+                 setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
                 </div>
@@ -161,7 +171,8 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.700.00 </h5> </div>
                     <div class="text-right " onClick={() => {
-                  setRetailCostEditOpen(true);
+                 setRetailExCostEditOpen(false);
+                 setRetailCostEditOpen(true);
                 }}> <EditIcon/></div>
                     
                 </div>
@@ -178,7 +189,9 @@ const RetailDeliveryCost = () => {
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.800.00 </h5> </div>
                     <div class="text-right " onClick={() => {
+                  setRetailExCostEditOpen(false);
                   setRetailCostEditOpen(true);
+                  
                 }}> <EditIcon/></div>
                     
                 </div>
@@ -188,17 +201,24 @@ const RetailDeliveryCost = () => {
         
       </div>
 
-      <div class ="rounded-xl   mt-2 ml-2 px-0 py-0  border-0  shadow-md bg-white ">
+      <div class ="rounded-xl   mt-2 ml-2 px-0 py-0  border-0  shadow-md bg-white bg-cover bg-center " style={{backgroundImage:`url("https://i.ibb.co/3kVbFSv/Who-We-Serve-Courier-Service-1080x675.jpg")`}}>
 
       </div>
       </div>
 
-      {RetailCostEditOpen && (
+      {retailCostEditOpen && (
         <RetailCostEdit
-          modalVisible={RetailCostEditOpen}
+          modalVisible={retailCostEditOpen}
           setModalVisible={setRetailCostEditOpen}
         />
       )}
+
+      {retailExCostOpen && (<RetailExCostModal
+       modalVisible={retailExCostOpen}
+       setModalVisible={setRetailExCostEditOpen}
+      />)}
+
+
   </div>
 };
 

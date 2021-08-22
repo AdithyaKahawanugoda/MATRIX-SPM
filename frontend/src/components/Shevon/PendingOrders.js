@@ -7,7 +7,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from "@material-ui/icons/Edit";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -20,7 +21,7 @@ const columns = [
   { id: "orderDate", label: "OrderDate", minWidth: 80 },
   { id: "deliveryType", label: "DeliveryType", minWidth: 80 },
   { id: "deliveryStatus", label: "DeliveryStatus", minWidth: 80 },
-  { id: "action", label: "Action", minWidth: 15 },
+  { id: "action", label: "Action", minWidth: 80 },
 ];
 
 function createData(
@@ -34,7 +35,7 @@ function createData(
   orderDate,
   deliveryType,
   deliveryStatus,
-  action,
+  action
 ) {
   return {
     no,
@@ -62,8 +63,7 @@ const rows = [
     "Paid",
     "8/9/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     2,
@@ -75,8 +75,7 @@ const rows = [
     "Paid",
     "6/16/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     3,
@@ -88,8 +87,7 @@ const rows = [
     "CashOnDelivery",
     "7/8/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     4,
@@ -101,8 +99,7 @@ const rows = [
     "Invoice",
     "4/25/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     5,
@@ -114,8 +111,7 @@ const rows = [
     "CashOnDelivery",
     "2/12/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     6,
@@ -127,8 +123,7 @@ const rows = [
     "Paid",
     "4/4/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     7,
@@ -140,8 +135,7 @@ const rows = [
     "Paid",
     "6/4/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     8,
@@ -153,8 +147,7 @@ const rows = [
     "Invoice",
     "7/31/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     9,
@@ -166,8 +159,7 @@ const rows = [
     "Invoice",
     "4/23/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     10,
@@ -179,8 +171,7 @@ const rows = [
     "Paid",
     "2/17/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     11,
@@ -192,8 +183,7 @@ const rows = [
     "CashOnDelivery",
     "2/1/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     12,
@@ -205,8 +195,7 @@ const rows = [
     "Invoice",
     "4/20/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     13,
@@ -218,8 +207,7 @@ const rows = [
     "CashOnDelivery",
     "1/2/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     14,
@@ -231,8 +219,7 @@ const rows = [
     "Paid",
     "2/28/2021",
     "Express",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
   createData(
     15,
@@ -244,8 +231,7 @@ const rows = [
     "CashOnDelivery",
     "2/7/2021",
     "Normal",
-    "Pending",
-    <EditIcon />,
+    "Pending"
   ),
 ];
 
@@ -264,8 +250,6 @@ const PendingOrders = () => {
 
   return (
     <div>
-     
-
       <div class=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
         <header class="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
           PENDING DELIVERY ORDERS
@@ -289,8 +273,15 @@ const PendingOrders = () => {
                 Search
               </button>
             </div>
+
+            <div class="text-black  px-0 py-2 m-4">
+              <icon class="text-gray-500  hover:text-halloweenOrange">
+                <RefreshIcon />
+              </icon>
+            </div>
           </div>
-          <Paper class="mt-12">
+
+          <Paper class="mt-2">
             <TableContainer style={{ maxHeight: "440px" }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -299,7 +290,12 @@ const PendingOrders = () => {
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ minWidth: column.minWidth }}
+                        style={{
+                          minWidth: column.minWidth,
+                          backgroundColor: "#065774",
+                          opacity: "85%",
+                          color: "white",
+                        }}
                       >
                         {column.label}
                       </TableCell>
@@ -324,6 +320,11 @@ const PendingOrders = () => {
                                 {column.format && typeof value === "number"
                                   ? column.format(value)
                                   : value}
+                                {column.id === "action" && (
+                                  <icon className="ml-2 hover:text-gamboge">
+                                    <EditIcon />
+                                  </icon>
+                                )}
                               </TableCell>
                             );
                           })}

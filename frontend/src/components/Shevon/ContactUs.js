@@ -2,7 +2,6 @@ import React from "react";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
-
 const validationSchema = Yup.object({
   email: Yup.string()
     .email("Please enter valid email")
@@ -16,9 +15,9 @@ const validationSchema = Yup.object({
 const ContactUs = () => {
   return (
     <div>
-      <div className="grid grid-cols-2 my-1 mx-8 rounded-xl  border-0  shadow-md bg-white">
-        <div className="rounded-l-xl mr-2 mx-2 my-2 border-0  shadow-md bg-white">
-          <h6 className="ml-4 mt-0 mb-2 font-black text-2xl">Inquire Form</h6>
+      <div className="grid grid-cols-2 mt-4 mx-16 rounded-xl  border-0  shadow-md bg-blueSapphire bg-opacity-10">
+        <div className="rounded-l-xl mr-2 mx-4 my-4 border-0  shadow-md bg-white">
+          <h6 className="ml-4 mt-2 mb-2 font-black text-2xl">Inquire Form</h6>
           <h6 className="ml-4  mb-2 text-gray-400 font-black text-sm">
             We will get in touch with you shortly.
           </h6>
@@ -55,7 +54,7 @@ const ContactUs = () => {
                       </div>
                       <div class="flex-initial" style={{ marginLeft: "108px" }}>
                         <input
-                          className={`focus:outline-none w-96  pl-2 border rounded-md focus:border-halloweenOrange border-blueSapphire ${
+                          className={`focus:outline-none w-96 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
                             errors.email && touched.email
                               ? "border-red-500"
                               : "border-gray-600"
@@ -75,7 +74,7 @@ const ContactUs = () => {
                       </div>
                     </div>
 
-                    <div class="flex mt-3">
+                    <div class="flex mt-8">
                       <div class=" ml-6 flex-initial">
                         <label className="block text-sm font-medium leading-149 mb-3 md:text-lg">
                           Mobile Number
@@ -86,7 +85,7 @@ const ContactUs = () => {
                         style={{ marginLeft: "48px" }}
                       >
                         <input
-                          className={`focus:outline-none w-96  pl-2 border rounded-md focus:border-halloweenOrange border-blueSapphire ${
+                          className={`focus:outline-none w-96 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
                             errors.mobileNum && touched.mobileNum
                               ? "border-red-500"
                               : "border-gray-600"
@@ -106,7 +105,7 @@ const ContactUs = () => {
                       </div>
                     </div>
 
-                    <div class="flex mt-3">
+                    <div class="flex mt-8">
                       <div class=" ml-6 flex-initial">
                         <label
                           className=" block text-sm font-medium leading-149 mb-3 md:text-lg"
@@ -117,7 +116,7 @@ const ContactUs = () => {
                       </div>
                       <div class="flex-initial" style={{ marginLeft: "70px" }}>
                         <select
-                          className={`focus:outline-none w-96 h-6 pl-2 border rounded-md focus:border-halloweenOrange border-blueSapphire ${
+                          className={`focus:outline-none w-96 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
                             errors.department && touched.department
                               ? "border-red-500"
                               : "border-gray-600"
@@ -144,7 +143,7 @@ const ContactUs = () => {
                       </div>
                     </div>
 
-                    <div class="flex mt-3">
+                    <div class="flex mt-8">
                       <div class=" ml-6 flex-initial">
                         <label
                           className="block text-sm font-medium leading-149 mb-3 md:text-lg"
@@ -155,7 +154,7 @@ const ContactUs = () => {
                       </div>
                       <div class="flex-initial ml-14">
                         <textarea
-                          className={`focus:outline-none  h-28 pl-2 border rounded-md focus:border-halloweenOrange border-blueSapphire ${
+                          className={`focus:outline-none  h-28 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver  ${
                             errors.message && touched.message
                               ? "border-red-500"
                               : "border-gray-600"
@@ -176,7 +175,7 @@ const ContactUs = () => {
                     </div>
                   </div>
 
-                  <div className="text-right mb-2 mr-2">
+                  <div className="text-center mb-4 mt-10">
                     <button
                       type="submit"
                       class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
@@ -193,9 +192,13 @@ const ContactUs = () => {
           </div>
         </div>
 
-        <div className="rounded-r-xl border-0  shadow-md bg-white">
-
-         
+        <div className="  bg-blueSapphire rounded-r-xl border-0  shadow-md  bg-cover">
+          <img
+            src="https://i.ibb.co/55ktwf1/servicio-png-8.png"
+            alt="servicio-png-8"
+            border="0"
+            class="h-96 mx-36 my-20 rounded-r-xl"
+          ></img>
         </div>
       </div>
     </div>

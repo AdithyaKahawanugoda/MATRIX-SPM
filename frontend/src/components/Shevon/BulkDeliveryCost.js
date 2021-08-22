@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState }from "react";
 import EditIcon from '@material-ui/icons/Edit';
+import BulkCostEditModal from "./modals/BulkCostEditModal"
+import BulkExCostModal from "./modals/BulkExCostModal"
 
 const BulkDeliveryCost = () => {
+
+    const [bulkCostEditOpen, setbulkCostEditOpen] = useState(false);
+    const[bulkExCostOpen, setBulkExCostEditOpen] = useState(false);
   return <div>
     
 
@@ -17,7 +22,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-black " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14"> 10% </h5> </div>
-                    <div class="text-right "> <EditIcon/></div>
+                    <div class="text-right " onClick={() => {
+                  setbulkCostEditOpen(false);
+                  setBulkExCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -33,7 +41,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.100.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -49,7 +60,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.500.00 </h5> </div>
-                    <div class="text-right "> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -64,7 +78,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.300.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -79,7 +96,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.200.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -94,7 +114,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.200.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -110,7 +133,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.200.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -126,7 +152,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.400.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -141,7 +170,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.700.00 </h5> </div>
-                    <div class="text-right"><EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}><EditIcon/></div>
                     
                 </div>
                 </div>
@@ -156,7 +188,10 @@ const BulkDeliveryCost = () => {
                 <div class ="text-white " > 
                 <div class ="grid grid-cols-2" >
                     <div class="ml-32">  <h5 className="mr-14">Rs.800.00 </h5> </div>
-                    <div class="text-right"> <EditIcon/></div>
+                    <div class="text-right" onClick={() => {
+                  setBulkExCostEditOpen(false);
+                  setbulkCostEditOpen(true);
+                }}> <EditIcon/></div>
                     
                 </div>
                 </div>
@@ -165,11 +200,25 @@ const BulkDeliveryCost = () => {
         
       </div>
 
-      <div class ="rounded-xl   mt-2 ml-2 px-0 py-0  border-0  shadow-md bg-white ">
+      <div class ="rounded-xl   mt-2 ml-2 px-0 py-0  border-0  shadow-md bg-white bg-cover bg-center " style={{backgroundImage:`url("https://i.ibb.co/h2Y9KSW/courier-firm.jpg")`}}>
 
       </div>
       </div>
-  </div>;
+
+
+      {bulkCostEditOpen && (
+        <BulkCostEditModal
+          modalVisible={bulkCostEditOpen}
+          setModalVisible={setbulkCostEditOpen}
+        />
+      )}
+
+      {bulkExCostOpen && (<BulkExCostModal
+       modalVisible={bulkExCostOpen}
+       setModalVisible={setBulkExCostEditOpen}
+      />)}
+
+  </div>
 };
 
 export default BulkDeliveryCost;

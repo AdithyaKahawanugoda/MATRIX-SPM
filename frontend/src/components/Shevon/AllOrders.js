@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 
 const columns = [
@@ -217,7 +217,7 @@ const AllOrders = () => {
         </header>
 
         <div class="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
-          <div class="rounded-lg flex bg-gray-100">
+        <div class="rounded-lg flex bg-gray-100">
             <div class="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
               Search Order ID:
             </div>
@@ -234,9 +234,16 @@ const AllOrders = () => {
                 Search
               </button>
             </div>
+
+            <div class="text-black  px-0 py-2 m-4">
+              <icon class="text-gray-500  hover:text-halloweenOrange">
+                <RefreshIcon />
+              </icon>
+            </div>
           </div>
 
-          <Paper class="mt-12">
+
+          <Paper class="mt-2">
             <TableContainer style={{ maxHeight: "440px" }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -245,7 +252,7 @@ const AllOrders = () => {
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ minWidth: column.minWidth }}
+                        style={{ minWidth: column.minWidth, backgroundColor:"#065774",opacity:"85%" , color: "white"}}
                       >
                         {column.label}
                       </TableCell>

@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -32,9 +32,8 @@ function createData(
   paymentType,
   orderDate,
   deliveryType,
-  deliveryStatus,
-) 
-{
+  deliveryStatus
+) {
   return {
     no,
     code,
@@ -247,8 +246,6 @@ const InTransitOrders = () => {
 
   return (
     <div>
-      
-
       <div class=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
         <header class="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
           IN TRANSIT ORDERS
@@ -272,9 +269,15 @@ const InTransitOrders = () => {
                 Search
               </button>
             </div>
+
+            <div class="text-black  px-0 py-2 m-4">
+              <icon class="text-gray-500  hover:text-halloweenOrange">
+                <RefreshIcon />
+              </icon>
+            </div>
           </div>
 
-          <Paper class="mt-12">
+          <Paper class="mt-2">
             <TableContainer style={{ maxHeight: "440px" }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -283,7 +286,12 @@ const InTransitOrders = () => {
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ minWidth: column.minWidth }}
+                        style={{
+                          minWidth: column.minWidth,
+                          backgroundColor: "#065774",
+                          opacity: "85%",
+                          color: "white",
+                        }}
                       >
                         {column.label}
                       </TableCell>
