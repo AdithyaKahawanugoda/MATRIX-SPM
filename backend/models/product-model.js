@@ -15,15 +15,15 @@ const ProductSchema = new mongoose.Schema({
   },
   originalAuthor: {
     type: String,
-    required: false,
+    required: true,
   },
   aboutAuthor: {
     type: String,
-    required: false,
+    required: true,
   },
   aboutBook: {
     type: String,
-    required: false,
+    required: true,
   },
   ISBN: {
     type: String,
@@ -31,18 +31,18 @@ const ProductSchema = new mongoose.Schema({
     unique: true,
   },
   license: {
-    type: String,
+    type: Boolean,
     required: false,
   },
   print: [
     {
       quantity: {
         type: Number,
-        required: false,
+        required: true,
       },
       edition: {
         type: Number,
-        required: false,
+        required: true,
       },
     },
   ],
@@ -56,7 +56,7 @@ const ProductSchema = new mongoose.Schema({
   },
   press: {
     type: String,
-    required: false,
+    required: true,
   },
   proofReader: {
     type: String,
@@ -92,7 +92,7 @@ const ProductSchema = new mongoose.Schema({
   },
   marketPrice: {
     type: Number,
-    required: false,
+    required: true,
   },
   discountPercentage: {
     regular: { type: Number, default: 0 },
@@ -100,22 +100,15 @@ const ProductSchema = new mongoose.Schema({
     label: { type: String },
   },
   charges: {
-    coverCost: {
-      type: Number,
-      required: false,
-    },
+    coverCost: Number,
     licenseCost: Number,
     writerPayment: Number,
-    proofReadingPayment: {
-      type: Number,
-      required: false,
-    },
+    proofReadingPayment: Number,
     typeSetterPayment: Number,
     printCost: {
       type: Number,
-      required: false,
+      required: true,
     },
-    other: Number,
   },
   ratings: [
     {

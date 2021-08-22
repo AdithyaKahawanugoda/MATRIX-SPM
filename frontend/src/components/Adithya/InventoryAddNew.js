@@ -9,6 +9,7 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import axios from "axios";
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -20,7 +21,7 @@ registerPlugin(
 const validationSchema = Yup.object({
   publishingTitle: Yup.string().trim().uppercase().required("Required"),
   originalTitle: Yup.string().trim().required("Required"),
-  translator: Yup.string().trim().required("Required"),
+  translator: Yup.string().trim(),
   originalAuthor: Yup.string().trim().required("Required"),
   aboutAuthor: Yup.string().trim().required("Required"),
   aboutBook: Yup.string().trim().required("Required"),
@@ -63,6 +64,7 @@ const validationSchema = Yup.object({
     otherwise: Yup.number().positive("Invalid value").required("Required"),
   }),
   printCost: Yup.number().positive("Invalid value").required("Required"),
+  encImg: Yup.string().required("Required"),
 });
 
 const InventoryAddNew = () => {
@@ -85,7 +87,7 @@ const InventoryAddNew = () => {
             aboutAuthor: "",
             aboutBook: "",
             ISBN: "",
-            license: "",
+            license: false,
             quantity: "",
             edition: "",
             translatorContact: "",
@@ -102,17 +104,36 @@ const InventoryAddNew = () => {
             proofReadingPayment: "",
             typeSetterPayment: "",
             printCost: "",
+            encImg: "",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
+            // values.encImg = file[0].getFileEncodeDataURL();
+
             console.log(values);
+            await axios
+              .post(
+                "http://localhost:6500/matrix/api/inventoryManager/addbook",
+                values
+              )
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                handleSubmit();
+                if (file[0] !== undefined) {
+                  values.encImg = file[0].getFileEncodeDataURL();
+                  handleSubmit();
+                } else {
+                  alert("Please Upload Cover Image");
+                }
               }}
             >
               <p className="font-fatKidFont text-xl">GENERAL DETAILS</p>
@@ -158,7 +179,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
-                      label="Translator"
+                      label="Translator (Optional)"
                       id="translator"
                       type="text"
                       InputLabelProps={{ style: { fontWeight: 600 } }}
