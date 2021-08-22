@@ -50,6 +50,10 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  translatorEmail: {
+    type: String,
+    required: false,
+  },
   press: {
     type: String,
     required: false,
