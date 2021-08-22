@@ -54,8 +54,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     2,
@@ -65,8 +64,7 @@ const rows = [
     377,
     "98223456",
     "544,000",
-    "Twenty Chickens and a Saddle",
-    <EditIcon />
+    "Twenty Chickens and a Saddle"
   ),
   createData(
     1,
@@ -76,8 +74,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -87,8 +84,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -98,8 +94,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -109,8 +104,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -120,8 +114,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -131,8 +124,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -142,8 +134,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -153,8 +144,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -164,8 +154,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -175,8 +164,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -186,8 +174,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -197,8 +184,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -208,8 +194,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
   createData(
     1,
@@ -219,8 +204,7 @@ const rows = [
     2380,
     "982343441",
     "344,000",
-    "The Wind Is Silver",
-    <EditIcon />
+    "The Wind Is Silver"
   ),
 ];
 
@@ -313,6 +297,13 @@ const InventoryEdit = () => {
                                   {column.format && typeof value === "number"
                                     ? column.format(value)
                                     : value}
+                                  {column.id === "action" && (
+                                    <EditIcon
+                                      onClick={() => {
+                                        alert(value);
+                                      }}
+                                    />
+                                  )}
                                 </TableCell>
                               );
                             })}
