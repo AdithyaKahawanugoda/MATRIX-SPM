@@ -20,6 +20,7 @@ const columns = [
   { id: "orderType", label: "OrderType", minWidth: 100 },
   { id: "paymentType", label: "PaymentType", minWidth: 80 },
   { id: "deliveryStatus", label: "DeliveryStatus", minWidth: 80 },
+  { id: "action", label: "Action", minWidth: 80 },
 
 ];
 
@@ -290,7 +291,7 @@ const CourierOrdersDP = () => {
                       </TableCell>
                       
                     ))}
-                   <TableCell style={{ backgroundColor:"#065774",opacity:"85%" , color: "white"}} >Action</TableCell>
+                  
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -312,13 +313,17 @@ const CourierOrdersDP = () => {
                                   ? column.format(value)
                                   : value}
                                   
-
+                                  {column.id === "action" && (
+                                  <icon className="ml-2 hover:text-gamboge">
+                                    <EditIcon />
+                                  </icon>
+                                )}
                                  
                               </TableCell>
                             );
                           })}
                          
-                          <TableCell><icon className="ml-2 hover:text-gamboge"><EditIcon /></icon></TableCell>
+                        
                         </TableRow>
                       );
                     })}
