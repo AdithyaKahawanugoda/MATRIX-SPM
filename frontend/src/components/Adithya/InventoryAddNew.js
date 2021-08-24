@@ -10,6 +10,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import axios from "axios";
+import { Hidden } from "@material-ui/core";
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -136,6 +137,36 @@ const InventoryAddNew = () => {
                 }
               }}
             >
+              <Hidden only={["md", "lg", "xl"]}>
+                <Grid item xs={12} md={3}>
+                  <div>
+                    <p className="font-fatKidFont text-xl">
+                      COVER IMAGE UPLOAD
+                    </p>
+                    <hr className="border-lightSilver border-2 w-3/4 mb-4" />
+                    <FilePond
+                      files={file}
+                      onupdatefiles={setFile}
+                      allowMultiple={false}
+                      allowFileEncode={true}
+                      maxFiles={1}
+                      name="files"
+                      credits={false}
+                      labelIdle='Upload book cover image<br />Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                      allowFileTypeValidation={true}
+                      acceptedFileTypes={["image/*"]}
+                      labelFileTypeNotAllowed={
+                        "Please import valid profile picture"
+                      }
+                      required
+                      allowImagePreview
+                      className="border rounded-2xl"
+                      imagePreviewMinHeight={350}
+                    />
+                  </div>
+                </Grid>
+              </Hidden>
+
               <p className="font-fatKidFont text-xl">GENERAL DETAILS</p>
               <hr className="border-lightSilver border-2 w-3/4" />
               <div className="grid lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-6 my-4">
@@ -145,6 +176,7 @@ const InventoryAddNew = () => {
                       variant="outlined"
                       label="Publishing Title"
                       id="publishingTitle"
+                      fullWidth
                       type="text"
                       InputLabelProps={{ style: { fontWeight: 600 } }}
                       onChange={handleChange("publishingTitle")}
@@ -161,6 +193,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Original Title"
                       id="originalTitle"
                       type="text"
@@ -179,6 +212,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Translator (Optional)"
                       id="translator"
                       type="text"
@@ -197,6 +231,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="OriginalAuthor"
                       id="originalAuthor"
                       type="text"
@@ -215,6 +250,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="ISBN"
                       id="ISBN"
                       type="text"
@@ -233,6 +269,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Prints (Qut.)"
                       id="quantity"
                       type="number"
@@ -251,6 +288,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Edition"
                       id="edition"
                       type="number"
@@ -269,6 +307,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Weight (g)"
                       id="weight"
                       type="number"
@@ -287,6 +326,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Press"
                       id="press"
                       type="text"
@@ -305,6 +345,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Translator's Email"
                       id="translatorEmail"
                       type="text"
@@ -323,6 +364,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Translator's Contact no."
                       id="translatorContact"
                       type="text"
@@ -345,6 +387,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Retail Price"
                       id="marketPrice"
                       type="number"
@@ -363,6 +406,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Print Cost"
                       id="printCost"
                       type="number"
@@ -381,6 +425,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Proof Reader (optional)"
                       id="proofReader"
                       type="text"
@@ -399,6 +444,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Proof Reading Payment"
                       id="proofReadingPayment"
                       type="number"
@@ -418,6 +464,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Cover Designer (optional)"
                       id="coverDesigner"
                       type="text"
@@ -436,6 +483,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Cover Cost"
                       id="coverCost"
                       type="number"
@@ -454,6 +502,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Type Setter (optional)"
                       id="typeSetter"
                       type="text"
@@ -472,6 +521,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Type Setter Payment"
                       id="typeSetterPayment"
                       type="number"
@@ -490,6 +540,7 @@ const InventoryAddNew = () => {
                   <div>
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="Writer Payment"
                       id="writerPayment"
                       type="number"
@@ -506,7 +557,7 @@ const InventoryAddNew = () => {
                 </Grid>
                 <Grid item xs={11}>
                   <div>
-                    <div className="flex justify-center font-semibold">
+                    <div className="flex lg:justify-center font-semibold">
                       <input
                         id="license"
                         type="checkbox"
@@ -515,7 +566,9 @@ const InventoryAddNew = () => {
                         className="w-6 h-6 m-2 mb-4"
                       />
 
-                      <label>License acquisition from original author?</label>
+                      <label className="my-auto">
+                        License acquisition from original author?
+                      </label>
                     </div>
                     {errors.license && touched.license ? (
                       <div className="text-ferrariRed font-black text-xs mt-1 md:text-sm">
@@ -525,6 +578,7 @@ const InventoryAddNew = () => {
                     {values.license && (
                       <TextField
                         variant="outlined"
+                        fullWidth
                         label="License Cost"
                         id="licenseCost"
                         type="number"
@@ -552,6 +606,7 @@ const InventoryAddNew = () => {
                   <div className="my-4">
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="About Author"
                       className="w-full"
                       id="aboutAuthor"
@@ -573,6 +628,7 @@ const InventoryAddNew = () => {
                   <div className="mb-8">
                     <TextField
                       variant="outlined"
+                      fullWidth
                       label="About Book"
                       className="w-full"
                       id="aboutBook"
@@ -606,27 +662,31 @@ const InventoryAddNew = () => {
           )}
         </Formik>
       </Grid>
-      <Grid item xs={12} md={3}>
-        <div>
-          <FilePond
-            files={file}
-            onupdatefiles={setFile}
-            allowMultiple={false}
-            allowFileEncode={true}
-            maxFiles={1}
-            name="files"
-            credits={false}
-            labelIdle='Upload book cover image<br />Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
-            allowFileTypeValidation={true}
-            acceptedFileTypes={["image/*"]}
-            labelFileTypeNotAllowed={"Please import valid profile picture"}
-            required
-            allowImagePreview
-            className="border rounded-2xl "
-            imagePreviewMinHeight={350}
-          />
-        </div>
-      </Grid>
+      <Hidden only={["xs", "sm"]}>
+        <Grid item xs={12} md={3}>
+          <div>
+            <p className="font-fatKidFont text-xl">COVER IMAGE UPLOAD</p>
+            <hr className="border-lightSilver border-2 w-3/4 mb-4" />
+            <FilePond
+              files={file}
+              onupdatefiles={setFile}
+              allowMultiple={false}
+              allowFileEncode={true}
+              maxFiles={1}
+              name="files"
+              credits={false}
+              labelIdle='Upload book cover image<br />Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+              allowFileTypeValidation={true}
+              acceptedFileTypes={["image/*"]}
+              labelFileTypeNotAllowed={"Please import valid profile picture"}
+              required
+              allowImagePreview
+              className="border rounded-2xl"
+              imagePreviewMinHeight={350}
+            />
+          </div>
+        </Grid>
+      </Hidden>
     </Grid>
   );
 };
