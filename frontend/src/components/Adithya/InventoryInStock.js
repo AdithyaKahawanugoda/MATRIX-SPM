@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
@@ -11,206 +11,253 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import axios from "axios";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
-  { id: "code", label: "BookID", minWidth: 30 },
-  { id: "name", label: "Title", minWidth: 100 },
-  { id: "address", label: "Translator", minWidth: 100 },
-  { id: "deliveryType", label: "OriginalBook", minWidth: 100 },
-  { id: "weight", label: "Qut.", minWidth: 30 },
-  { id: "orderType", label: "ISBN", minWidth: 200 },
-  { id: "paymentType", label: "TotalCost", minWidth: 100 },
+  { id: "bookid", label: "BookID", minWidth: 50 },
+  { id: "title", label: "Title", minWidth: 200 },
+  { id: "translator", label: "Translator", minWidth: 150 },
+  { id: "originalbook", label: "Original Book", minWidth: 200 },
+  { id: "qut", label: "Qut.", minWidth: 50 },
+  { id: "isbn", label: "ISBN", minWidth: 100 },
+  { id: "totalcost", label: "Total Cost", minWidth: 100 },
 ];
 
-function createData(
-  no,
-  code,
-  name,
-  address,
-  weight,
-  orderType,
-  paymentType,
-  deliveryType
-) {
-  return {
-    no,
-    code,
-    name,
-    address,
-    weight,
-    orderType,
-    paymentType,
-    deliveryType,
-  };
-}
+// function createData(
+//   no,
+//   code,
+//   name,
+//   address,
+//   weight,
+//   orderType,
+//   paymentType,
+//   deliveryType
+// ) {
+//   return {
+//     no,
+//     code,
+//     name,
+//     address,
+//     weight,
+//     orderType,
+//     paymentType,
+//     deliveryType,
+//   };
+// }
 
-const rows = [
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    2,
-    "000002",
-    "LIMPOPO GALABASI",
-    "Priyanka Kahawanugoda",
-    377,
-    "98223456",
-    "544,000",
-    "Twenty Chickens and a Saddle"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-  createData(
-    1,
-    "000001",
-    "RIDEE THARU WIYANA YATA",
-    "Priyanka Kahawanugoda",
-    2380,
-    "982343441",
-    "344,000",
-    "The Wind Is Silver"
-  ),
-];
+// const rows = [
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     2,
+//     "000002",
+//     "LIMPOPO GALABASI",
+//     "Priyanka Kahawanugoda",
+//     377,
+//     "98223456",
+//     "544,000",
+//     "Twenty Chickens and a Saddle"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+//   createData(
+//     1,
+//     "000001",
+//     "RIDEE THARU WIYANA YATA",
+//     "Priyanka Kahawanugoda",
+//     2380,
+//     "982343441",
+//     "344,000",
+//     "The Wind Is Silver"
+//   ),
+// ];
 
 const InventoryInStock = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    const getAllBooks = async () => {
+      await axios
+        .get("http://localhost:6500/matrix/api/inventoryManager/getbooks")
+        .then((res) => {
+          console.log(res.data);
+          setTableData(res.data.allBooks);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllBooks();
+  }, []);
+
+  useEffect(() => {
+    if (tableData) {
+      tableData.map((item) => {
+        const createData = () => {
+          let no = item._id;
+          let code = item.ISBN;
+          let name;
+          let address;
+          let weight;
+          let orderType;
+          let paymentType;
+          let deliveryType;
+          return {
+            no,
+            code,
+            name,
+            address,
+            weight,
+            orderType,
+            paymentType,
+            deliveryType,
+          };
+        };
+        createData();
+        console.log(item);
+        console.log(item._id);
+      });
+    }
+  }, [tableData]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -347,7 +394,7 @@ const InventoryInStock = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows
+                    {tableData
                       .slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
@@ -379,7 +426,7 @@ const InventoryInStock = () => {
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={tableData.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

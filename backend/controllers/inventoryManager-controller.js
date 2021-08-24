@@ -3,7 +3,6 @@ const ProductModel = require("../models/product-model");
 const { cloudinary } = require("../utils/cloudinary");
 
 // add new book
-
 exports.addNewBook = async (req, res) => {
   const {
     publishingTitle,
@@ -81,6 +80,21 @@ exports.addNewBook = async (req, res) => {
     res.status(500).json({
       error,
       desc: "Error occurred in addNewBook",
+    });
+  }
+};
+
+// get all books
+exports.getAllBooks = async (req, res) => {
+  try {
+    const allBooks = await ProductModel.find();
+    res.status(200).send({
+      allBooks,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in getAllBooks",
     });
   }
 };
