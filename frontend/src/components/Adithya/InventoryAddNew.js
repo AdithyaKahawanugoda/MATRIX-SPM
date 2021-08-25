@@ -11,6 +11,7 @@ import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import axios from "axios";
 import { Hidden } from "@material-ui/core";
+import PropagateLoader from "react-spinners/ScaleLoader";
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -70,7 +71,7 @@ const validationSchema = Yup.object({
 
 const InventoryAddNew = () => {
   const [file, setFile] = useState("");
-
+  const [loading, setLoading] = useState(false);
   return (
     <Grid container spacing={1}>
       <Grid item xs={9}>
@@ -108,7 +109,7 @@ const InventoryAddNew = () => {
             encImg: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={async (values) => {
+          onSubmit={async (values, { resetForm }) => {
             // values.encImg = file[0].getFileEncodeDataURL();
 
             console.log(values);
@@ -118,9 +119,13 @@ const InventoryAddNew = () => {
                 values
               )
               .then((res) => {
-                console.log(res.data);
+                setLoading(false);
+                resetForm();
+                setFile("");
+                alert("Data Saved Successfully");
               })
               .catch((err) => {
+                setLoading(false);
                 console.log(err);
               });
           }}
@@ -129,10 +134,13 @@ const InventoryAddNew = () => {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
+                setLoading(true);
                 if (file[0] !== undefined) {
                   values.encImg = file[0].getFileEncodeDataURL();
+                  // alert(JSON.stringify(values, null, 4));
                   handleSubmit();
                 } else {
+                  setLoading(false);
                   alert("Please Upload Cover Image");
                 }
               }}
@@ -166,7 +174,6 @@ const InventoryAddNew = () => {
                   </div>
                 </Grid>
               </Hidden>
-
               <p className="font-fatKidFont text-xl">GENERAL DETAILS</p>
               <hr className="border-lightSilver border-2 w-3/4" />
               <div className="grid lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-6 my-4">
@@ -655,9 +662,14 @@ const InventoryAddNew = () => {
                     boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                   }}
                 >
-                  SAVE
+                  {!loading ? (
+                    "SAVE"
+                  ) : (
+                    <PropagateLoader loading={loading} height={15} />
+                  )}
                 </button>
               </div>
+              {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
             </form>
           )}
         </Formik>
