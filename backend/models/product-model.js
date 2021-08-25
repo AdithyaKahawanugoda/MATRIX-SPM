@@ -46,6 +46,10 @@ const ProductSchema = new mongoose.Schema({
       },
     },
   ],
+  inStockQuantity: {
+    type: Number,
+    required: true,
+  },
   translatorContact: {
     type: String,
     required: false,

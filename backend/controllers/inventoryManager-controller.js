@@ -50,6 +50,7 @@ exports.addNewBook = async (req, res) => {
         ISBN,
         license,
         print: { quantity, edition },
+        inStockQuantity: quantity,
         translatorContact,
         translatorEmail,
         press,
@@ -98,6 +99,9 @@ exports.getAllBooks = async (req, res) => {
     });
   }
 };
+
+// delete specific book
+// exports.deleteBook = async (req,res) = {}
 
 const findBookByISBN = async (ISBN, res) => {
   try {
