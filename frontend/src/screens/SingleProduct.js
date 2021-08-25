@@ -1,7 +1,12 @@
 import React from "react";
+import SingleProductDetails from "../components/Adithya/SingleProductDetails";
 
 const SingleProduct = () => {
-  return <div></div>;
+  return (
+    <>
+      <SingleProductDetails />
+    </>
+  );
 };
 
 export default SingleProduct;
