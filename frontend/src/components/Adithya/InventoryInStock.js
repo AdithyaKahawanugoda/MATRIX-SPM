@@ -37,9 +37,9 @@ function stableSort(array, comparator, searchTerm) {
       if (searchTerm === "") {
         return val;
       } else if (
-        val._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.description.toLowerCase().includes(searchTerm.toLowerCase())
+        val._id.includes(searchTerm)
+        // || val.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        // val.description.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
         return val;
       }
@@ -64,15 +64,6 @@ const headCells = [
   { id: "col3", numeric: true, disablePadding: false, label: "Title" },
   { id: "col4", numeric: true, disablePadding: false, label: "Translator" },
   { id: "col5", numeric: true, disablePadding: false, label: "Original Book" },
-
-  // { id: "no", label: "No", minWidth: 15 },
-  // { id: "bookid", label: "BookID", minWidth: 50 },
-  // { id: "title", label: "Title", minWidth: 200 },
-  // { id: "translator", label: "Translator", minWidth: 150 },
-  // { id: "originalbook", label: "Original Book", minWidth: 200 },
-  // { id: "qut", label: "Qut.", minWidth: 50 },
-  // { id: "isbn", label: "ISBN", minWidth: 100 },
-  // { id: "totalcost", label: "Total Cost", minWidth: 100 },
 ];
 
 function EnhancedTableHead(props) {
@@ -136,16 +127,17 @@ const useStyles = makeStyles((theme) => ({
 
 const InventoryInStock = () => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("no");
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("no");
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-
-  // const [page, setPage] = useState(0);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const [tableData, setTableData] = useState([]);
+  // const [bookID, setBookID] = useState("");
+  // const [title, setTitle] = useState("");
+  // const [translator, setTranslator] = useState("");
+  // const [originalbook, setOriginalBook] = useState("");
 
   useEffect(() => {
     const getAllBooks = async () => {
@@ -160,6 +152,15 @@ const InventoryInStock = () => {
     };
     getAllBooks();
   }, []);
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = tableData.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -294,69 +295,6 @@ const InventoryInStock = () => {
                 </icon>
               </div>
             </div>
-            {/* 
-            <Paper class="mt-2">
-              <TableContainer style={{ maxHeight: "440px" }}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      {columns.map((column) => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{
-                            minWidth: column.minWidth,
-                            backgroundColor: "#065774",
-                            opacity: "85%",
-                            color: "white",
-                          }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {tableData
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                      .map((tableData) => {
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={tableData.code}
-                          >
-                            {columns.map((column) => {
-                              const value = tableData[column.id];
-                              return (
-                                <TableCell key={column.id} align={column.align}>
-                                  {column.format && typeof value === "number"
-                                    ? column.format(value)
-                                    : value}
-                                </TableCell>
-                              );
-                            })}
-                          </TableRow>
-                        );
-                      })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={tableData.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </Paper> */}
-
             <div className={classes.root}>
               <Paper className={classes.paper}>
                 <TableContainer>
@@ -383,9 +321,7 @@ const InventoryInStock = () => {
                           if (searchTerm === "") {
                             return val;
                           } else if (
-                            val._id
-                              .toLowerCase()
-                              .includes(searchTerm.toLowerCase()) ||
+                            val._id.includes(searchTerm) ||
                             val.title
                               .toLowerCase()
                               .includes(searchTerm.toLowerCase()) ||
