@@ -11,7 +11,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import Grid from "@material-ui/core/Grid";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import EditWholeSale from "./EditWholeSale";
+import EditWholeSale from "./modals/EditWholeSale";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },

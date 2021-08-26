@@ -385,8 +385,7 @@ const InventoryInStock = () => {
                               <TableCell align="center">
                                 {" "}
                                 <button
-                                  variant="contained"
-                                  color="secondary"
+                                  className="focus:outline-none bg-gamboge font-semibold rounded py-2 px-4"
                                   onClick={() => {
                                     setBookID(book._id);
                                     setPublishingTitle(book.publishingTitle);

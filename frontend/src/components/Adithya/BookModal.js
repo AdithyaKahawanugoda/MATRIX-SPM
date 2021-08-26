@@ -63,99 +63,90 @@ const BookModal = ({
             </div>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={11}>
             <div className=" m-1">
               <h1 className="text-lg   font-bold text-prussianBlue">
                 {" "}
-                ISBN :{" "}
+                ISBN : {ISBN}
               </h1>{" "}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={1}>
             <div className=" m-1">
-              <h1 className="text-lg font-bold text-prussianBlue">{ISBN}</h1>
+              <h1 className="text-lg font-bold text-prussianBlue"></h1>
             </div>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={11}>
             <div className=" m-1">
               <h1 className="text-lg   font-bold text-prussianBlue">
                 {" "}
-                Book ID :
+                Book ID : {bookID}
               </h1>{" "}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={1}>
             <div className=" m-1">
-              <h1 className="text-lg font-bold text-prussianBlue">{bookID}</h1>
+              <h1 className="text-lg font-bold text-prussianBlue"></h1>
             </div>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={11}>
             <div className=" m-1">
               {" "}
               <h1 className="text-lg   font-bold text-prussianBlue">
                 {" "}
-                Publishing Title :
+                Publishing Title : {publishingTitle}
               </h1>{" "}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={1}>
             <div className=" m-1">
-              <h1 className="text-lg font-bold text-prussianBlue">
-                {publishingTitle}
-              </h1>
+              <h1 className="text-lg font-bold text-prussianBlue"></h1>
             </div>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={11}>
             <div className=" m-1">
               {" "}
               <h1 className="text-lg   font-bold text-prussianBlue">
                 {" "}
-                Original Title :
+                Original Title : {originalTitle}
               </h1>{" "}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={1}>
             <div className=" m-1">
-              <h1 className="text-lg font-bold text-prussianBlue">
-                {originalTitle}
-              </h1>
+              <h1 className="text-lg font-bold text-prussianBlue"></h1>
             </div>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={11}>
             <div className=" m-1">
               <h1 className="text-lg   font-bold text-prussianBlue">
                 {" "}
-                Translator :
+                Translator : {Translator}
               </h1>{" "}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={1}>
             <div className=" m-1">
-              <h1 className="text-lg font-bold text-prussianBlue">
-                {Translator}
-              </h1>
+              <h1 className="text-lg font-bold text-prussianBlue"></h1>
             </div>
           </Grid>
 
-          <Grid item xs={12} sm={4} md={4}>
+          <Grid item xs={12} sm={4} md={11}>
             <div className=" m-1">
               {" "}
               <h1 className="text-lg   font-bold text-prussianBlue">
                 {" "}
-                Original Author :
+                Original Author : {originalAuthor}
               </h1>{" "}
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={1}>
             <div className=" m-1">
-              <h1 className="text-lg font-bold text-prussianBlue">
-                {" "}
-                {originalAuthor}
-              </h1>
+              <h1 className="text-lg font-bold text-prussianBlue"> </h1>
             </div>
           </Grid>
         </Grid>
