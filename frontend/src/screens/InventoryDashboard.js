@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-
+import { Grid } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
@@ -190,24 +190,36 @@ const InventoryDashboard = (props) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6 text"
-            noWrap
-            className={" text-3xl font-black"}
-          >
-            Inventory Manager
-          </Typography>
+          <Grid container justify="flex-start">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6 text"
+              noWrap
+              className={" text-2xl font-black "}
+            >
+              Inventory Manager
+            </Typography>
+          </Grid>
+          <Grid container justify="flex-end">
+            <button
+              class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+              style={{
+                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+              }}
+            >
+              LogOut
+            </button>
+          </Grid>
         </Toolbar>
-      </AppBar>
+      </AppBar>{" "}
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">

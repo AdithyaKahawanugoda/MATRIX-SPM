@@ -14,6 +14,7 @@ import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import axios from "axios";
+import BookModal from "./BookModal";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -37,9 +38,11 @@ function stableSort(array, comparator, searchTerm) {
       if (searchTerm === "") {
         return val;
       } else if (
-        val._id.includes(searchTerm)
-        // || val.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        // val.description.toLowerCase().includes(searchTerm.toLowerCase())
+        val.ISBN.includes(searchTerm) ||
+        val._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        val.publishingTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        val.translator.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        val.originalTitle.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
         return val;
       }
@@ -61,9 +64,11 @@ const headCells = [
     label: "No",
   },
   { id: "col2", numeric: true, disablePadding: false, label: "BookID" },
-  { id: "col3", numeric: true, disablePadding: false, label: "Title" },
-  { id: "col4", numeric: true, disablePadding: false, label: "Translator" },
-  { id: "col5", numeric: true, disablePadding: false, label: "Original Book" },
+  { id: "col3", numeric: true, disablePadding: false, label: "ISBN" },
+  { id: "col4", numeric: true, disablePadding: false, label: "Title" },
+  { id: "col5", numeric: true, disablePadding: false, label: "Translator" },
+  { id: "col6", numeric: true, disablePadding: false, label: "Original Book" },
+  { id: "col7", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -134,7 +139,16 @@ const InventoryInStock = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [tableData, setTableData] = useState([]);
-  // const [bookID, setBookID] = useState("");
+
+  const [bookModalOpen, setBookModalOpen] = useState(false);
+  const [bookID, setBookID] = useState("");
+  const [publishingTitle, setPublishingTitle] = useState("");
+  const [originalTitle, setOriginalTitle] = useState("");
+  const [translator, setTranslator] = useState("");
+  const [originalAuthor, setOriginalAuthor] = useState("");
+  const [ISBN, setISBN] = useState("");
+  const [bookImage, setbookImage] = useState("");
+
   // const [title, setTitle] = useState("");
   // const [translator, setTranslator] = useState("");
   // const [originalbook, setOriginalBook] = useState("");
@@ -145,6 +159,7 @@ const InventoryInStock = () => {
         .get("http://localhost:6500/matrix/api/inventoryManager/getbooks")
         .then((res) => {
           setTableData(res.data.allBooks);
+          console.log(tableData);
         })
         .catch((err) => {
           console.log(err);
@@ -153,14 +168,14 @@ const InventoryInStock = () => {
     getAllBooks();
   }, []);
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = tableData.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelecteds = tableData.map((n) => n.name);
+  //     setSelected(newSelecteds);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -312,7 +327,11 @@ const InventoryInStock = () => {
                       rowCount={tableData.length}
                     />
                     <TableBody>
-                      {stableSort(tableData, getComparator(order, orderBy))
+                      {stableSort(
+                        tableData,
+                        getComparator(order, orderBy),
+                        searchTerm
+                      )
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
@@ -321,22 +340,28 @@ const InventoryInStock = () => {
                           if (searchTerm === "") {
                             return val;
                           } else if (
-                            val._id.includes(searchTerm) ||
-                            val.title
+                            val.ISBN.includes(searchTerm) ||
+                            val._id
                               .toLowerCase()
                               .includes(searchTerm.toLowerCase()) ||
-                            val.description
+                            val.publishingTitle
+                              .toLowerCase()
+                              .includes(searchTerm.toLowerCase()) ||
+                            val.translator
+                              .toLowerCase()
+                              .includes(searchTerm.toLowerCase()) ||
+                            val.originalTitle
                               .toLowerCase()
                               .includes(searchTerm.toLowerCase())
                           ) {
                             return val;
                           }
                         })
-                        .map((news, index) => {
+                        .map((book, index) => {
                           const labelId = `enhanced-table-checkbox-${index}`;
 
                           return (
-                            <TableRow tabIndex={1} key={news._id}>
+                            <TableRow tabIndex={1} key={book._id}>
                               <TableCell
                                 component="th"
                                 id={labelId}
@@ -344,20 +369,33 @@ const InventoryInStock = () => {
                                 padding="none"
                                 style={{ padding: "10px" }}
                               >
-                                {news._id}
+                                {index + 1}
                               </TableCell>
-                              <TableCell align="right">{news.title}</TableCell>
-                              <TableCell align="right">{news.tag}</TableCell>
-                              <TableCell align="right">
-                                {news.description}
+                              <TableCell align="center">{book._id}</TableCell>
+                              <TableCell align="center">{book.ISBN}</TableCell>
+                              <TableCell align="center">
+                                {book.publishingTitle}
                               </TableCell>
-                              <TableCell align="right">
+                              <TableCell align="center">
+                                {book.translator}
+                              </TableCell>
+                              <TableCell align="center">
+                                {book.originalTitle}
+                              </TableCell>
+                              <TableCell align="center">
                                 {" "}
                                 <button
                                   variant="contained"
                                   color="secondary"
                                   onClick={() => {
-                                    //view more action
+                                    setBookID(book._id);
+                                    setPublishingTitle(book.publishingTitle);
+                                    setOriginalTitle(book.originalTitle);
+                                    setTranslator(book.translator);
+                                    setOriginalAuthor(book.originalAuthor);
+                                    setISBN(book.ISBN);
+                                    setbookImage(book.bookImage);
+                                    setBookModalOpen(true);
                                   }}
                                 >
                                   View More
@@ -383,6 +421,20 @@ const InventoryInStock = () => {
           </div>
         </div>
       </Grid>
+
+      {bookModalOpen && (
+        <BookModal
+          setModalVisible={setBookModalOpen}
+          modalVisible={bookModalOpen}
+          bookID={bookID}
+          publishingTitle={publishingTitle}
+          originalTitle={originalTitle}
+          Translator={translator}
+          originalAuthor={originalAuthor}
+          ISBN={ISBN}
+          bookImage={bookImage}
+        />
+      )}
     </div>
   );
 };

@@ -101,7 +101,17 @@ exports.getAllBooks = async (req, res) => {
 };
 
 // delete specific book
-// exports.deleteBook = async (req,res) = {}
+exports.deleteBook = async (req, res) => {
+  const { ISBN } = req.body;
+  try {
+    await ProductModel.deleteOne({ ISBN });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in deleteBook",
+    });
+  }
+};
 
 const findBookByISBN = async (ISBN, res) => {
   try {
