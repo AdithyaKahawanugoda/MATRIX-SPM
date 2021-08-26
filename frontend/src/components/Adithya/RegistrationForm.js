@@ -3,12 +3,15 @@ import Grid from "@material-ui/core/Grid";
 import { Hidden } from "@material-ui/core";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 // Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import PulseLoader from "react-spinners/PulseLoader";
+
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -43,7 +46,8 @@ const validationSchema = Yup.object({
 });
 
 const RegistrationForm = () => {
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -55,19 +59,20 @@ const RegistrationForm = () => {
           <Grid item xs={12} md={6}>
             <div className="border border-lightSilver rounded-2xl border-8 m-1">
               <FilePond
-                files={file}
                 onupdatefiles={setFile}
                 allowMultiple={false}
                 allowFileEncode={true}
                 maxFiles={1}
                 name="files"
                 credits={false}
-                labelIdle='Upload profile picture<br />Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                 allowFileTypeValidation={true}
                 acceptedFileTypes={["image/*"]}
                 labelFileTypeNotAllowed={"Please import valid profile picture"}
                 required
                 allowImagePreview
+                className="border rounded-2xl"
+                imagePreviewMinHeight={350}
               />
             </div>
           </Grid>
@@ -82,17 +87,34 @@ const RegistrationForm = () => {
               address: "",
               phone: "",
               agreement: false,
+              ppEnc: "",
             }}
             validationSchema={validationSchema}
             onSubmit={async (values) => {
               console.log(values);
+              await axios
+                .post("http://localhost:6500/matrix/api/auth/customer", values)
+                .then((res) => {
+                  console.log(res.data);
+                  setIsLoading(false);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             }}
           >
             {({ handleChange, handleSubmit, values, errors, touched }) => (
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
-                  handleSubmit();
+                  setIsLoading(true);
+                  if (file[0] !== undefined) {
+                    values.ppEnc = file[0].getFileEncodeDataURL();
+                    handleSubmit();
+                  } else {
+                    setIsLoading(false);
+                    alert("Please Upload Cover Image");
+                  }
                 }}
               >
                 <div className="m-1 lg:pl-6">
@@ -283,15 +305,19 @@ const RegistrationForm = () => {
                   </Grid>
                   <Grid item xs={12} sm={9}>
                     <div className=" lg:my-10 md:my-9 sm:my-6">
-                      <button
-                        type="submit"
-                        className="focus:outline-none bg-yellow-500 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
-                        style={{
-                          boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-                        }}
-                      >
-                        SIGN UP
-                      </button>
+                      {isLoading ? (
+                        <PulseLoader loading={isLoading} size={12} />
+                      ) : (
+                        <button
+                          type="submit"
+                          className="focus:outline-none bg-yellow-500 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
+                          style={{
+                            boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+                          }}
+                        >
+                          SIGN UP
+                        </button>
+                      )}
                     </div>
                   </Grid>
                 </div>
@@ -301,21 +327,22 @@ const RegistrationForm = () => {
         </Grid>
         <Hidden only={["xs", "sm"]}>
           <Grid item xs={12} md={5}>
-            <div className="border border-lightSilver rounded-2xl border-8 mt-10">
+            <div className="mt-10">
               <FilePond
-                files={file}
                 onupdatefiles={setFile}
                 allowMultiple={false}
                 allowFileEncode={true}
                 maxFiles={1}
                 name="files"
                 credits={false}
-                labelIdle='Upload profile picture<br />Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                 allowFileTypeValidation={true}
                 acceptedFileTypes={["image/*"]}
                 labelFileTypeNotAllowed={"Please import valid profile picture"}
                 required
                 allowImagePreview
+                className="border-8 border-lightSilver rounded-2xl"
+                imagePreviewMinHeight={350}
               />
             </div>
           </Grid>

@@ -11,11 +11,27 @@ const Header = () => {
     setMobileView((prevState) => !prevState);
   };
 
+  let hasToken;
+  let hasRole;
+
+  if (localStorage.getItem("authToken")) {
+    hasToken = localStorage.getItem("authToken");
+  }
+  if (localStorage.getItem("userRole")) {
+    hasRole = localStorage.getItem("userRole");
+  }
+
+  const logOutHandler = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole");
+    window.location = "/";
+  };
+
   return (
     <>
       <nav className="bg-white shadow-lg py-1">
         {/* <!-- Horizontal navbar --> */}
-        <div className={`${mobileView && " mb-6"} py-2 max-w-6xl mx-auto px-4`}>
+        <div className={`${mobileView && " mb-6"} py-2 max-w-7xl mx-auto px-4`}>
           <div className="flex justify-between">
             <div className="flex">
               <img
@@ -54,60 +70,76 @@ const Header = () => {
                 </NavLink>
                 <NavLink
                   className="py-4 px-2 border-b-4 border-lightSilver font-semibold "
-                  to="/Support"
+                  to="/support"
                   activeStyle={{
                     borderColor: "orange",
                   }}
                 >
                   Support
                 </NavLink>
+                <NavLink
+                  className="py-4 px-2 border-b-4 border-lightSilver font-semibold "
+                  to="/about"
+                  activeStyle={{
+                    borderColor: "orange",
+                  }}
+                >
+                  About
+                </NavLink>
               </div>
             </div>
 
             {/* <!-- Secondary Navbar items --> */}
-            <div className="sm:hidden flex items-center space-x-3">
-              <NavLink
-                className="py-2 px-2 border-b-4 border-transparent"
-                to="/cart"
-                activeStyle={{
-                  borderColor: "orange",
-                }}
-              >
-                <div className="w-10">
-                  <CartSVG />
-                </div>
-              </NavLink>
-              <NavLink
-                className="py-4 px-2 border-b-4 border-transparent"
-                to="/customer"
-                activeStyle={{
-                  borderColor: "orange",
-                }}
-              >
-                <ProfileSVG width={40} height={40} />
-              </NavLink>
-              <NavLink
-                className="py-1 px-2 rounded bg-gamboge hover:bg-halloweenOrange hover:text-white font-semibold "
-                to="/registration"
-              >
-                Signup
-              </NavLink>
-              <button
-                className="py-1 px-2 rounded bg-gamboge  hover:bg-halloweenOrange hover:text-white font-semibold "
-                onClick={() => {
-                  setLoginModalOpen(true);
-                }}
-              >
-                <p>Sign in</p>
-              </button>
-              <button
-                className="py-1 px-2 rounded bg-lightSilver  hover:bg-black hover:text-white font-semibold "
-                onClick={() => {
-                  alert("LOG OUT");
-                }}
-              >
-                Logout
-              </button>
+            <div className="md:hidden sm:hidden flex items-center space-x-3">
+              {hasRole && hasToken ? (
+                <>
+                  <NavLink
+                    className="py-2 px-2 border-b-4 border-transparent"
+                    to="/cart"
+                    activeStyle={{
+                      borderColor: "orange",
+                    }}
+                  >
+                    <div className="w-10">
+                      <CartSVG />
+                    </div>
+                  </NavLink>
+                  <NavLink
+                    className="py-4 px-2 border-b-4 border-transparent"
+                    to="/customer"
+                    activeStyle={{
+                      borderColor: "orange",
+                    }}
+                  >
+                    <ProfileSVG width={40} height={40} />
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    className="py-1 px-2 rounded bg-gamboge hover:bg-halloweenOrange hover:text-white font-semibold "
+                    to="/registration"
+                  >
+                    Signup
+                  </NavLink>
+                  <button
+                    className="py-1 px-2 rounded bg-gamboge  hover:bg-halloweenOrange hover:text-white font-semibold "
+                    onClick={() => {
+                      setLoginModalOpen(true);
+                    }}
+                  >
+                    <p>Sign in</p>
+                  </button>
+                </>
+              )}
+              {hasRole && hasToken ? (
+                <button
+                  className="py-1 px-2 rounded bg-lightSilver  hover:bg-black hover:text-white font-semibold "
+                  onClick={logOutHandler}
+                >
+                  Logout
+                </button>
+              ) : null}
             </div>
 
             {/* <!-- Mobile menu button --> */}
@@ -150,14 +182,39 @@ const Header = () => {
                 Support
               </li>
             </NavLink>
-            <NavLink to="/registration">
-              <li className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300">
-                Signup
-              </li>
-            </NavLink>
-            <li className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300">
-              Sign in
-            </li>
+
+            {!hasRole && !hasToken ? (
+              <>
+                <NavLink to="/registration">
+                  <li className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300">
+                    Signup
+                  </li>
+                </NavLink>
+
+                <li className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300">
+                  Sign in
+                </li>
+              </>
+            ) : (
+              <>
+                <NavLink to="/customer">
+                  <li className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300">
+                    Profile
+                  </li>
+                </NavLink>
+                <NavLink to="/cart">
+                  <li className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300">
+                    Cart
+                  </li>
+                </NavLink>
+                <li
+                  onClick={logOutHandler}
+                  className="block text-lg px-2 py-4 pl-4  hover:bg-halloweenOrange transition duration-300"
+                >
+                  Logout
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </nav>
