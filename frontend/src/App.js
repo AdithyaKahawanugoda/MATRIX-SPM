@@ -1,9 +1,6 @@
 import React from "react";
 import { BrowserRouter as BRouter, Switch, Route } from "react-router-dom";
 
-//imported components
-import Header from "./components/Adithya/Header";
-import Footer from "./components/Adithya/Footer";
 //imported screens
 import Home from "./screens/Home";
 import AboutUs from "./screens/AboutUs";
@@ -25,7 +22,6 @@ import AdminLogin from "./screens/AdminLogin";
 const App = () => {
   return (
     <BRouter>
-      <Header />
       <main>
         <Switch>
           <Route exact path="/" component={Home} />
@@ -46,7 +42,6 @@ const App = () => {
           <Route exact path="/login/admin" component={AdminLogin} />
         </Switch>
       </main>
-      <Footer />
     </BRouter>
   );
 };

@@ -4,9 +4,13 @@ import HomeTopBanner from "../components/Adithya/HomeTopBanner";
 import HomeCarousal from "../components/Adithya/HomeCarousal";
 import HomeCategories from "../components/Adithya/HomeCategories";
 import HomeBestSellers from "../components/Adithya/HomeBestSellers";
+import Footer from "../components/Adithya/Footer";
+import Header from "../components/Adithya/Header";
+
 const Home = () => {
   return (
     <>
+      <Header />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <div className="m-1">
@@ -61,6 +65,7 @@ const Home = () => {
           </div>
         </Grid>
       </Grid>
+      <Footer />
     </>
   );
 };

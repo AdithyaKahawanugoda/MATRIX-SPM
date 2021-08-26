@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -13,6 +15,8 @@ const validationSchema = Yup.object({
 });
 
 const LoginModal = ({ setModalVisible, modalVisible }) => {
+  //login configurations
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <Modal
       open={modalVisible}
@@ -22,7 +26,7 @@ const LoginModal = ({ setModalVisible, modalVisible }) => {
       center
       styles={{
         modal: {
-          border: "3px solid  black",
+          border: "2px solid  black",
           borderRadius: "8px",
           maxWidth: "300px",
           width: "50%",
@@ -32,16 +36,31 @@ const LoginModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ email: "", password: "", role: "customer" }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            await axios
+              .post("http://localhost:6500/matrix/api/auth/login", values)
+              .then((res) => {
+                localStorage.setItem("authToken", res.data.token);
+                localStorage.setItem("userRole", res.data.user.role);
+                setIsLoading(false);
+                if (res.data.user.role === "customer") {
+                  window.location = `/customer`;
+                }
+              })
+              .catch((err) => {
+                alert("Unauthorized access detected!");
+                window.location = "/";
+              });
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
               onSubmit={(event) => {
                 event.preventDefault();
+                setIsLoading(true);
                 handleSubmit();
               }}
             >
@@ -98,13 +117,17 @@ const LoginModal = ({ setModalVisible, modalVisible }) => {
                 </div>
               </div>
               <div className="text-center mb-4 md:mb-6">
-                <button
-                  type="submit"
-                  className="focus:outline-none bg-yellow-500 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
-                  style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
-                >
-                  LOGIN
-                </button>
+                {isLoading ? (
+                  <ScaleLoader />
+                ) : (
+                  <button
+                    type="submit"
+                    className="focus:outline-none bg-yellow-500 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
+                    style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
+                  >
+                    LOGIN
+                  </button>
+                )}
               </div>
             </form>
           )}
