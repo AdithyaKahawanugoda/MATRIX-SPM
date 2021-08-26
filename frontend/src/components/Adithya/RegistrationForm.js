@@ -65,7 +65,7 @@ const RegistrationForm = () => {
                 maxFiles={1}
                 name="files"
                 credits={false}
-                labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                labelIdle="Drag & Drop your files or click to Browse"
                 allowFileTypeValidation={true}
                 acceptedFileTypes={["image/*"]}
                 labelFileTypeNotAllowed={"Please import valid profile picture"}
@@ -335,7 +335,7 @@ const RegistrationForm = () => {
                 maxFiles={1}
                 name="files"
                 credits={false}
-                labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                labelIdle="Drag & Drop your files or click to Browse"
                 allowFileTypeValidation={true}
                 acceptedFileTypes={["image/*"]}
                 labelFileTypeNotAllowed={"Please import valid profile picture"}

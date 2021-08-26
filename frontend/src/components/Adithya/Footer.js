@@ -13,7 +13,7 @@ const Footer = () => {
   const footer = {
     footerSocialLinks: [
       { platform: "facebook", link: "https://www.facebook.com/Apurupoth/" },
-      { platform: "twitter", link: "https://www.instagram.com/" },
+      { platform: "twitter", link: "https://www.twitter.com/" },
       { platform: "youtube", link: "https://www.youtube.com/" },
       { platform: "linkedin", link: "https://lk.linkedin.com/" },
       { platform: "instagram", link: "https://www.instagram.com/" },

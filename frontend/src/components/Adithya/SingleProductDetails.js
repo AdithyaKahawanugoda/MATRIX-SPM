@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Rating from "@material-ui/lab/Rating";
 
 const SingleProductDetails = () => {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(4);
 
   return (
     <Grid container className="px-32 pt-28 pb-10">
@@ -59,6 +59,7 @@ const SingleProductDetails = () => {
             <div>
               <Rating
                 className="mx-3"
+                disabled={`${localStorage.getItem("authToken") ? true : false}`}
                 name="simple-controlled"
                 value={value}
                 size="large"

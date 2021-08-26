@@ -49,7 +49,12 @@ const HomeBestSellers = () => {
     <>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5  lg:gap-6 md:gap-4 sm:gap-3">
         {dummyBooks.map((item, index) => (
-          <div key={index}>
+          <div
+            key={index}
+            onClick={() => {
+              window.location = "/book";
+            }}
+          >
             <BookCard
               imgSrc={item.imgSrc}
               title={item.title}
