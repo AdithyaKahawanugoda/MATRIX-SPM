@@ -145,16 +145,16 @@ const Header = () => {
             {/* <!-- Mobile menu button --> */}
             <div className="lg:hidden flex items-center">
               <button
-                class="outline-none mobile-menu-button"
+                className="outline-none mobile-menu-button"
                 onClick={toggleMobileMenu}
               >
                 <svg
-                  class="w-9 h-9 text-lightSilver"
+                  className="w-9 h-9 text-lightSilver"
                   x-show="!showMenu"
                   fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >

@@ -26,15 +26,15 @@ const BookCard = (props) => {
           )}
           <CardContent>
             {props?.title && (
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography gutterBottom variant="h5">
                 <p className="font-medievalFont font-bold">{props.title}</p>
               </Typography>
             )}
             {props?.description && (
-              <Typography variant="body2" color="textSecondary" component="p">
-                <p className=" font-contentFont font-bold">
+              <Typography variant="body2" color="textSecondary">
+                <div className=" font-contentFont font-bold">
                   {props.description}
-                </p>
+                </div>
               </Typography>
             )}
           </CardContent>
@@ -42,10 +42,13 @@ const BookCard = (props) => {
 
         <CardActions>
           {props?.label1 && (
-            <Typography variant="button" display="block" gutterBottom>
-              <p className="ml-4 text-lg font-black font-boldTallFont">
-                {props.label1}
-              </p>
+            <Typography
+              variant="button"
+              display="block"
+              gutterBottom
+              className="ml-4 text-lg font-black font-boldTallFont"
+            >
+              {props.label1}
             </Typography>
           )}
           {props?.label2 && (

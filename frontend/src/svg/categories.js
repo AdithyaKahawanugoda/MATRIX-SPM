@@ -4,7 +4,7 @@ export const Novels = () => {
   return (
     <svg
       id="Color"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -52,7 +52,7 @@ export const Historical = () => {
   return (
     <svg
       id="FilledOutline"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -81,7 +81,7 @@ export const Literary = () => {
   return (
     <svg
       id="Color"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -116,7 +116,7 @@ export const MilitaryWestern = () => {
   return (
     <svg
       id="Color"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -150,7 +150,7 @@ export const Romance = () => {
   return (
     <svg
       id="FilledOutline"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -184,7 +184,7 @@ export const Spiritual = () => {
   return (
     <svg
       id="FilledOutline"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -219,7 +219,7 @@ export const WomenFiction = () => {
   return (
     <svg
       id="FilledOutline"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
@@ -259,7 +259,7 @@ export const SciFiFantasy = () => {
   return (
     <svg
       id="FilledOutline"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
       height="60"
       viewBox="0 0 64 64"
       width="60"
