@@ -1,4 +1,3 @@
-import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,7 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
-
+import React, { useEffect, useState } from "react";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -46,7 +45,7 @@ function createData(
 const rows = [
   createData(
     1,
-    "000001",
+    "133331",
     "Tony Russell",
     "Mr. Tony Russell, Coalecroft  909, Ontario - 7480, Hungary",
     0.5 + "kg",
@@ -56,7 +55,7 @@ const rows = [
   ),
   createData(
     2,
-    "000002",
+    "137953",
     "Doug Wilton",
     "Mr. Doug Wilton, Longleigh   1845, Glendale - 5576, Panama",
     0.3 + "kg",
@@ -66,7 +65,7 @@ const rows = [
   ),
   createData(
     3,
-    "000003",
+    "139968",
     "Roger Cobb",
     "Mr. Roger Cobb, Sundown 7120, Tokyo - 2368, Mali",
     0.9 + "kg",
@@ -76,7 +75,7 @@ const rows = [
   ),
   createData(
     4,
-    "000004",
+    "142447",
     "Bryon Radley",
     "Mr. Bryon Radley, Bales  9695, Houston - 6560, Serbia",
     70 + "kg",
@@ -86,7 +85,7 @@ const rows = [
   ),
   createData(
     5,
-    "000005",
+    "145227",
     "Fred Carter",
     "Mr. Fred Carter, Bloomsbury  8925, Otawa - 4818, Panama",
     0.2 + "kg",
@@ -96,7 +95,7 @@ const rows = [
   ),
   createData(
     6,
-    "000006",
+    "340561",
     "Martin Talbot",
     "Mr. Martin Talbot, Aberavon  426, Oakland - 2273, Ireland",
     0.6 + "kg",
@@ -106,7 +105,7 @@ const rows = [
   ),
   createData(
     7,
-    "000007",
+    "606106",
     "John Clifton",
     "Mr. John Clifton, Lexington 93, Glendale - 6215, Vatican City",
     0.8 + "kg",
@@ -116,7 +115,7 @@ const rows = [
   ),
   createData(
     8,
-    "000008",
+    "864939",
     "Nate Hobson",
     "Mr. Nate Hobson, Blendon    9754, Henderson - 0324, Central African Republic",
     5 + "kg",
@@ -126,7 +125,7 @@ const rows = [
   ),
   createData(
     9,
-    "000009",
+    "630745",
     "Madelyn Woods",
     "Mrs. Madelyn Woods, Fairfield  2525, Lyon - 6460, Korea, North",
     45 + "kg",
@@ -136,7 +135,7 @@ const rows = [
   ),
   createData(
     10,
-    "000010",
+    "233234",
     "Cara Reynolds",
     "Mrs. Cara Reynolds, Lincoln 3001, Venice - 8061, Kyrgyzstan",
     0.3 + "kg",
@@ -146,7 +145,7 @@ const rows = [
   ),
   createData(
     11,
-    "000011",
+    "237593",
     "Nick Walton",
     "Mr. Nick Walton, Unwin  6947, St. Louis - 6607, Togo",
     0.8 + "kg",
@@ -156,7 +155,7 @@ const rows = [
   ),
   createData(
     12,
-    "000012",
+    "667071",
     "Gwenyth Buckley",
     "Mrs. Gwenyth Buckley, Blanchard  2566, Pittsburgh - 2071, Fiji",
     10 + "kg",
@@ -166,7 +165,7 @@ const rows = [
   ),
   createData(
     13,
-    "000013",
+    "969969",
     "Johnathan Isaac",
     "Mr. Johnathan Isaac, Thoresby   5619, Santa Ana - 0765, Nigeria",
     0.5 + "kg",
@@ -176,7 +175,7 @@ const rows = [
   ),
   createData(
     14,
-    "000014",
+    "716539",
     "Doris Knight",
     "Ms. Doris Knight, Eldon  2417, Henderson - 7173, Malawi",
     0.1 + "kg",
@@ -186,7 +185,7 @@ const rows = [
   ),
   createData(
     15,
-    "000015",
+    "755968",
     "Eileen Truscott",
     "Mrs. Eileen Truscott, Vine  8883, Paris - 0678, Namibia",
     0.7 + "kg",
@@ -197,8 +196,23 @@ const rows = [
 ];
 
 const AllOrders = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
+
+  useEffect(() => {
+    setSelectedRows(rows);
+  }, []);
+
+  const search = () => {
+    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+  };
+
+  const refresh = () => {
+    setSelectedRows(rows);
+    setSearchKey("");
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -217,7 +231,7 @@ const AllOrders = () => {
         </header>
 
         <div class="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
-        <div class="rounded-lg flex bg-gray-100">
+          <div class="rounded-lg flex bg-gray-100">
             <div class="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
               Search Order ID:
             </div>
@@ -226,22 +240,30 @@ const AllOrders = () => {
                 class="ml-0 mt-0  border-1 bg-gray-200 appearance-none border-2 border-gamboge rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-halloweenOrange"
                 id="inline-full-name"
                 type="text"
+                name="searchKey"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
               ></input>
             </div>
 
             <div class=" flex-initial px-0 py-2 m-2">
-              <button class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full">
+              <button
+                class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
+                onClick={search}
+              >
                 Search
               </button>
             </div>
 
             <div class="text-black  px-0 py-2 m-4">
-              <icon class="text-gray-500  hover:text-halloweenOrange">
+              <icon
+                class="text-gray-500  hover:text-halloweenOrange"
+                onClick={refresh}
+              >
                 <RefreshIcon />
               </icon>
             </div>
           </div>
-
 
           <Paper class="mt-2">
             <TableContainer style={{ maxHeight: "440px" }}>
@@ -252,7 +274,12 @@ const AllOrders = () => {
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ minWidth: column.minWidth, backgroundColor:"#065774",opacity:"85%" , color: "white"}}
+                        style={{
+                          minWidth: column.minWidth,
+                          backgroundColor: "#065774",
+                          opacity: "85%",
+                          color: "white",
+                        }}
                       >
                         {column.label}
                       </TableCell>
@@ -260,7 +287,7 @@ const AllOrders = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
+                  {selectedRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       return (
