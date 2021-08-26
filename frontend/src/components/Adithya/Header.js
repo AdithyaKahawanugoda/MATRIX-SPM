@@ -128,7 +128,7 @@ const Header = () => {
                       setLoginModalOpen(true);
                     }}
                   >
-                    <p>Sign in</p>
+                    <p>Login</p>
                   </button>
                 </>
               )}
