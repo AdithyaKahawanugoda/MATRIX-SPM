@@ -7,16 +7,26 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import { withRouter } from "react-router-dom";
+import Header from '../Adithya/Header';
 
+const drawerWidth = 240;
+const useStyles = makeStyles((theme)=>({
 
-const useStyles = makeStyles({
-    drawer: {
-      width: "190px"
-    }
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    marginTop:"2rem"
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerContainer: {
+    overflow: 'auto',
+  },
     // container: {
     //   display: "flex"
     // }
-  });
+  }));
 
 const CustomerSidebar = props => {
 
@@ -57,8 +67,11 @@ const CustomerSidebar = props => {
       }
     ];
     return (
-      <div>
-        <Drawer variant="permanent" className={classes.drawer}>
+     <div>
+        <Drawer variant="permanent" className={classes.drawer} classes={{
+          paper: classes.drawerPaper,
+        }}>
+        <div className={classes.drawerContainer}>
         <List>
           {itemsList.map((item, index) => {
             const { text, icon, onClick } = item;
@@ -70,6 +83,7 @@ const CustomerSidebar = props => {
             );
           })}
         </List>
+        </div> 
       </Drawer>
     </div>
     )

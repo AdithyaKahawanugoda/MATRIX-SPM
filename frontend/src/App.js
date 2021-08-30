@@ -10,6 +10,7 @@ import Footer from "./components/Adithya/Footer";
 import Home from "./screens/Home";
 import AboutUs from "./screens/AboutUs";
 import AdminDashboard from "./screens/AdminDashboard";
+//import AdminNavBar from "./screens/AdminNavBar";
 import AllProducts from "./screens/AllProducts";
 import CategorizedProducts from "./screens/CategorizedProducts";
 import CourierDashboard from "./screens/CourierDashboard";
@@ -20,9 +21,11 @@ import Newsletter from "./screens/Newsletter";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import Registration from "./screens/Registration";
 import ShoppingCart from "./screens/ShoppingCart";
+import Checkout from "./screens/Checkout";
 import SingleProduct from "./screens/SingleProduct";
 import Support from "./screens/Support";
 import AdminLogin from "./screens/AdminLogin";
+import PlaceOrderSuccessfully from "./screens/PlaceOrderSuccessfully";
 
 
 
@@ -30,7 +33,7 @@ const App = () => {
  
   return (
     <BRouter>
-      <Header />
+    <Header />
       <main>
         <Switch>
           <Route exact path="/" component={Home} />
@@ -46,6 +49,8 @@ const App = () => {
           <Route exact path="/privacy" component={PrivacyPolicy} />
           <Route exact path="/registration" component={Registration} />
           <Route exact path="/cart" component={ShoppingCart} />
+          <Route exact path="/checkout" component={Checkout} />
+          <Route exact path="/OrderSuccess" component={PlaceOrderSuccessfully} />
           <Route exact path="/book" component={SingleProduct} />
           <Route exact path="/support" component={Support} />
           <Route exact path="/login/admin" component={AdminLogin} />

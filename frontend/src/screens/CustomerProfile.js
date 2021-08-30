@@ -7,17 +7,26 @@ import RequestBook from '../components/Deshani/RequestBook';
 import MyReview from '../components/Deshani/MyReview';
 import { BrowserRouter as Router,Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import Header from "../components/Adithya/Header";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
   container: {
     display: "flex"
-  }
-});
+  },
+  content: {
+    display: "flex",
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+
+
+}));
 
 const CustomerProfile = () => {
   const classes = useStyles();
   return (
-    <div className={classes.container}>
+   
+    <div className={classes.content}>
       <Router>
       <CustomerSidebar />
       
@@ -32,6 +41,7 @@ const CustomerProfile = () => {
     
 
   </div>
+  
   )
 };
 

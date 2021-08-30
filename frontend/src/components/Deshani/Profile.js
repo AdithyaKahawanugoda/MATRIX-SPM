@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -7,50 +7,110 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditProfileModal from "./EditProfileModal";
+import EditPpModal from "./EditPpModal";
+import DeleteProfileModal from "./DeleteProfileModal";
+import { Image } from "cloudinary-react";
+import axios from "axios";
+
 
 const Profile = props => {
+
+  const [editModalOpen,setEditModalOpen] = useState(false);
+  const [editPpOpen,setEditPpOpen] = useState(false);
+  const [deleteModalOpen,setDeleteModalOpen] = useState(false);
+
+
+  const [username,setUserName] = useState("");
+  const [email,setEmail] = useState("");
+  const [address,setAddress] = useState("");
+  const [phone,setPhone] = useState("");
+  const [profilepic, setProfilePic] = useState(" ");
+  useEffect(() =>{
+        const getCustomer = async() =>{
+          const config ={
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+              },
+        };
+        try{
+          await axios
+              .get("http://localhost:6500/matrix/api/customer/profile",config)
+              .then((res) =>{
+                setUserName(res.data.customer.username);
+                setEmail(res.data.customer.email);
+                setAddress(res.data.customer.address);
+                setPhone(res.data.customer.phone);
+                setProfilePic(res.data.customer.profilePicture.imagePublicId);
+              })
+              .catch((err) =>{
+                alert("Error occured!!! :"+err);
+              });
+        }catch(error){
+          alert("Error occured!!! : " + error)
+        }
+      };
+      getCustomer();
+  },[]);
+
     return (
         
         <div className='flex w-full min-h-screen justify-center items-center'>
-        <div className='flex flex-col space-y-6 max-w-xl mt-6 mb-6 p-8 rounded-xl shadow-lg text-black bg-gamboge'>
+        <div className='flex flex-col space-y-2 bg w-full xl:max-w-6xl sm:max-w-xl md:max-w-3xl h-4/5 mt-3 mb-10 p-8 rounded-xl shadow-lg text-black bg-gamboge'>
         <h1 className='font-boldTallFont font-semibold text-4xl'>Profile</h1>
+        <div className=" justify-center items-center w-40 ml-96" style={{marginLeft:"28rem"}}>
+        <img src="https://i.ibb.co/Zd7q5vd/photo-1572460418264-695212ed493a.jpg" alt="Whats-App-Image-2021-06-27-at-3-51-27-PM" border="0" className=" w-40 h-40 mr-14 rounded-xl"></img>
         
-        <img src="https://thumbs.dreamstime.com/b/cute-rabbit-sitting-brick-wall-green-field-spring-meadow-easter-bunny-hunt-egg-grass-flower-outdoor-nature-background-141613432.jpg" alt="Whats-App-Image-2021-06-27-at-3-51-27-PM" border="0" ></img> 
+        </div>
+         
         <List>
        
         <ListItem>
           <ListItemText
-            primary="Single-line item:1"
+           primary={username}
             
           />
+          
         </ListItem>
+        <hr></hr>
         <ListItem>
           <ListItemText
-            primary="Single-line item:2"
+          primary={email}
             
           />
+          
         </ListItem>
+        <hr></hr>
         <ListItem>
           <ListItemText
-            primary="Single-line item:3"
-            
+           
+          primary={address}
           />
+          
         </ListItem>
+        <hr></hr>
         <ListItem>
           <ListItemText
-            primary="Single-line item:4"
-            
+           
+          primary= {phone}
           />
+         
         </ListItem>
+        <hr></hr>
         </List>
         <div className='grid grid-flow-col grid-cols-3 '>
             <div>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={() => {
+              setEditModalOpen(true);
+            }}>
             Edit Details
           </Button>
           </div>
             <div>
-            <Button variant="contained"  style={{width:"14rem",marginLeft:"-1.1rem"}}>
+            <Button variant="contained"  style={{width:"14rem", marginLeft:"-13rem"}} onClick={() =>{
+              setEditPpOpen(true);
+            }
+            }>
             Update Profile Picture
             </Button>
             </div>
@@ -58,16 +118,44 @@ const Profile = props => {
             <Button
             variant="contained"
             color="secondary"
-            style={{marginLeft:"4.5rem"}}
+            style={{marginLeft:"-19.5rem"}}
             startIcon={<DeleteIcon />}
+            onClick={() =>{
+              setDeleteModalOpen(true);
+            }
+            }
           >  Delete
           </Button>
           </div>
         </div>
         
         </div>
-        
+        {editModalOpen && (
+          <EditProfileModal
+            modalVisible={editModalOpen}
+            setModalVisible={setEditModalOpen}
+            cusUsername={username}
+            cusEmail={email}
+            cusAddress={address}
+            cusPhone={phone}
+          />
+        )}
+        {editPpOpen && (
+          <EditPpModal 
+          modalVisible={editPpOpen}
+          setModalVisible={setEditPpOpen}
+          />
+        )}
+        {deleteModalOpen && (
+          <DeleteProfileModal
+          modalVisible={deleteModalOpen}
+          setModalVisible={setDeleteModalOpen}
+          />
+        )
+        }
         </div>
+       
+        
 
 
     )

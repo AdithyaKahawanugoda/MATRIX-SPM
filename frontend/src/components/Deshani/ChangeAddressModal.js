@@ -1,18 +1,17 @@
 import React,{useState} from "react";
 import { Modal } from "react-responsive-modal";
-import { Formik } from "formik";
 import * as Yup from "yup";
-import Rating from '@material-ui/lab/Rating';
+import { Formik } from "formik";
+
 
 const validationSchema = Yup.object({
-  bookName: Yup.string().trim().required("Book Name is required"),
-  comment:Yup.string().trim().required("Description is required"),
+    address: Yup.string().trim().required("Address is required"),
 
 
 })
 
-const EditReviewModal = ({ setModalVisible, modalVisible }) => {
-    const [value, setValue] = useState(2);
+const ChangeAddressModal = ({ setModalVisible, modalVisible }) => {
+    
 
   return (
     <Modal
@@ -33,7 +32,7 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
         <Formik
-          initialValues={{ bookName: "", rating: "", comment:"" }}
+          initialValues={{ address:'' }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
@@ -47,64 +46,34 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
               }}
             >
               <div className="flex flex-col mb-6">
-              <h1 className="mb-5 font-bold text-2xl">Edit Review</h1>
+              <h1 className="mb-5 font-bold text-2xl">Change Address</h1>
                 <div className="pb-6 md:pr-3 md:mb-0 w-full">
+                
                   <label
                     className="block text-sm font-medium leading-149 mb-3 md:text-lg"
-                    htmlFor={"bookName"}
+                    htmlFor={"address"}
                   >
-                   Book Name
+                    Address
                   </label>
                   <input
                   className={`focus:outline-none w-full pb-2 md:pb-3 border-b focus:border-blue-900 ${
-                    errors.bookName && touched.bookName
+                    errors.address && touched.address
                       ? "border-red-500"
                       : "border-gray-600"
                   }  text-base`}
                     id="email"
                     type="text"
-                    onChange={handleChange("bookName")}
-                    value={values.bookName}
+                    onChange={handleChange("address")}
+                    value={values.address}
                   />
-                  {errors.bookName && touched.bookName ? (
+                  {errors.address && touched.address ? (
                     <div className="text-red-500 text-xs mt-1 md:text-sm">
-                      {errors.bookName}
+                      {errors.address}
                     </div>
                   ) : null}
                 </div>
-                <div className="pb-6 md:pr-3 md:mb-0 w-full">
-                <Rating
-                name="simple-controlled"
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-              />
-                </div>
-                <div className="pb-6 md:pr-3 md:mb-0 w-full">
-                  <label
-                    className="block text-sm font-medium leading-149 mb-3 md:text-lg"
-                    htmlFor={"comment"}
-                  >
-                  Comment
-                  </label>
-                  <textarea
-                  className={`focus:outline-none w-full pb-2 md:pb-3 border-b focus:border-blue-900 ${
-                    errors.comment && touched.comment
-                      ? "border-red-500"
-                      : "border-gray-600"
-                  }  text-base`}
-                    id="comment"
-                    type="text"
-                    onChange={handleChange("comment")}
-                    value={values.comment}
-                  />
-                  {errors.comment && touched.comment ? (
-                    <div className="text-red-500 text-xs mt-1 md:text-sm">
-                      {errors.comment}
-                    </div>
-                  ) : null}
-                </div>
+                
+            
               </div>
               <div className="flex flex-row  space-x-2  text-center mb-4 md:mb-6">
                 <button
@@ -130,4 +99,4 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
   );
 };
 
-export default EditReviewModal;
+export default ChangeAddressModal;

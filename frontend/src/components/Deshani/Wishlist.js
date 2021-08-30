@@ -29,12 +29,12 @@ const Wishlist = () => {
           <TableHead>
             <TableRow>
               <TableCell>
-              <div className='flex bg-white max-h-24 w-24 mr-5'>
-              <img src="https://thumbs.dreamstime.com/b/cute-rabbit-sitting-brick-wall-green-field-spring-meadow-easter-bunny-hunt-egg-grass-flower-outdoor-nature-background-141613432.jpg" alt="Whats-App-Image-2021-06-27-at-3-51-27-PM" border="0" ></img> 
+              <div className='flex bg-white max-h-32 w-28 mr-5'>
+              <img src="https://toppsta.com/images/covers/5/1/4/1/9781444935141.jpg" alt="Whats-App-Image-2021-06-27-at-3-51-27-PM" border="0" ></img> 
               </div>
               </TableCell>
-              <TableCell align="right">Product Name</TableCell>
-              <TableCell align="right">Amount</TableCell>
+              <TableCell align="right">Famous Five</TableCell>
+              <TableCell align="right">Rs.1500</TableCell>
               <TableCell align="right">
                 <IconButton color="primary" aria-label="add to shopping cart">
                     <AddShoppingCartIcon />

@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { Modal } from "react-responsive-modal";
-import { Formik } from "formik";
 import * as Yup from "yup";
+import { Formik } from "formik";
 import Rating from '@material-ui/lab/Rating';
 
 const validationSchema = Yup.object({
@@ -11,7 +11,7 @@ const validationSchema = Yup.object({
 
 })
 
-const EditReviewModal = ({ setModalVisible, modalVisible }) => {
+const AddReviewModal = ({ setModalVisible, modalVisible }) => {
     const [value, setValue] = useState(2);
 
   return (
@@ -47,8 +47,9 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
               }}
             >
               <div className="flex flex-col mb-6">
-              <h1 className="mb-5 font-bold text-2xl">Edit Review</h1>
+              <h1 className="mb-5 font-bold text-2xl">Add Review</h1>
                 <div className="pb-6 md:pr-3 md:mb-0 w-full">
+                
                   <label
                     className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                     htmlFor={"bookName"}
@@ -130,4 +131,4 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
   );
 };
 
-export default EditReviewModal;
+export default AddReviewModal;
