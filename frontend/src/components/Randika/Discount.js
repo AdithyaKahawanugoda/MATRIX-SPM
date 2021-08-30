@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { makeStyles } from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -8,6 +9,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import { Hidden } from "@material-ui/core";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { Image } from "cloudinary-react";
 
 const validationSchema = Yup.object({
   lable: Yup.string()
@@ -119,11 +121,9 @@ const Discount = () => {
 
   const [checked, setChecked] = React.useState(false);
   const [searchTerm, setsearchTerm] = useState("");
-
   const [selectedBook, setSelectedBook] = useState([]);
-
-  const [books, setBooks] = useState(data);
   const [pageNumber, setPageNumber] = useState(0);
+  const [products, setProducts] = useState([]);
 
   const bookPerPage = 8;
   const pageVisited = pageNumber * bookPerPage;
@@ -132,16 +132,33 @@ const Discount = () => {
     setChecked(event.target.checked);
   };
 
-  const addDiscount = () => {
-    if(selectedBook.length>0){
-      alert("discount added!");
-    }else{
-      alert("Please select at least one book!")
+  const addDiscount = async (values) => {
+    if (selectedBook.length > 0) {
+      let dataObject = {
+        regular: values.regularPercentage,
+        bulk: values.bulkPercentage,
+        label: values.lable,
+        BIDs: selectedBook,
+      };
+
+      try {
+        await axios
+          .put(
+            "http://localhost:6500/matrix/api/admin/addDiscountsForSelected",
+            dataObject
+          )
+          .then(() => {
+            window.location.reload(false);
+          });
+      } catch (err) {
+        alert("error :" + err);
+      }
+    } else {
+      alert("Please select at least one book!!");
     }
-    
   };
 
-  const displayBooks = books
+  const displayBooks = products
     .filter((val) => {
       if (searchTerm === "") {
         return val;
@@ -162,34 +179,53 @@ const Discount = () => {
                 "aria-label": "uncontrolled-checkbox",
               }}
               onClick={() => {
-                selectedBook.push(book.BookName);
+                selectedBook.push(book._id);
               }}
             />
           </div>
 
           <div className="w-4/5 h-28 ">
             <div className="h-4/5">
-              <img
-                src={book.img}
-                alt="petshop-design-with-cat-and-dog-vector-21771960"
-                border="0"
+              <Image
+                className="w-full h-full object-contain "
+                cloudName="grid1234"
+                publicId={book.bookImage.imagePublicId}
                 style={{ width: "80px", height: "80px" }}
               />
             </div>
 
             <div className="w-full h-1/5 ml-10">
-              <h1>{book.BookName}</h1>
+              <h1>{book.publishingTitle}</h1>
             </div>
           </div>
         </div>
       );
     });
 
-  const pageCount = Math.ceil(books.length / bookPerPage);
+  const pageCount = Math.ceil(products.length / bookPerPage);
 
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
+
+  useEffect(() => {
+    const getNewsletterItems = async () => {
+      try {
+        await axios
+          .get("http://localhost:6500/matrix/api/admin/getProducts")
+          .then((res) => {
+            setProducts(res.data.Products);
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      } catch (err) {
+        alert("error :" + err);
+      }
+    };
+    getNewsletterItems();
+  }, []);
+
   return (
     <div>
       <h1 className="text-2xl h-16 text-center text-white font-bold mb-1 bg-prussianBlue pt-4 rounded-lg">
@@ -211,7 +247,9 @@ const Discount = () => {
                       }}
                       validationSchema={validationSchema}
                       onSubmit={async (values) => {
-                        console.log(values);
+                        // console.log(values);
+                        // alert(values.regularPercentage);
+                        addDiscount(values);
                       }}
                     >
                       {({
@@ -225,7 +263,6 @@ const Discount = () => {
                           onSubmit={(event) => {
                             event.preventDefault();
                             handleSubmit();
-                            addDiscount();
                           }}
                         >
                           <Grid container spacing={2}>
