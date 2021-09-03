@@ -45,18 +45,6 @@ exports.getNewsletters = async (req, res) => {
   }
 };
 
-exports.getBookRequests = async (req, res) => {
-  try {
-    const bookRequests = await RequestBook.find();
-    res.status(200).send({ bookRequests: bookRequests });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      desc: "Error in fetching book requests -" + err,
-    });
-  }
-};
-
 exports.updateNewsletter = async (req, res) => {
   const { NID, title, description, additionalData, tag, fileEnc } = req.body;
   let Newsletter;
@@ -174,6 +162,44 @@ exports.updateDiscounts = async (req, res) => {
     res.status(200).send({
       success: true,
       desc: "Discount added successfully",
+      Discount,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in add discount" + error,
+    });
+  }
+};
+
+exports.removeDiscounts = async (req, res) => {
+  const { BID } = req.body;
+  const regular = 0,
+    bulk = 0,
+    label = "";
+
+  try {
+    const Discount = await ProductModel.findByIdAndUpdate(
+      BID,
+      {
+        $set: {
+          discountPercentage: {
+            regular,
+            bulk,
+            label,
+          },
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res.status(200).send({
+      success: true,
+      desc: "Discount removed successfully",
       Discount,
     });
   } catch (error) {
