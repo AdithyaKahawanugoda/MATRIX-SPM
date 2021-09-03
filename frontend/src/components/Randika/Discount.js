@@ -6,7 +6,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
-import { Hidden } from "@material-ui/core";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Image } from "cloudinary-react";

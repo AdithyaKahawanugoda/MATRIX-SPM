@@ -32,7 +32,6 @@ const UpdateNewsletterModal = ({
   const [newTitle, setNewTitle] = useState(newsTitle);
   const [newDescription, setNewDescription] = useState(newsDescription);
   const [newTag, setNewTag] = useState(newsTag);
-  const [coverImage, setcoverImage] = useState(newsCover);
 
   const [file, setFile] = useState([]);
 

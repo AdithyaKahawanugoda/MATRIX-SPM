@@ -19,7 +19,6 @@ const AddNewNewsletter = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newTag, setNewTag] = useState("");
-  const [coverImage, setcoverImage] = useState("");
 
   const [file, setFile] = useState([]);
 

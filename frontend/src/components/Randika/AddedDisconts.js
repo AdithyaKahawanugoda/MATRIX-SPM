@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Select from "react-select";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -10,32 +12,8 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import SearchIcon from "@material-ui/icons/Search";
-import ReplayIcon from "@material-ui/icons/Replay";
 import Checkbox from "@material-ui/core/Checkbox";
-
-import TextField from "@material-ui/core/TextField";
 import UpdateDiscountModal from "./UpdateDiscountModal";
-
-function createData(col1, col2, col3, col4, col5) {
-  return { col1, col2, col3, col4, col5 };
-}
-
-const rows = [
-  createData("B4567", "Summer OFF", 20, 30),
-  createData("B4578", "Summer OFF", 20, 30),
-  createData("B7890", "Summer OFF", 20, 30),
-  createData("B6709", "Special Offer", 10, 20),
-  createData("B6789", "Special Offer", 10, 20),
-  createData("B8976", "Summer OFF", 20, 30),
-  createData("B6704", "Special Offer", 10, 20),
-  createData("B5678", "Summer OFF", 20, 30),
-  createData("B4578", "Special Offer", 20, 30),
-  createData("B6704", "Summer OFF", 20, 30),
-  createData("B9856", "Special Offer", 10, 20),
-  createData("B8932", "Special Offer", 10, 20),
-  createData("B8963", "Special Offer", 10, 20),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -58,7 +36,11 @@ function stableSort(array, comparator, searchTerm) {
     .filter((val) => {
       if (searchTerm === "") {
         return val;
-      } else if (val.col2.toLowerCase().includes(searchTerm.toLowerCase())) {
+      } else if (
+        val.discountPercentage.label
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      ) {
         return val;
       }
     })
@@ -76,7 +58,7 @@ const headCells = [
     id: "col1",
     numeric: false,
     disablePadding: true,
-    label: "BookID",
+    label: "Book",
   },
   { id: "col2", numeric: true, disablePadding: false, label: "Discount Lable" },
   {
@@ -91,7 +73,8 @@ const headCells = [
     disablePadding: false,
     label: "Bulk Perecentage",
   },
-  { id: "col5", numeric: true, disablePadding: false, label: "" },
+  { id: "col5", numeric: true, disablePadding: false, label: "Market Price" },
+  { id: "col6", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -202,12 +185,66 @@ const AddedDiscounts = () => {
     setPage(0);
   };
 
+  const [products, setProducts] = useState([]);
+
+  const [lables, setLables] = useState([]);
+  const [options, setOptions] = useState([]);
+  let uniqueLables = [];
+  let data = [];
+
+  const setDisLables = () => {
+    uniqueLables = lables.filter((c, index) => {
+      return lables.indexOf(c) === index;
+    });
+    uniqueLables.map((item, index) => {
+      let category = {
+        value: item,
+        label: item,
+      };
+      data.push(category);
+    });
+
+    setOptions(data);
+  };
+
+  useEffect(() => {
+    const getNewsletterItems = async () => {
+      try {
+        await axios
+          .get("http://localhost:6500/matrix/api/admin/getProducts")
+          .then((res) => {
+            for (let i = 0; i < res.data.Products.length; i++) {
+              if (res.data.Products[i].discountPercentage.label) {
+                products.push(res.data.Products[i]);
+                lables.push(res.data.Products[i].discountPercentage.label);
+              }
+            }
+
+            setDisLables();
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      } catch (err) {
+        alert("error :" + err);
+      }
+    };
+    getNewsletterItems();
+  }, []);
+
   return (
     <div className="w-11/12 h-auto p-4 mt-2 m-auto pt-5 rounded-xl bg-blueSapphire bg-opacity-30">
       <h1 className="text-4xl text-center text-prussianBlue font-bold mb-5">
         Regular Orders
       </h1>
       <div className="w-full h-auto bg-white p-3 rounded-xl">
+        <Select
+          options={options}
+          onChange={(event) => {
+            setsearchTerm(event.value);
+          }}
+          className="basic-multi-select"
+        />
         <div className="w-full mb-1 p-1 bg-blueSapphire bg-opacity-30 r rounded-lg  h-14">
           <div className="w-1/3 float-left">
             <Checkbox
@@ -260,16 +297,20 @@ const AddedDiscounts = () => {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                  rowCount={products.length}
                 />
                 <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy), searchTerm)
+                  {stableSort(
+                    products,
+                    getComparator(order, orderBy),
+                    searchTerm
+                  )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .filter((val) => {
                       if (searchTerm === "") {
                         return val;
                       } else if (
-                        val.col2
+                        val.discountPercentage.label
                           .toLowerCase()
                           .includes(searchTerm.toLowerCase())
                       ) {
@@ -288,11 +329,21 @@ const AddedDiscounts = () => {
                             padding="none"
                             align="center"
                           >
-                            {row.col1}
+                            {row.publishingTitle}
                           </TableCell>
-                          <TableCell align="center">{row.col2}</TableCell>
-                          <TableCell align="center">{row.col3}</TableCell>
-                          <TableCell align="center">Rs.{row.col4}</TableCell>
+                          <TableCell align="center">
+                            {" "}
+                            {row.discountPercentage.label}
+                          </TableCell>
+                          <TableCell align="center">
+                            {row.discountPercentage.regular}
+                          </TableCell>
+                          <TableCell align="center">
+                            Rs.{row.discountPercentage.bulk}
+                          </TableCell>
+                          <TableCell align="center">
+                            Rs.{row.marketPrice}
+                          </TableCell>
 
                           <TableCell
                             align="center"
@@ -325,7 +376,7 @@ const AddedDiscounts = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={products.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

@@ -1,6 +1,5 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import NotificationTable from "./NotificationTable";
 import RevenueChart from "./RevenueChart";
 import SalesChart from "./SalesChart";
 import TodayBulkOrdersTable from "./TodayBulkOrdersTable";

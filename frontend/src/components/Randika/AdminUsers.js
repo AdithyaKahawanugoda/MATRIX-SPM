@@ -10,7 +10,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import UserModal from "./UserModal";

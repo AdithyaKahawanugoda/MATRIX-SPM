@@ -19,7 +19,7 @@ const SalesModal = ({ setModalVisible, modalVisible }) => {
       }}
       focusTrapped={true}
     >
-      <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
+      {/* <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={9}>
             <div className="border border-black border-2 m-1">
@@ -49,8 +49,8 @@ const SalesModal = ({ setModalVisible, modalVisible }) => {
           <Grid item xs={12} md={3}>
             <div className="border border-black border-2 m-1">xs=12 md=3</div>
           </Grid>
-        </Grid>
-      </div>
+        </Grid> */}
+      {/* </div> */}
     </Modal>
   );
 };

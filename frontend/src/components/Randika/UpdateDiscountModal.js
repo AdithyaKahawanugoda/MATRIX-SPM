@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
+
 import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
-import { Image } from "cloudinary-react";
-import Button from "@material-ui/core/Button";
-import { Hidden } from "@material-ui/core";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
