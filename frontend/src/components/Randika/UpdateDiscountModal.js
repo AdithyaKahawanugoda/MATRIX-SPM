@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
@@ -25,13 +25,32 @@ const validationSchema = Yup.object({
 const SampleNewsletterModal = ({
   setModalVisible,
   modalVisible,
-  newsTitle,
-  newsDescription,
-  newsTag,
-  newsCover,
-  NID,
-  deleteNews,
+  setDiscountlable,
+  bulkPercentage,
+  regularPercentage,
+  bookID,
 }) => {
+  const updateDiscount = async (values) => {
+    let dataObject = {
+      regular: values.regularPercentage,
+      bulk: values.bulkPercentage,
+      label: values.lable,
+      BID: bookID,
+    };
+
+    try {
+      await axios
+        .put(
+          "http://localhost:6500/matrix/api/admin/updateDiscounts",
+          dataObject
+        )
+        .then(() => {
+          window.location.reload(false);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
   return (
     <Modal
       open={modalVisible}
@@ -59,13 +78,13 @@ const SampleNewsletterModal = ({
                   <div className="mt-4">
                     <Formik
                       initialValues={{
-                        lable: "",
-                        regularPercentage: "0",
-                        bulkPercentage: "0",
+                        lable: setDiscountlable,
+                        regularPercentage: regularPercentage,
+                        bulkPercentage: bulkPercentage,
                       }}
                       validationSchema={validationSchema}
                       onSubmit={async (values) => {
-                        console.log(values);
+                        updateDiscount(values);
                       }}
                     >
                       {({

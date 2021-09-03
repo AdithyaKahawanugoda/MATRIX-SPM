@@ -186,11 +186,15 @@ const AddedDiscounts = () => {
   };
 
   const [products, setProducts] = useState([]);
-
   const [lables, setLables] = useState([]);
   const [options, setOptions] = useState([]);
   let uniqueLables = [];
   let data = [];
+
+  const [bookID, setbookID] = useState("");
+  const [discountlable, setDiscountlable] = useState("");
+  const [regularPercentage, setregularPercentage] = useState(0);
+  const [bulkPercentage, setbulkPercentage] = useState(0);
 
   const setDisLables = () => {
     uniqueLables = lables.filter((c, index) => {
@@ -235,52 +239,28 @@ const AddedDiscounts = () => {
   return (
     <div className="w-11/12 h-auto p-4 mt-2 m-auto pt-5 rounded-xl bg-blueSapphire bg-opacity-30">
       <h1 className="text-4xl text-center text-prussianBlue font-bold mb-5">
-        Regular Orders
+        Added Discounts
       </h1>
       <div className="w-full h-auto bg-white p-3 rounded-xl">
-        <Select
-          options={options}
-          onChange={(event) => {
-            setsearchTerm(event.value);
-          }}
-          className="basic-multi-select"
-        />
-        <div className="w-full mb-1 p-1 bg-blueSapphire bg-opacity-30 r rounded-lg  h-14">
-          <div className="w-1/3 float-left">
-            <Checkbox
-              style={{ float: "left" }}
-              inputProps={{
-                "aria-label": "uncontrolled-checkbox",
+        <div className="w-full mb-1 p-1 bg-blueSapphire bg-opacity-30 r rounded-lg  h-12">
+          <div className="w-2/3 float-left">
+            <Select
+              options={options}
+              onChange={(event) => {
+                setsearchTerm(event.value);
               }}
-              onClick={() => {
-                setsearchTerm("Summer Off");
-              }}
-            />{" "}
-            <h1 className="text-lg pt-2 font-bold">Summer Off</h1>
+              className="basic-multi-select"
+            />
           </div>
-          <div className="w-1/3 float-left">
-            <Checkbox
-              style={{ float: "left" }}
-              inputProps={{
-                "aria-label": "uncontrolled-checkbox",
-              }}
-              onClick={() => {
-                setsearchTerm("Special Offer");
-              }}
-            />{" "}
-            <h1 className="text-lg pt-2 font-bold">Special Offer</h1>
-          </div>
-          <div className="w-1/3 float-left">
-            <Checkbox
-              style={{ float: "left" }}
-              inputProps={{
-                "aria-label": "uncontrolled-checkbox",
-              }}
-              onClick={() => {
-                setsearchTerm("");
-              }}
-            />{" "}
-            <h1 className="text-lg pt-2 font-bold">All</h1>
+          <div
+            className="w-max bg-gamboge float-left h-8 rounded-full p-3 mt-1 pt-1 ml-6"
+            onClick={() => {
+              setsearchTerm("");
+            }}
+          >
+            <h1 className="lg:text-xl md:text-sm sm:text-sm   font-bold mb-5   font-thinFont text-white">
+              VIEW ALL
+            </h1>
           </div>
         </div>
 
@@ -361,6 +341,12 @@ const AddedDiscounts = () => {
                               }}
                               onClick={() => {
                                 setRevenueModalOpen(true);
+                                setbookID(row._id);
+                                setDiscountlable(row.discountPercentage.label);
+                                setregularPercentage(
+                                  row.discountPercentage.regular
+                                );
+                                setbulkPercentage(row.discountPercentage.bulk);
                               }}
                             >
                               Update Discount
@@ -369,7 +355,6 @@ const AddedDiscounts = () => {
                         </TableRow>
                       );
                     })}
-                  Total Revenue : {tot}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -389,6 +374,10 @@ const AddedDiscounts = () => {
         <UpdateDiscountModal
           setModalVisible={setRevenueModalOpen}
           modalVisible={revenueModalOpen}
+          bookID={bookID}
+          regularPercentage={regularPercentage}
+          bulkPercentage={bulkPercentage}
+          setDiscountlable={discountlable}
         />
       )}
     </div>
