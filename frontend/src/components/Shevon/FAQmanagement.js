@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -44,6 +44,21 @@ const FAQmanagement = () => {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
+
+  useEffect(() => {
+    setSelectedRows(rows);
+  }, []);
+
+  const search = () => {
+    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+  };
+
+  const refresh = () => {
+    setSelectedRows(rows);
+    setSearchKey("");
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,48 +73,57 @@ const FAQmanagement = () => {
     <div>
       <Grid item xs={12}>
         <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-          <header class="font-contentFont text-4xl mb-0 font-bold text-prussianBlue ">
+          <header className="font-contentFont text-4xl mb-0 font-bold text-prussianBlue ">
             FAQ MANAGEMENT
           </header>
         </Paper>
       </Grid>
 
-      <div class=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-        <div class="rounded-xl   mt-0 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
-          <div class="rounded-lg flex bg-gray-100">
-            <div class="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
+      <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <div className="rounded-xl   mt-0 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
+          <div className="rounded-lg flex bg-gray-100">
+            <div className="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
               Search Order ID:
             </div>
-            <div class="flex-initial px-0 py-2 m-2">
+            <div className="flex-initial px-0 py-2 m-2">
               <input
-                class="ml-0 mt-0  border-1 bg-gray-200 appearance-none border-2 border-gamboge rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-halloweenOrange"
+                className="ml-0 mt-0  border-1 bg-gray-200 appearance-none border-2 border-gamboge rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-halloweenOrange"
                 id="inline-full-name"
                 type="text"
+                name="searchKey"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
               ></input>
             </div>
 
-            <div class=" flex-initial px-0 py-2 m-2">
-              <button class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full">
+            <div className=" flex-initial px-0 py-2 m-2">
+              <button
+                className="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
+                onClick={search}
+              >
                 Search
               </button>
             </div>
 
-            <div class="text-black  px-0 py-2 m-4">
-              <icon class="text-gray-500  hover:text-halloweenOrange">
+            <div className="text-black  px-0 py-2 m-4">
+              <icon
+                className="text-gray-500  hover:text-halloweenOrange"
+                onClick={refresh}
+              >
                 <RefreshIcon />
               </icon>
             </div>
           </div>
-          <div class=" flex flex-row-reverse px-0 m-3">
+          <div className=" flex flex-row-reverse px-0 m-3">
             <div>
               <button
-                class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
+                className="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => {
                   setEditCategoryOpen(false);
                   setAddCategoryOpen(true);
                 }}
               >
-                <icons class="mr-4">
+                <icons className="mr-4">
                   <AddCircleRoundedIcon />
                 </icons>
                 ADD NEW CATEGORY
@@ -128,7 +152,7 @@ const FAQmanagement = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
+                  {selectedRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       return (

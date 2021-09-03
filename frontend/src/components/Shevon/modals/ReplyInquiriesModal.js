@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 
 const validationSchema = Yup.object({
-    email: Yup.string()
+  email: Yup.string()
     .email("Please enter valid email")
     .required("Email is required"),
   message: Yup.string().required("Message is required"),
@@ -30,7 +30,7 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
         <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
-         Reply For Inquiries
+          Reply For Inquiries
         </h6>
         <hr></hr>
 
@@ -50,7 +50,7 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
             >
               <div className="mt-2 ">
                 <div className="grid grid-cols-4 px-2 py-2">
-                  <div class="  ">
+                  <div className="  ">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"email"}
@@ -71,7 +71,6 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
                       placeholder="Enter email"
                       onChange={handleChange("email")}
                       value={values.email}
-                      
                     />
                     {errors.email && touched.email ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
@@ -82,7 +81,7 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
                 </div>
 
                 <div className="grid grid-cols-4 px-2 py-2">
-                  <div class="  ">
+                  <div className="  ">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"message"}
@@ -103,7 +102,6 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
                       placeholder="Enter message"
                       onChange={handleChange("message")}
                       value={values.message}
-                      
                     />
                     {errors.message && touched.message ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
@@ -117,7 +115,7 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
               <div className="text-center mb-0 mt-4">
                 <button
                   type="submit"
-                  class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
                   style={{
                     boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                   }}

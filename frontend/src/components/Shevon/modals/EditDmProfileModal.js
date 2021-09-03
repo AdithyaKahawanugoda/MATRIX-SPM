@@ -8,8 +8,6 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import Grid from "@material-ui/core/Grid";
-import { Image } from "cloudinary-react";
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -197,7 +195,7 @@ const EditDmProfileModal = ({ setModalVisible, modalVisible }) => {
                   <div className="text-center mb-0 mt-6">
                     <button
                       type="submit"
-                      class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+                      className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
                       style={{
                         boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                       }}

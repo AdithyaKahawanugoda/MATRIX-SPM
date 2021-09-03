@@ -48,7 +48,7 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
             >
               <div className=" grid grid-rows-2 gap-0 mt-2 ">
                 <div className="grid grid-cols-4 px-2 py-2">
-                  <div class="  ">
+                  <div className="  ">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"question"}
@@ -69,7 +69,6 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
                       placeholder="Enter Question"
                       onChange={handleChange("question")}
                       value={values.question}
-                      
                     />
                     {errors.question && touched.question ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
@@ -80,7 +79,7 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
                 </div>
 
                 <div className="grid grid-cols-4 px-2 py-2">
-                  <div class="  ">
+                  <div className="  ">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"answer"}
@@ -101,7 +100,6 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
                       placeholder="Enter Answer"
                       onChange={handleChange("answer")}
                       value={values.answer}
-                      
                     />
                     {errors.answer && touched.answer ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">

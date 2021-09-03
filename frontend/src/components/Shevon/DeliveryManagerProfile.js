@@ -9,12 +9,12 @@ const DeliveryManagerProfile = () => {
     <div>
       <Grid item xs={12}>
         <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-          <header class="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
+          <header className="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
             Profile Information
           </header>
         </Paper>
       </Grid>
-      <div class="grid grid-row-3">
+      <div className="grid grid-row-3">
         <div className="rounded-xl my-1 mx-1 px-5 py-5   shadow-md bg-blueSapphire bg-opacity-10">
           <h6 className="ml-4 mt-0 mb-2 font-black text-lg">
             Personal Details
@@ -57,7 +57,7 @@ const DeliveryManagerProfile = () => {
 
             <div className="rounded-xl mt-6 mb-0 text-right">
               <button
-                class="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-8 rounded-full"
+                className="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-8 rounded-full"
                 onClick={() => {
                   setEditDmProfileOpen(true);
                 }}
@@ -89,7 +89,7 @@ const DeliveryManagerProfile = () => {
               <div className="col-span-2 grid grid-rows-2">
                 <div className="rounded-r-xl my-1 mr-20 px-4 py-4 shadow-md bg-white bg-opacity-20">
                   <input
-                    class=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue "
+                    className=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue "
                     id="inline-full-name"
                     type="password"
                     placeholder="Enter Old Password"
@@ -97,7 +97,7 @@ const DeliveryManagerProfile = () => {
                 </div>
                 <div className="rounded-r-xl my-1  mr-20 px-4 py-4 shadow-md bg-white bg-opacity-20">
                   <input
-                    class=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue"
+                    className=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue"
                     id="inline-full-name"
                     type="password"
                     placeholder="Enter New Password"
@@ -107,7 +107,7 @@ const DeliveryManagerProfile = () => {
             </div>
 
             <div className=" mt-6 mb-0 text-right">
-              <button class="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full">
+              <button className="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full">
                 Update
               </button>
             </div>
@@ -122,7 +122,7 @@ const DeliveryManagerProfile = () => {
               </h6>
             </div>
             <div className=" mt-0 mb-0 text-right">
-              <button class="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full">
+              <button className="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full">
                 Generate
               </button>
             </div>

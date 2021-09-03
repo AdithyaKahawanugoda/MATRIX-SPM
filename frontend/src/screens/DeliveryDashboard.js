@@ -74,20 +74,20 @@ function ResponsiveDrawer(props) {
   };
 
   const drawer = (
-    <div class="bg-lightSilver " style={{height: '1000px'}}>
+    <div className="bg-lightSilver " style={{ height: "1000px" }}>
       <div className={classes.toolbar} />
-      <div class="mt-10 mx-16 mb-3">
+      <div className="mt-10 mx-16 mb-3">
         <img
           src="https://i.ibb.co/NW4nMPX/profile-pic-24.png"
           alt="profile-pic-24"
           border="0"
         ></img>
       </div>
-      <div class="mt-2 mx-5 mb-8">
+      <div className="mt-2 mx-5 mb-8">
         <Typography
           variant="h6 text"
           noWrap
-          class="font-extrabold text-xl ml-2"
+          className="font-extrabold text-xl ml-2"
         >
           Mr. Shevon Krishmal
         </Typography>
@@ -252,7 +252,6 @@ function ResponsiveDrawer(props) {
 }
 
 ResponsiveDrawer.propTypes = {
-  
   window: PropTypes.func,
 };
 

@@ -58,7 +58,7 @@ const TrianCostDelete = ({
           Delete {selectedRailWay.destination} Cost
         </h6>
         <hr></hr>
-        <div class="text-center text-ferrariRed m-5 ">
+        <div className="text-center text-ferrariRed m-5 ">
           <icon>
             <HighlightOffOutlinedIcon style={{ fontSize: 60 }} />
           </icon>

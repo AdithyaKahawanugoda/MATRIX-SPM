@@ -89,8 +89,8 @@ const EditTrainCostModal = ({
               }}
             >
               <div className="flex flex-col mb-6 ml-1 mt-10">
-                <div class="flex ">
-                  <div class=" ml-6 flex-initial">
+                <div className="flex ">
+                  <div className=" ml-6 flex-initial">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"destination"}
@@ -98,7 +98,7 @@ const EditTrainCostModal = ({
                       Destination :
                     </label>
                   </div>
-                  <div class="flex-initial" style={{ marginLeft: "54px" }}>
+                  <div className="flex-initial" style={{ marginLeft: "54px" }}>
                     <input
                       className={`focus:outline-none w-56 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
                         errors.destination && touched.destination
@@ -119,13 +119,16 @@ const EditTrainCostModal = ({
                   </div>
                 </div>
 
-                <div class="flex mt-6">
-                  <div class=" ml-6 flex-initial">
+                <div className="flex mt-6">
+                  <div className=" ml-6 flex-initial">
                     <label className="block text-sm font-medium leading-149 mb-3 md:text-lg">
                       Cost(Rs) :
                     </label>
                   </div>
-                  <div class="flex-initial  " style={{ marginLeft: "72px" }}>
+                  <div
+                    className="flex-initial  "
+                    style={{ marginLeft: "72px" }}
+                  >
                     <input
                       className={`focus:outline-none w-56 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
                         errors.cost && touched.cost
@@ -154,7 +157,7 @@ const EditTrainCostModal = ({
               <div className="text-center mb-4 mt-10">
                 <button
                   type="submit"
-                  class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
                   style={{
                     boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                   }}

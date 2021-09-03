@@ -48,7 +48,7 @@ const EditQaModal = ({ setModalVisible, modalVisible }) => {
             >
               <div className=" grid grid-rows-2 gap-0 mt-2 ">
                 <div className="grid grid-cols-4 px-2 py-2">
-                  <div class="  ">
+                  <div className="  ">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"question"}
@@ -69,7 +69,6 @@ const EditQaModal = ({ setModalVisible, modalVisible }) => {
                       placeholder="Enter Question"
                       onChange={handleChange("question")}
                       value={values.question}
-                      
                     />
                     {errors.question && touched.question ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
@@ -80,7 +79,7 @@ const EditQaModal = ({ setModalVisible, modalVisible }) => {
                 </div>
 
                 <div className="grid grid-cols-4 px-2 py-2">
-                  <div class="  ">
+                  <div className="  ">
                     <label
                       className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                       htmlFor={"answer"}
@@ -101,7 +100,6 @@ const EditQaModal = ({ setModalVisible, modalVisible }) => {
                       placeholder="Enter Answer"
                       onChange={handleChange("answer")}
                       value={values.answer}
-                      
                     />
                     {errors.answer && touched.answer ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
@@ -115,7 +113,7 @@ const EditQaModal = ({ setModalVisible, modalVisible }) => {
               <div className="text-center mb-0 mt-4">
                 <button
                   type="submit"
-                  class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
                   style={{
                     boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                   }}

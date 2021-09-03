@@ -16,15 +16,15 @@ function DeliveryManagementNav() {
     <div>
       <Grid item xs={12}>
         <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-          <header class="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
+          <header className="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
             Delivery Managment
           </header>
           <hr></hr>
 
-          <div class="grid grid-cols-4 gap-x-0">
+          <div className="grid grid-cols-4 gap-x-0">
             <div>
               <button
-                class="mt-5  mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-12 rounded-full"
+                className="mt-5  mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-12 rounded-full"
                 onClick={() => {
                   setAllOrdersOpen(true);
                   setInTransitOrdersOpen(false);
@@ -36,39 +36,42 @@ function DeliveryManagementNav() {
               </button>
             </div>
             <div>
-              <button class="mt-5  mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-10 rounded-full"
-               onClick={() => {
-                setAllOrdersOpen(false);
-                setInTransitOrdersOpen(true);
-                setPendingOrdersOpen(false);
-                setDeliveredOrdersOpen(false);
-              }}
+              <button
+                className="mt-5  mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-10 rounded-full"
+                onClick={() => {
+                  setAllOrdersOpen(false);
+                  setInTransitOrdersOpen(true);
+                  setPendingOrdersOpen(false);
+                  setDeliveredOrdersOpen(false);
+                }}
               >
                 In Transit Order Details
               </button>
             </div>
 
             <div>
-              <button class="mt-5 mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-6 rounded-full"
-              onClick={() => {
-                setAllOrdersOpen(false);
-                setInTransitOrdersOpen(false);
-                setPendingOrdersOpen(true);
-                setDeliveredOrdersOpen(false);
-              }}
+              <button
+                className="mt-5 mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-6 rounded-full"
+                onClick={() => {
+                  setAllOrdersOpen(false);
+                  setInTransitOrdersOpen(false);
+                  setPendingOrdersOpen(true);
+                  setDeliveredOrdersOpen(false);
+                }}
               >
                 Pending Delivery Order Details
               </button>
             </div>
 
             <div>
-              <button class="mt-5 mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-6 rounded-full"
-              onClick={() => {
-                setAllOrdersOpen(false);
-                setInTransitOrdersOpen(false);
-                setPendingOrdersOpen(false);
-                setDeliveredOrdersOpen(true);
-              }}
+              <button
+                className="mt-5 mb-2 bg-blueSapphire hover:bg-prussianBlue text-white font-bold py-2 px-6 rounded-full"
+                onClick={() => {
+                  setAllOrdersOpen(false);
+                  setInTransitOrdersOpen(false);
+                  setPendingOrdersOpen(false);
+                  setDeliveredOrdersOpen(true);
+                }}
               >
                 Delivered Order History Details
               </button>

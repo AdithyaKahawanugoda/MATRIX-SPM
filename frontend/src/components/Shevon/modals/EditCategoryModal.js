@@ -56,7 +56,6 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
               >
                 <div className="grid grid-cols-4 mt-3">
                   <div className="text-left  pt-1">
-                
                     <label className="block text-sm font-medium leading-149 mb-3 md:text-lg">
                       Category Name :
                     </label>
@@ -85,7 +84,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                   <div className=" col-span-2 text-right">
                     <button
                       type="submit"
-                      class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6  rounded-full"
+                      className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6  rounded-full"
                       style={{
                         boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                       }}
@@ -106,8 +105,8 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                 setAddQaOpen(true);
               }}
             >
-              <h5 class="text-white font-black text-md">
-                <icons class="text-white mr-5 ">
+              <h5 className="text-white font-black text-md">
+                <icons className="text-white mr-5 ">
                   <AddCircleRoundedIcon />
                 </icons>{" "}
                 Add New Question And Answer
@@ -147,7 +146,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
 
                 <div className="text-right py-2 px-2">
                   <icons
-                    class="mr-4 hover:text-gamboge"
+                    className="mr-4 hover:text-gamboge"
                     onClick={() => {
                       setAddQaOpen(false);
                       setEditQaOpen(true);
@@ -155,7 +154,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                   >
                     <EditIcon />
                   </icons>
-                  <icons class="mr-4 hover:text-red-600">
+                  <icons className="mr-4 hover:text-red-600">
                     <DeleteForeverIcon />
                   </icons>
                 </div>
@@ -190,7 +189,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
 
                 <div className="text-right py-2 px-2">
                   <icons
-                    class="mr-4 hover:text-gamboge"
+                    className="mr-4 hover:text-gamboge"
                     onClick={() => {
                       setAddQaOpen(false);
                       setEditQaOpen(true);
@@ -198,7 +197,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                   >
                     <EditIcon />
                   </icons>
-                  <icons class="mr-4 hover:text-red-600">
+                  <icons className="mr-4 hover:text-red-600">
                     <DeleteForeverIcon />
                   </icons>
                 </div>
@@ -232,7 +231,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                 <hr></hr>
                 <div className="text-right py-2 px-2">
                   <icons
-                    class="mr-4 hover:text-gamboge"
+                    className="mr-4 hover:text-gamboge"
                     onClick={() => {
                       setAddQaOpen(false);
                       setEditQaOpen(true);
@@ -240,7 +239,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                   >
                     <EditIcon />
                   </icons>
-                  <icons class="mr-4 hover:text-red-600">
+                  <icons className="mr-4 hover:text-red-600">
                     <DeleteForeverIcon />
                   </icons>
                 </div>
