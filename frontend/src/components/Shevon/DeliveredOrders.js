@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,8 +8,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
-
-
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -36,9 +34,8 @@ function createData(
   orderDate,
   deliveryType,
   deliveryStatus,
-  deliveredDate,
-) 
-{
+  deliveredDate
+) {
   return {
     no,
     code,
@@ -255,6 +252,21 @@ const rows = [
 const DeliveredOrders = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
+
+  useEffect(() => {
+    setSelectedRows(rows);
+  }, []);
+
+  const search = () => {
+    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+  };
+
+  const refresh = () => {
+    setSelectedRows(rows);
+    setSearchKey("");
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -267,14 +279,13 @@ const DeliveredOrders = () => {
 
   return (
     <div>
-      
       <div class=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
         <header class="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
           DELIVERD ORDER HISTORY
         </header>
 
         <div class="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
-        <div class="rounded-lg flex bg-gray-100">
+          <div class="rounded-lg flex bg-gray-100">
             <div class="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
               Search Order ID:
             </div>
@@ -283,17 +294,26 @@ const DeliveredOrders = () => {
                 class="ml-0 mt-0  border-1 bg-gray-200 appearance-none border-2 border-gamboge rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-halloweenOrange"
                 id="inline-full-name"
                 type="text"
+                name="searchKey"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
               ></input>
             </div>
 
             <div class=" flex-initial px-0 py-2 m-2">
-              <button class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full">
+              <button
+                class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
+                onClick={search}
+              >
                 Search
               </button>
             </div>
 
             <div class="text-black  px-0 py-2 m-4">
-              <icon class="text-gray-500  hover:text-halloweenOrange">
+              <icon
+                class="text-gray-500  hover:text-halloweenOrange"
+                onClick={refresh}
+              >
                 <RefreshIcon />
               </icon>
             </div>
@@ -308,7 +328,12 @@ const DeliveredOrders = () => {
                       <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ minWidth: column.minWidth, backgroundColor:"#065774",opacity:"85%" , color: "white"}}
+                        style={{
+                          minWidth: column.minWidth,
+                          backgroundColor: "#065774",
+                          opacity: "85%",
+                          color: "white",
+                        }}
                       >
                         {column.label}
                       </TableCell>
@@ -316,7 +341,7 @@ const DeliveredOrders = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
+                  {selectedRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       return (

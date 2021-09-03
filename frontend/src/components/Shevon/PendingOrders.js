@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -238,6 +238,21 @@ const rows = [
 const PendingOrders = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
+
+  useEffect(() => {
+    setSelectedRows(rows);
+  }, []);
+
+  const search = () => {
+    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+  };
+
+  const refresh = () => {
+    setSelectedRows(rows);
+    setSearchKey("");
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -265,17 +280,26 @@ const PendingOrders = () => {
                 class="ml-0 mt-0  border-1 bg-gray-200 appearance-none border-2 border-gamboge rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-halloweenOrange"
                 id="inline-full-name"
                 type="text"
+                name="searchKey"
+                value={searchKey}
+                onChange={(e) => setSearchKey(e.target.value)}
               ></input>
             </div>
 
             <div class=" flex-initial px-0 py-2 m-2">
-              <button class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full">
+              <button
+                class="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
+                onClick={search}
+              >
                 Search
               </button>
             </div>
 
             <div class="text-black  px-0 py-2 m-4">
-              <icon class="text-gray-500  hover:text-halloweenOrange">
+              <icon
+                class="text-gray-500  hover:text-halloweenOrange"
+                onClick={refresh}
+              >
                 <RefreshIcon />
               </icon>
             </div>
@@ -303,7 +327,7 @@ const PendingOrders = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
+                  {selectedRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       return (
