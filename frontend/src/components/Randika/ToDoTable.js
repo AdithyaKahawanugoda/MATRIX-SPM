@@ -18,18 +18,16 @@ const useStyles = makeStyles({
   },
 });
 
-
 function createData(toDo, action) {
   return { toDo, action };
 }
 
 const rows = [
   createData("Check Revenue", 159),
-  createData("Check Revenue", 159),  
-  createData("Check Revenue", 159),  
+  createData("Check Revenue", 159),
+  createData("Check Revenue", 159),
   createData("Add summer discounts", 262),
   createData("Contact Store Manager", 305),
-  
 ];
 
 const makeAlert = () => {
@@ -66,8 +64,8 @@ const ToDoTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.name}>
+                {rows.map((row, index) => (
+                  <TableRow key={index}>
                     {/* <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell> */}

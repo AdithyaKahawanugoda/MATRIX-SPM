@@ -16,7 +16,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import TextField from "@material-ui/core/TextField";
 
 function createData(col1, col2, col3, col4, col5) {
-  return { col1, col2, col3, col4, col5};
+  return { col1, col2, col3, col4, col5 };
 }
 
 const rows = [
@@ -26,7 +26,6 @@ const rows = [
   createData("O6709", "B151,B111,B181", 4, 6024, "2021-05-24"),
   createData("O6789", "B141,B101,B111,B181", 4, 4939, "2021-05-25"),
   createData("O8976", "B191,B171,B111,B101", 4, 8765, "2021-05-24"),
-  
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -53,6 +52,7 @@ function stableSort(array, comparator, searchDate) {
       } else if (val.col5.toLowerCase().includes(searchDate.toLowerCase())) {
         return val;
       }
+      return null;
     })
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -166,8 +166,6 @@ const RegularOrders = ({ setModalVisible, modalVisible }) => {
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [searchDate, setsearchDate] = useState("");
 
-  let tot = 0;
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -255,10 +253,11 @@ const RegularOrders = ({ setModalVisible, modalVisible }) => {
                       ) {
                         return val;
                       }
+                      return null;
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      tot += row.col4;
+
                       return (
                         <TableRow hover tabIndex={-1} key={row.name}>
                           <TableCell
@@ -298,7 +297,6 @@ const RegularOrders = ({ setModalVisible, modalVisible }) => {
                         </TableRow>
                       );
                     })}
-          
                 </TableBody>
               </Table>
             </TableContainer>

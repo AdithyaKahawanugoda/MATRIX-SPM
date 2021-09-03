@@ -59,6 +59,7 @@ function stableSort(array, comparator, searchDate) {
       } else if (val.col6.toLowerCase().includes(searchDate.toLowerCase())) {
         return val;
       }
+      return null;
     })
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -253,6 +254,7 @@ const RegularOrders = () => {
                       ) {
                         return val;
                       }
+                      return null;
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;

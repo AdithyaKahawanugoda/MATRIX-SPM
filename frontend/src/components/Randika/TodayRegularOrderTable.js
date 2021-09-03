@@ -66,8 +66,8 @@ const TodayRegularOrderTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.name}>
+                {rows.map((row, index) => (
+                  <TableRow key={index}>
                     <TableCell align="left">{row.PID}</TableCell>
                     <TableCell align="left">{row.Qty}</TableCell>
                     <TableCell align="left">{row.NetTot}</TableCell>

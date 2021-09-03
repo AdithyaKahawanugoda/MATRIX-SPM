@@ -56,21 +56,20 @@ const useStyles = makeStyles({
 const Discount = () => {
   const classes = useStyles();
 
-  const [checked, setChecked] = React.useState(false);
+  // const [checked, setChecked] = React.useState(false);
   const [searchTerm, setsearchTerm] = useState("");
-  const [selectedBook, setSelectedBook] = useState([]);
+  let selectedBook = [];
   const [pageNumber, setPageNumber] = useState(0);
   const [products, setProducts] = useState([]);
 
   const bookPerPage = 8;
   const pageVisited = pageNumber * bookPerPage;
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
+  // const handleChange = (event) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const addDiscount = async (values) => {
-  
     if (selectedBook.length > 0) {
       let dataObject = {
         regular: values.regularPercentage,
@@ -105,6 +104,7 @@ const Discount = () => {
       ) {
         return val;
       }
+      return null;
     })
     .slice(pageVisited, pageVisited + bookPerPage)
     .map((book, index) => {

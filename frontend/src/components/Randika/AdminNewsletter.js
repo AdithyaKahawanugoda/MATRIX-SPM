@@ -130,10 +130,11 @@ const AdminNewsletter = () => {
             style={{ maxHeight: "500px" }}
           >
             {newsletterItems
-              .filter((val) => {
+              .filter((val) => {               
                 if (searchTerm === "") {
                   return val;
-                } else if (
+                } else
+                 if (
                   val.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   val.description
                     .toLowerCase()
@@ -142,6 +143,7 @@ const AdminNewsletter = () => {
                 ) {
                   return val;
                 }
+                return null;
               })
               .map((row, index) => {
                 return (

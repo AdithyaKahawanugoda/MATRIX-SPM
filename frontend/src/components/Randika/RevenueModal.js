@@ -20,13 +20,14 @@ const RevenueModal = ({ setModalVisible, modalVisible }) => {
       }}
       focusTrapped={true}
     >
-      <h1 className="text-lg  text-gamboge font-bold mb-5 ">
-                Customer Data
-              </h1>
-              <Divider />
+      <h1 className="text-lg  text-gamboge font-bold mb-5 ">Customer Data</h1>
+      <Divider />
       <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8 w-2/3 m-auto">
-      
-        <Grid container spacing={3} className="border border-black border-2 w-2/3 m-auto rounded-lg shadow-2xl">
+        <Grid
+          container
+          spacing={3}
+          className=" border-black border-2 w-2/3 m-auto rounded-lg shadow-2xl"
+        >
           <Grid item md={4}>
             <div>Customer ID : </div>
           </Grid>
@@ -49,7 +50,6 @@ const RevenueModal = ({ setModalVisible, modalVisible }) => {
           </Grid>
         </Grid>
       </div>
-      
     </Modal>
   );
 };

@@ -58,10 +58,11 @@ function stableSort(array, comparator, searchTerm) {
       } else if (
         val.col1.toLowerCase().includes(searchTerm.toLowerCase()) ||
         val.col2.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.col3 == searchTerm
+        val.col3 === searchTerm
       ) {
         return val;
       }
+      return null;
     })
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -256,6 +257,7 @@ const AdminUsers = () => {
                       ) {
                         return val;
                       }
+                      return null;
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;

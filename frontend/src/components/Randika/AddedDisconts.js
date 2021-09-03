@@ -12,7 +12,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
 import UpdateDiscountModal from "./UpdateDiscountModal";
 
 function descendingComparator(a, b, orderBy) {
@@ -43,6 +42,7 @@ function stableSort(array, comparator, searchTerm) {
       ) {
         return val;
       }
+      return null;
     })
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -170,8 +170,6 @@ const AddedDiscounts = () => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
 
-  let tot = 0;
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -187,8 +185,8 @@ const AddedDiscounts = () => {
     setPage(0);
   };
 
-  const [products, setProducts] = useState([]);
-  const [lables, setLables] = useState([]);
+  let products = [];
+  let lables = [];
   const [options, setOptions] = useState([]);
   let uniqueLables = [];
   let data = [];
@@ -208,6 +206,7 @@ const AddedDiscounts = () => {
         label: item,
       };
       data.push(category);
+      return 0;
     });
 
     setOptions(data);
@@ -225,7 +224,6 @@ const AddedDiscounts = () => {
                 lables.push(res.data.Products[i].discountPercentage.label);
               }
             }
-
             setDisLables();
           })
           .catch((err) => {
@@ -298,24 +296,24 @@ const AddedDiscounts = () => {
                       ) {
                         return val;
                       }
+                      return null;
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      tot += row.col4;
+
                       return (
-                        <TableRow hover tabIndex={-1} key={row.name}>
+                        <TableRow hover tabIndex={-1} key={index}>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             paddingLeft="3px"
-                        
                           >
                             <h1 className="font-bold text-md ">
                               {row.publishingTitle}
                             </h1>
                           </TableCell>
-                          <TableCell >
+                          <TableCell>
                             {" "}
                             <h1 className="font-bold text-md">
                               {row.discountPercentage.label}
@@ -383,7 +381,6 @@ const AddedDiscounts = () => {
                                 setUpdateModalOpen(true);
                                 setRemoveModalOpen(true);
                                 setbookID(row._id);
-                               
                               }}
                             >
                               Remove
