@@ -3,9 +3,6 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { Divider } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import ReplayIcon from "@material-ui/icons/Replay";
 import { Image } from "cloudinary-react";
 import Header from "../components/Adithya/Header";
 
@@ -37,7 +34,6 @@ const useStyles = makeStyles({
 
 const AllProducts = () => {
   const classes = useStyles();
-  const [searchTerm, setsearchTerm] = useState("");
   const [newsletterItems, setNewsletterItems] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
 
