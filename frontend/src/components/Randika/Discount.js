@@ -53,68 +53,6 @@ const useStyles = makeStyles({
   },
 });
 
-const data = [
-  {
-    BookName: "Anne of Green Gables",
-    img: "https://i.ibb.co/zn6sSHM/download-1.jpg",
-  },
-  { BookName: "Dracula", img: "https://i.ibb.co/sQDTJ78/download-5.jpg" },
-  {
-    BookName: "A Town Like Alice",
-    img: "https://i.ibb.co/9Ns64V0/download-2.jpg",
-  },
-  {
-    BookName: "The Color Purple",
-    img: "https://i.ibb.co/MBNrv9s/download-3.jpg",
-  },
-  { BookName: "Frankenstein", img: "https://i.ibb.co/LvnXySj/download-4.jpg" },
-  { BookName: "Animal Farm", img: "https://i.ibb.co/M1drW98/download-6.jpg" },
-  {
-    BookName: "The Handmaid's Tale",
-    img: "https://i.ibb.co/tPyPrJS/download.jpg",
-  },
-  {
-    BookName: "Barney's Version",
-    img: "https://i.ibb.co/pxyhJ0X/images-1.jpg",
-  },
-  {
-    BookName: "Breakfast of Champions",
-    img: "https://i.ibb.co/YL6BRSm/images-3.jpg",
-  },
-  {
-    BookName: "The Brothers Karamazov",
-    img: "https://i.ibb.co/2WFNjK0/images-4.jpg",
-  },
-  {
-    BookName: "Brave New World",
-    img: "https://i.ibb.co/7J9K9vm/images-5.jpg",
-  },
-  {
-    BookName: "City of Thieves",
-    img: "https://i.ibb.co/NLmqS82/images-6.jpg",
-  },
-  { BookName: "Don Quixote", img: "https://i.ibb.co/FDNLntg/images-7.jpg" },
-  { BookName: "Disgrace", img: "https://i.ibb.co/b2NZ8PH/images-8.jpg" },
-  {
-    BookName: "Crime and Punishment",
-    img: "https://i.ibb.co/Wx9R4Vr/images-9.jpg",
-  },
-  { BookName: "Doomsday Book", img: "https://i.ibb.co/C6T8DcW/images-10.jpg" },
-  {
-    BookName: "Your House Will Pay",
-    img: "https://i.ibb.co/M1xKjc9/images-11.jpg",
-  },
-  { BookName: "Rebecca", img: "https://i.ibb.co/RjYmp9z/images-12.jpg" },
-  {
-    BookName: "The Silence of the Lambs",
-    img: "https://i.ibb.co/zxJ83f7/images.jpg",
-  },
-  {
-    BookName: "Shutter Island",
-    img: "https://i.ibb.co/NLmqS82/images-6.jpg",
-  },
-];
-
 const Discount = () => {
   const classes = useStyles();
 
@@ -132,11 +70,12 @@ const Discount = () => {
   };
 
   const addDiscount = async (values) => {
+  
     if (selectedBook.length > 0) {
       let dataObject = {
         regular: values.regularPercentage,
         bulk: values.bulkPercentage,
-        label: values.lable,
+        label: values.lable.toUpperCase(),
         BIDs: selectedBook,
       };
 

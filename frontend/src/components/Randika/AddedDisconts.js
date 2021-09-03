@@ -75,6 +75,7 @@ const headCells = [
   },
   { id: "col5", numeric: true, disablePadding: false, label: "Market Price" },
   { id: "col6", numeric: true, disablePadding: false, label: "" },
+  { id: "col7", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -166,7 +167,8 @@ const AddedDiscounts = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchTerm, setsearchTerm] = useState("");
 
-  const [revenueModalOpen, setRevenueModalOpen] = useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [removeModalOpen, setRemoveModalOpen] = useState(false);
 
   let tot = 0;
 
@@ -306,23 +308,33 @@ const AddedDiscounts = () => {
                             component="th"
                             id={labelId}
                             scope="row"
-                            padding="none"
-                            align="center"
+                            paddingLeft="3px"
+                        
                           >
-                            {row.publishingTitle}
+                            <h1 className="font-bold text-md ">
+                              {row.publishingTitle}
+                            </h1>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell >
                             {" "}
-                            {row.discountPercentage.label}
+                            <h1 className="font-bold text-md">
+                              {row.discountPercentage.label}
+                            </h1>
                           </TableCell>
                           <TableCell align="center">
-                            {row.discountPercentage.regular}
+                            <h1 className="font-bold text-md">
+                              {row.discountPercentage.regular}
+                            </h1>
                           </TableCell>
                           <TableCell align="center">
-                            Rs.{row.discountPercentage.bulk}
+                            <h1 className="font-bold text-md ">
+                              Rs.{row.discountPercentage.bulk}
+                            </h1>
                           </TableCell>
                           <TableCell align="center">
-                            Rs.{row.marketPrice}
+                            <h1 className="font-bold text-md">
+                              Rs.{row.marketPrice}
+                            </h1>
                           </TableCell>
 
                           <TableCell
@@ -332,7 +344,7 @@ const AddedDiscounts = () => {
                             {" "}
                             <button
                               type="submit"
-                              className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12"
+                              className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-20 h-10 sm:w-80 sm:h-12"
                               style={{
                                 boxShadow:
                                   "0px 10px 15px rgba(3, 17, 86, 0.25)",
@@ -340,7 +352,8 @@ const AddedDiscounts = () => {
                                 color: "white",
                               }}
                               onClick={() => {
-                                setRevenueModalOpen(true);
+                                setUpdateModalOpen(true);
+                                setRemoveModalOpen(false);
                                 setbookID(row._id);
                                 setDiscountlable(row.discountPercentage.label);
                                 setregularPercentage(
@@ -349,7 +362,31 @@ const AddedDiscounts = () => {
                                 setbulkPercentage(row.discountPercentage.bulk);
                               }}
                             >
-                              Update Discount
+                              Update
+                            </button>
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{ paddingLeft: "20px" }}
+                          >
+                            {" "}
+                            <button
+                              type="submit"
+                              className="focus:outline-none bg-ferrariRed text-snow-900 text-base rounded border hover:border-transparent w-20 h-10 sm:w-80 sm:h-12"
+                              style={{
+                                boxShadow:
+                                  "0px 10px 15px rgba(3, 17, 86, 0.25)",
+                                float: "right",
+                                color: "white",
+                              }}
+                              onClick={() => {
+                                setUpdateModalOpen(true);
+                                setRemoveModalOpen(true);
+                                setbookID(row._id);
+                               
+                              }}
+                            >
+                              Remove
                             </button>
                           </TableCell>
                         </TableRow>
@@ -370,14 +407,15 @@ const AddedDiscounts = () => {
           </Paper>
         </div>
       </div>
-      {revenueModalOpen && (
+      {updateModalOpen && (
         <UpdateDiscountModal
-          setModalVisible={setRevenueModalOpen}
-          modalVisible={revenueModalOpen}
+          setModalVisible={setUpdateModalOpen}
+          modalVisible={updateModalOpen}
           bookID={bookID}
           regularPercentage={regularPercentage}
           bulkPercentage={bulkPercentage}
           setDiscountlable={discountlable}
+          removeModalOpen={removeModalOpen}
         />
       )}
     </div>
