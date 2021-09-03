@@ -4,7 +4,7 @@ import { BrowserRouter as BRouter, Switch, Route } from "react-router-dom";
 //imported screens
 import Home from "./screens/Home";
 import AboutUs from "./screens/AboutUs";
-import AdminDashboard from "./screens/AdminDashboard";
+import AdminDashboard from "./screens/AdminNavBar";
 import AllProducts from "./screens/AllProducts";
 import CategorizedProducts from "./screens/CategorizedProducts";
 import CourierDashboard from "./screens/CourierDashboard";
