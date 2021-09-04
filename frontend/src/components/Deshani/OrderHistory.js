@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { withStyles, makeStyles, alpha } from '@material-ui/core/styles';
+import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from "prop-types";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -245,6 +245,7 @@ const OrderHistory = () => {
                     ) {
                       return val;
                     }
+                    return null;
                   })
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;

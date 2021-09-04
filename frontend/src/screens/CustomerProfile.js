@@ -4,7 +4,6 @@ import OrderHistory from '../components/Deshani/OrderHistory';
 import Wishlist from '../components/Deshani/Wishlist';
 import RequestBook from '../components/Deshani/RequestBook';
 import MyReview from '../components/Deshani/MyReview';
-import { BrowserRouter as Router,Route, Switch } from "react-router-dom";
 import { Drawer,ListItem,List,ListItemIcon,ListItemText} from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -17,6 +16,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Header from "../components/Adithya/Header";
+import Footer from "../components/Adithya/Footer";
 
 const drawerWidth = 250;
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme)=>({
   },
   drawerPaper: {
     width: drawerWidth,
-    marginTop:"7rem",
+    marginTop:"6rem",
   },
   drawerContainer: {
     overflow: 'auto',
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme)=>({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    marginTop:"3rem",
+    marginTop:"5rem",
   },
 }));
 
@@ -138,7 +138,7 @@ function CustomerProfile (props)  {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   return (
-   
+    
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
@@ -184,9 +184,11 @@ function CustomerProfile (props)  {
         {requestBook && <RequestBook />}
         {review && <MyReview />}
       </main>
+      
+      
     
-
   </div>
+     
   
   );
 }

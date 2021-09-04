@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
+// import CssBaseline from '@material-ui/core/CssBaseline';
+// import Typography from '@material-ui/core/Typography';
+// import Container from '@material-ui/core/Container';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditProfileModal from "./EditProfileModal";
 import EditPpModal from "./EditPpModal";
 import DeleteProfileModal from "./DeleteProfileModal";
-import { Image } from "cloudinary-react";
+// import { Image } from "cloudinary-react";
 import axios from "axios";
 
 
@@ -59,7 +59,7 @@ const Profile = props => {
         <div className='flex flex-col space-y-2 bg w-full xl:max-w-6xl sm:max-w-xl md:max-w-3xl h-4/5 mt-3 mb-10 p-8 rounded-xl shadow-lg text-black bg-gamboge'>
         <h1 className='font-boldTallFont font-semibold text-4xl'>Profile</h1>
         <div className=" justify-center items-center w-40 ml-96" style={{marginLeft:"28rem"}}>
-        <img src="https://i.ibb.co/Zd7q5vd/photo-1572460418264-695212ed493a.jpg" alt="Whats-App-Image-2021-06-27-at-3-51-27-PM" border="0" className=" w-40 h-40 mr-14 rounded-xl"></img>
+        <img src="https://i.ibb.co/Zd7q5vd/photo-1572460418264-695212ed493a.jpg" alt="profile pic" border="0" className=" w-40 h-40 mr-14 rounded-xl"></img>
         
         </div>
          

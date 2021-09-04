@@ -15,37 +15,35 @@ const MyReview = () => {
         <div className='flex flex-col space-y-6 bg w-full xl:max-w-6xl sm:max-w-xl md:max-w-3xl h-3/4 mt-6 mb-10 p-8 rounded-xl shadow-lg text-black bg-gamboge'>
         <h1 className='font-boldTallFont font-semibold text-4xl'>My Reviews</h1>
  
-           <div className="max-w-md mx-auto bg-white rounded-xl shadow-sm overflow-hidden md:max-w-2xl justify-start ml-5 mt-4">
-           <div className="md:flex">
-             <div className="md:flex-shrink-0">
-             
-             <img src="https://i.ibb.co/S6t2SV6/81-YOu-OGFCJL-1-1.jpg" alt="Man looking at item at a store" className="h-48 w-full object-cover md:h-full md:w-48"></img>
-             </div>
-               
-               
-             <div className="p-8 space-y-3">
-               <div className="uppercase tracking-wide text-sm font-semibold">Harry Potter and the Philosopher's Stone</div>
-               <Rating name="read-only" value={5} readOnly />
-               <p className="mt-2 text-gray-500">I can honestly say from the bottom of my heart, with every ounce of my being, that the Harry Potter books are among some of the most well-developed, thoroughly planned, terrifically intriguing, thought-provoking and meaningful books I have ever read.</p>
-               <Button variant="contained" color="primary" className="mr-20" onClick={() =>{
-                 setEditModalOpen(true);
-               }} >
-               Edit Rewiews
-                 </Button>
-                 <Button
-                 variant="contained"
-                 color="secondary"
-                 style={{marginLeft:"4.5rem"}}
-                 startIcon={<DeleteIcon />}
-                onClick={()=>{
-                  setDeleteModalOpen(true);
-                }} 
-               >  Delete Reviews
-               </Button>
-              
-             </div>
-           </div> 
+         <div className=" w-full lg:max-w-full lg:flex">
+         <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"  title="Mountain">
+         <img src="https://i.ibb.co/S6t2SV6/81-YOu-OGFCJL-1-1.jpg" alt="Man looking at item at a store" ></img>
          </div>
+         <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+           <div className="mb-8">
+            
+             <div className="text-gray-900 font-bold text-xl mb-2">Harry Potter and the Philosopher's Stone</div>
+             <Rating name="read-only" value={5} readOnly />
+             <p className="text-gray-700 text-base mb-10">I can honestly say from the bottom of my heart, with every ounce of my being, that the Harry Potter books are among some of the most well-developed, thoroughly planned, terrifically intriguing, thought-provoking and meaningful books I have ever read.</p>
+             <Button variant="contained" color="primary" className="mr-20" onClick={() =>{
+              setEditModalOpen(true);
+            }} >
+            Edit Rewiews
+              </Button>
+              <Button
+              variant="contained"
+              color="secondary"
+              style={{marginLeft:"2rem"}}
+              startIcon={<DeleteIcon />}
+             onClick={()=>{
+               setDeleteModalOpen(true);
+             }} 
+            >  Delete Reviews
+            </Button>
+           </div>
+      
+         </div>
+       </div>    
         </div>
         {editModalOpen && (
           <EditReviewModal 
@@ -60,6 +58,7 @@ const MyReview = () => {
           />
         )
         }
+        
          </div>
   
         

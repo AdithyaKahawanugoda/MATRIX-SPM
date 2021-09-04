@@ -32,7 +32,7 @@ const PlaceOrderSuccessfully = () => {
         <p className='ml-2 font-bold'>Rs.1500</p>
         </div>
         </div>
-        <div  className="flex flex-row grid-rows-2 space-x-10 mt-8 mb-3" style={{marginLeft:"10rem"}}>
+        <div  className="flex flex-row grid-rows-2 space-x-10 mt-8 mb-3" style={{marginLeft:"15rem"}}>
         <div>
         <button
               type="submit"

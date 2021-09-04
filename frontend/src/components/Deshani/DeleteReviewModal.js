@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal } from "react-responsive-modal";
-import * as Yup from "yup";
 import { Formik } from "formik";
 
 const DeleteReviewModal = ({setModalVisible, modalVisible}) => {
@@ -48,17 +47,17 @@ const DeleteReviewModal = ({setModalVisible, modalVisible}) => {
                   </label>
                 </div>
               </div>
-              <div className="flex flex-row  space-x-2 text-center mb-4 md:mb-6">
+              <div className="flex flex-row  space-x-2 text-center mb-4 md:mb-6 ml-12">
                 <button
                   type="submit"
-                  className="focus:outline-none bg-yellow-500 text-snow-900 text-base rounded border hover:border-transparent w-25 h-10 sm:w-80 sm:h-12"
+                  className="focus:outline-none bg-yellow-500 text-snow-900 text-base rounded border hover:border-transparent w-40 h-10 sm:w-80 sm:h-12"
                   style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
                 >
-                  DELETE PROFILE
+                  DELETE REVIEW
                 </button>
                 <button
                 type="submit"
-                className="focus:outline-none bg-gray-400 text-snow-900 text-base rounded border hover:border-transparent w-25 h-10 sm:w-80 sm:h-12"
+                className="focus:outline-none bg-gray-400 text-snow-900 text-base rounded border hover:border-transparent w-40 h-10 sm:w-80 sm:h-12"
                 style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
               >
                 CANCEL
