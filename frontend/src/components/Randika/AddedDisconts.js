@@ -12,7 +12,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
 import UpdateDiscountModal from "./UpdateDiscountModal";
 
 function descendingComparator(a, b, orderBy) {
@@ -43,6 +42,7 @@ function stableSort(array, comparator, searchTerm) {
       ) {
         return val;
       }
+      return null;
     })
     .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -170,7 +170,13 @@ const AddedDiscounts = () => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
 
-  let tot = 0;
+  const [products, setproducts] = useState([]);
+  const [options, setOptions] = useState([]);
+
+  const [bookID, setbookID] = useState("");
+  const [discountlable, setDiscountlable] = useState("");
+  const [regularPercentage, setregularPercentage] = useState(0);
+  const [bulkPercentage, setbulkPercentage] = useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -187,46 +193,36 @@ const AddedDiscounts = () => {
     setPage(0);
   };
 
-  const [products, setProducts] = useState([]);
-  const [lables, setLables] = useState([]);
-  const [options, setOptions] = useState([]);
-  let uniqueLables = [];
-  let data = [];
-
-  const [bookID, setbookID] = useState("");
-  const [discountlable, setDiscountlable] = useState("");
-  const [regularPercentage, setregularPercentage] = useState(0);
-  const [bulkPercentage, setbulkPercentage] = useState(0);
-
-  const setDisLables = () => {
-    uniqueLables = lables.filter((c, index) => {
-      return lables.indexOf(c) === index;
-    });
-    uniqueLables.map((item, index) => {
-      let category = {
-        value: item,
-        label: item,
-      };
-      data.push(category);
-    });
-
-    setOptions(data);
-  };
-
   useEffect(() => {
     const getNewsletterItems = async () => {
       try {
         await axios
           .get("http://localhost:6500/matrix/api/admin/getProducts")
           .then((res) => {
+            let testLables = [];
+            let testProducts = [];
             for (let i = 0; i < res.data.Products.length; i++) {
               if (res.data.Products[i].discountPercentage.label) {
-                products.push(res.data.Products[i]);
-                lables.push(res.data.Products[i].discountPercentage.label);
+                testProducts.push(res.data.Products[i]);
+                testLables.push(res.data.Products[i].discountPercentage.label);
               }
             }
 
-            setDisLables();
+            setproducts(testProducts);
+            let data = [];
+            let uniqueLables = testLables.filter((c, index) => {
+              return testLables.indexOf(c) === index;
+            });
+            uniqueLables.map((item) => {
+              let category = {
+                value: item,
+                label: item,
+              };
+              data.push(category);
+              return 0;
+            });
+
+            setOptions(data);
           })
           .catch((err) => {
             alert(err.message);
@@ -298,24 +294,24 @@ const AddedDiscounts = () => {
                       ) {
                         return val;
                       }
+                      return null;
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      tot += row.col4;
+
                       return (
-                        <TableRow hover tabIndex={-1} key={row.name}>
+                        <TableRow hover tabIndex={-1} key={index}>
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             paddingLeft="3px"
-                        
                           >
                             <h1 className="font-bold text-md ">
                               {row.publishingTitle}
                             </h1>
                           </TableCell>
-                          <TableCell >
+                          <TableCell>
                             {" "}
                             <h1 className="font-bold text-md">
                               {row.discountPercentage.label}
@@ -383,7 +379,6 @@ const AddedDiscounts = () => {
                                 setUpdateModalOpen(true);
                                 setRemoveModalOpen(true);
                                 setbookID(row._id);
-                               
                               }}
                             >
                               Remove

@@ -2,19 +2,7 @@ import React, { useState } from "react";
 import BulkOrders from "./BulkOrders";
 import RegularOrders from "./RegularOrders";
 
-import { makeStyles } from "@material-ui/core/styles";
-
-
-const useStyles = makeStyles({
-  root: {
-    width: 300,
-    backgroundColor: "#D3DCDE",
-  },
-});
-
 const RevenueComponents = () => {
-  const classes = useStyles();
-  const [value, setValue] = useState(0);
   const [openRegularOrders, setOpenRegularOrders] = useState(true);
 
   return (

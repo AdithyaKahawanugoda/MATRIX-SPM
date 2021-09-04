@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
@@ -95,7 +95,7 @@ const SampleNewsletterModal = ({
           <Grid container spacing={1}>
             <Grid item xs={12} sm={6} md={12}>
               <div>
-                <div className="w-full m-auto h-auto mb-5 bg-lightSilver m-auto">
+                <div className="w-full  h-auto mb-5 bg-lightSilver m-auto">
                   <div className="w-full m-auto mt-5 bg-white p-5 rounded-lg shadow-lg">
                     <div className="mt-4">
                       <Formik
