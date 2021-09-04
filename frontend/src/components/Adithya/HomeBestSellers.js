@@ -8,7 +8,7 @@ const HomeBestSellers = () => {
       title: "Fantastic Mr.Fox",
       description:
         "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: "LKR 850",
+      label1: " 850",
       label2: "Summer OFF 20%",
     },
     {
@@ -16,7 +16,7 @@ const HomeBestSellers = () => {
       title: "Fantastic Mr.Fox",
       description:
         "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: "LKR 850",
+      label1: " 850",
       label2: "Summer OFF 20%",
     },
     {
@@ -24,7 +24,7 @@ const HomeBestSellers = () => {
       title: "Fantastic Mr.Fox",
       description:
         "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: "LKR 850",
+      label1: " 850",
       label2: "Summer OFF 20%",
     },
     {
@@ -32,7 +32,7 @@ const HomeBestSellers = () => {
       title: "Fantastic Mr.Fox",
       description:
         "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: "LKR 850",
+      label1: " 850",
       label2: "Summer OFF 20%",
     },
     {
@@ -41,7 +41,7 @@ const HomeBestSellers = () => {
       title: "Fantastic Mr.Fox",
       description:
         "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: "LKR 850",
+      label1: " 850",
       label2: "Summer OFF 20%",
     },
   ];
@@ -52,6 +52,7 @@ const HomeBestSellers = () => {
           <div
             key={index}
             onClick={() => {
+              // window.location = `/book/${item._id}`;
               window.location = "/book";
             }}
           >

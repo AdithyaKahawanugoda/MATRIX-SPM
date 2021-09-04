@@ -24,17 +24,19 @@ const BookCard = (props) => {
               title="bookCardImage"
             />
           )}
+
           <CardContent>
             {props?.title && (
-              <Typography gutterBottom variant="h5">
-                <p className="font-medievalFont font-bold">{props.title}</p>
+              <Typography
+                gutterBottom
+                style={{ fontWeight: 600, fontSize: "1.4rem" }}
+              >
+                {props.title}
               </Typography>
             )}
             {props?.description && (
               <Typography variant="body2" color="textSecondary">
-                <div className=" font-contentFont font-bold">
-                  {props.description}
-                </div>
+                {props.description}
               </Typography>
             )}
           </CardContent>
@@ -43,12 +45,14 @@ const BookCard = (props) => {
         <CardActions>
           {props?.label1 && (
             <Typography
-              variant="button"
-              display="block"
               gutterBottom
-              className="ml-4 text-lg font-black font-boldTallFont"
+              style={{
+                fontWeight: 900,
+                fontSize: "1.3rem",
+                marginRight: "1vw",
+              }}
             >
-              {props.label1}
+              Rs.{props.label1}
             </Typography>
           )}
           {props?.label2 && (
@@ -56,6 +60,7 @@ const BookCard = (props) => {
               variant="overline"
               display="block"
               gutterBottom
+              style={{ fontWeight: 900 }}
               className="rounded-full bg-ferrariRed text-white px-2"
             >
               {props.label2}
