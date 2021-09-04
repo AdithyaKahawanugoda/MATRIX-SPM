@@ -179,7 +179,7 @@ const EditDPersonModal = ({ setModalVisible, modalVisible }) => {
                       onChange={handleChange("province")}
                       value={values.province}
                     >
-                      <option value="" disabled selected>
+                      <option value="" disabled>
                         Select your option
                       </option>
                       <option value="wp">Western Province</option>

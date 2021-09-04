@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import EditDpProfileModal from "./modals/EditDpProfileModal";
 
 const DeliveryPersonProfile = () => {
@@ -8,11 +7,11 @@ const DeliveryPersonProfile = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <h6 className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
             Profile Information
           </header>
-        </Paper>
+        </h6>
       </Grid>
 
       <div className="grid grid-row-2">
@@ -91,7 +90,7 @@ const DeliveryPersonProfile = () => {
                 <div className="rounded-r-xl my-1 mr-20 px-4 py-4 shadow-md bg-white bg-opacity-20">
                   <input
                     className=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue "
-                    id="inline-full-name"
+                    id="password"
                     type="password"
                     placeholder="Enter Old Password"
                   ></input>
@@ -99,7 +98,7 @@ const DeliveryPersonProfile = () => {
                 <div className="rounded-r-xl my-1  mr-20 px-4 py-4 shadow-md bg-white bg-opacity-20">
                   <input
                     className=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue"
-                    id="inline-full-name"
+                    id="newpassword"
                     type="password"
                     placeholder="Enter New Password"
                   ></input>

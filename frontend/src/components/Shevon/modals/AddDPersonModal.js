@@ -4,8 +4,8 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 
 const validationSchema = Yup.object({
-    userName: Yup.string().trim().uppercase().required("User Name is required"),
-    email: Yup.string()
+  userName: Yup.string().trim().uppercase().required("User Name is required"),
+  email: Yup.string()
     .trim()
     .email("Please enter a valid email")
     .required("Email is required"),
@@ -17,12 +17,11 @@ const validationSchema = Yup.object({
     "Passwords must match"
   ),
   mobileNum: Yup.number()
-  .positive()
-  .integer()
-  .min(10, "Please enter a valid phone number")
-  .required("Phone number is required"),
+    .positive()
+    .integer()
+    .min(10, "Please enter a valid phone number")
+    .required("Phone number is required"),
   province: Yup.string().trim().uppercase().required("Province is required"),
-
 });
 
 const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
@@ -50,8 +49,14 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
         <hr></hr>
 
         <Formik
-          initialValues={{ userName: "", email: "",mobileNum:"",province:"",password: "",
-          confirmpassword: "" }}
+          initialValues={{
+            userName: "",
+            email: "",
+            mobileNum: "",
+            province: "",
+            password: "",
+            confirmpassword: "",
+          }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
@@ -65,8 +70,6 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
               }}
             >
               <div className="grid grid-rows-7 gap-y-2 mt-2 justify-center ml-2">
-
-
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
                   <div className=" my-1">
                     <label
@@ -77,7 +80,7 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                     </label>
                   </div>
                   <div className=" col-span-2">
-                  <input
+                    <input
                       className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
                         errors.userName && touched.userName
                           ? "border-red-500"
@@ -97,73 +100,66 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
 
-
-
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
                   <div className=" my-1">
-                  <label
-                          className="block text-sm font-medium leading-149  md:text-lg"
-                          htmlFor={"email"}
-                        >
-                          Email :
-                        </label>
+                    <label
+                      className="block text-sm font-medium leading-149  md:text-lg"
+                      htmlFor={"email"}
+                    >
+                      Email :
+                    </label>
                   </div>
                   <div className=" col-span-2">
-                  <input
-                          className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
-                            errors.email && touched.email
-                              ? "border-red-500"
-                              : "border-gray-600"
-                          } text-base`}
-                          id="email"
-                          type="text"
-                          placeholder="John@cargils.com"
-                          onChange={handleChange("email")}
-                          value={values.email}
-                     
-                        />
-                        {errors.email && touched.email ? (
-                          <div className="text-red-500 text-xs mt-1 md:text-sm">
-                            {errors.email}
-                          </div>
-                        ) : null}
-
+                    <input
+                      className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
+                        errors.email && touched.email
+                          ? "border-red-500"
+                          : "border-gray-600"
+                      } text-base`}
+                      id="email"
+                      type="text"
+                      placeholder="John@cargils.com"
+                      onChange={handleChange("email")}
+                      value={values.email}
+                    />
+                    {errors.email && touched.email ? (
+                      <div className="text-red-500 text-xs mt-1 md:text-sm">
+                        {errors.email}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 
-
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
                   <div className=" my-1">
-                  <label className="block text-sm font-medium leading-149  md:text-lg ">
-                          Mobile Number :
-                        </label>
+                    <label className="block text-sm font-medium leading-149  md:text-lg ">
+                      Mobile Number :
+                    </label>
                   </div>
                   <div className=" col-span-2">
-                  <input
-                          className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange ${
-                            errors.mobileNum && touched.mobileNum
-                              ? "border-red-500"
-                              : "border-gray-600"
-                          } text-base`}
-                          id="mobileNum"
-                          type="Number"
-                          placeholder="7712345678"
-                          onChange={handleChange("mobileNum")}
-                          value={values.mobileNum}
-                         
-                        />
-                        {errors.mobileNum && touched.mobileNum ? (
-                          <div className="text-red-500 text-xs mt-1 md:text-sm">
-                            {errors.mobileNum}
-                          </div>
-                        ) : null}
+                    <input
+                      className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange ${
+                        errors.mobileNum && touched.mobileNum
+                          ? "border-red-500"
+                          : "border-gray-600"
+                      } text-base`}
+                      id="mobileNum"
+                      type="Number"
+                      placeholder="7712345678"
+                      onChange={handleChange("mobileNum")}
+                      value={values.mobileNum}
+                    />
+                    {errors.mobileNum && touched.mobileNum ? (
+                      <div className="text-red-500 text-xs mt-1 md:text-sm">
+                        {errors.mobileNum}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 
-
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
-                  <div className=" my-1" >
-                  <label
+                  <div className=" my-1">
+                    <label
                       className="block text-sm font-medium leading-149  md:text-lg"
                       htmlFor={"province"}
                     >
@@ -171,7 +167,7 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                     </label>
                   </div>
                   <div className=" col-span-2">
-                  <select
+                    <select
                       className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
                         errors.province && touched.province
                           ? "border-red-500"
@@ -183,18 +179,18 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                       onChange={handleChange("province")}
                       value={values.province}
                     >
-                        <option value="" disabled selected >
-                            Select your option
-                          </option>
-                          <option value="wp">Western Province</option>
-                          <option value="CP">Central Province</option>
-                          <option value="EP">Eastern Province</option>
-                          <option value="NP">Northern Province</option>
-                          <option value="SP">Southern Province</option>
-                          <option value="NWP">North Western Province</option>
-                          <option value="NCP">North Central Province</option>
-                          <option value="UP">Uva Province</option>
-                          <option value="SP">Sabaragamuwa Province</option>
+                      <option value="" disabled>
+                        Select your option
+                      </option>
+                      <option value="wp">Western Province</option>
+                      <option value="CP">Central Province</option>
+                      <option value="EP">Eastern Province</option>
+                      <option value="NP">Northern Province</option>
+                      <option value="SP">Southern Province</option>
+                      <option value="NWP">North Western Province</option>
+                      <option value="NCP">North Central Province</option>
+                      <option value="UP">Uva Province</option>
+                      <option value="SP">Sabaragamuwa Province</option>
                     </select>
                     {errors.province && touched.province ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
@@ -204,67 +200,57 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
 
-
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
-                  <div className=" my-1">Password :
-                  </div>
+                  <div className=" my-1">Password :</div>
                   <div className=" col-span-2">
-                  <input
-                        className={`focus:outline-none w-60 h-8 pl-2  border-2 rounded-lg border-lightSilver focus:border-halloweenOrange ${
-                          errors.password && touched.password
-                            ? "border-red-500"
-                            : "border-gray-600"
-                        } text-base`}
-                        id="password"
-                        type="password"
-                        placeholder="*********"
-                        onChange={handleChange("password")}
-                        value={values.password}
-                      />
-                      {errors.password && touched.password ? (
-                        <div className="text-red-500 text-xs mt-1 md:text-sm">
-                          {errors.password}
-                        </div>
-                      ) : null}
+                    <input
+                      className={`focus:outline-none w-60 h-8 pl-2  border-2 rounded-lg border-lightSilver focus:border-halloweenOrange ${
+                        errors.password && touched.password
+                          ? "border-red-500"
+                          : "border-gray-600"
+                      } text-base`}
+                      id="password"
+                      type="password"
+                      placeholder="*********"
+                      onChange={handleChange("password")}
+                      value={values.password}
+                    />
+                    {errors.password && touched.password ? (
+                      <div className="text-red-500 text-xs mt-1 md:text-sm">
+                        {errors.password}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-
 
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
                   <div className=" my-1">Confirm Password :</div>
                   <div className=" col-span-2">
-                  <input
-                        className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange ${
-                          errors.confirmpassword && touched.confirmpassword
-                            ? "border-red-500"
-                            : "border-gray-600"
-                        } text-base`}
-                        id="confirmpassword"
-                        type="password"
-                        placeholder="Re-enter password"
-                        onChange={handleChange("confirmpassword")}
-                        value={values.confirmpassword}
-                      />
-                      {errors.confirmpassword && touched.confirmpassword ? (
-                        <div className="text-red-500 text-xs mt-1 md:text-sm">
-                          {errors.confirmpassword}
-                        </div>
-                      ) : null}
+                    <input
+                      className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange ${
+                        errors.confirmpassword && touched.confirmpassword
+                          ? "border-red-500"
+                          : "border-gray-600"
+                      } text-base`}
+                      id="confirmpassword"
+                      type="password"
+                      placeholder="Re-enter password"
+                      onChange={handleChange("confirmpassword")}
+                      value={values.confirmpassword}
+                    />
+                    {errors.confirmpassword && touched.confirmpassword ? (
+                      <div className="text-red-500 text-xs mt-1 md:text-sm">
+                        {errors.confirmpassword}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-
-
-                
               </div>
-
-
-
-
 
               <div className="text-center mb-0 mt-6">
                 <button
                   type="submit"
-                  class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+                  className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
                   style={{
                     boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                   }}
@@ -272,7 +258,6 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                   Register
                 </button>
               </div>
-
             </form>
           )}
         </Formik>

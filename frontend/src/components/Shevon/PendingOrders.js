@@ -9,6 +9,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@material-ui/icons/Edit";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import Icon from "@material-ui/core/Icon";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -295,13 +296,13 @@ const PendingOrders = () => {
               </button>
             </div>
 
-            <div className="text-black  px-0 py-2 m-4">
-              <icon
+            <div className="text-black  px-0 py-0 m-4">
+              <Icon
                 className="text-gray-500  hover:text-halloweenOrange"
                 onClick={refresh}
               >
                 <RefreshIcon />
-              </icon>
+              </Icon>
             </div>
           </div>
 
@@ -345,9 +346,9 @@ const PendingOrders = () => {
                                   ? column.format(value)
                                   : value}
                                 {column.id === "action" && (
-                                  <icon className="ml-2 hover:text-gamboge">
+                                  <Icon className="ml-2 hover:text-gamboge">
                                     <EditIcon />
-                                  </icon>
+                                  </Icon>
                                 )}
                               </TableCell>
                             );

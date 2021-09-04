@@ -8,6 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import Icon from "@material-ui/core/Icon";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -291,13 +292,13 @@ const InTransitOrders = () => {
               </button>
             </div>
 
-            <div className="text-black  px-0 py-2 m-4">
-              <icon
+            <div className="text-black  px-0 py-0 m-4">
+              <Icon
                 className="text-gray-500  hover:text-halloweenOrange"
                 onClick={refresh}
               >
                 <RefreshIcon />
-              </icon>
+              </Icon>
             </div>
           </div>
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import AllOrders from "./AllOrders";
 import InTransitOrders from "./InTransitOrders";
 import PendingOrders from "./PendingOrders";
@@ -15,7 +14,7 @@ function DeliveryManagementNav() {
   return (
     <div>
       <Grid item xs={12}>
-        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
             Delivery Managment
           </header>
@@ -77,7 +76,7 @@ function DeliveryManagementNav() {
               </button>
             </div>
           </div>
-        </Paper>
+        </div>
       </Grid>
 
       {allOrdersOpen && <AllOrders />}
