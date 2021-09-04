@@ -172,7 +172,6 @@ const BulkOrders = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchDate, setsearchDate] = useState("");
 
-  let tot = 0;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -254,7 +253,7 @@ const BulkOrders = () => {
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      tot += row.col4;
+               
                       return (
                         <TableRow hover tabIndex={-1} key={index}>
                           <TableCell
