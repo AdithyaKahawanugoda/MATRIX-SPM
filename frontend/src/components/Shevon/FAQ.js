@@ -5,7 +5,6 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 
@@ -100,7 +99,7 @@ const FAQ = () => {
       <div className="mt-4 mx-16 py-6 px-10 rounded-xl  border-0  shadow-md bg-blueSapphire bg-opacity-10">
         <h6 className="ml-4 mt-2 mb-2 font-black text-3xl">FAQ</h6>
         <hr />
-        <div className=" py-6  ">
+        <div className=" py-6">
           {data.map(({ category, faq }) => (
             <Accordion
               style={{
@@ -112,7 +111,6 @@ const FAQ = () => {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon className="text-white mr-4 " />}
                 aria-controls="panel1a-content"
-                id="panel1a-header"
                 style={{ backgroundColor: "", borderRadius: "50px" }}
                 className="border-0"
               >
@@ -125,7 +123,7 @@ const FAQ = () => {
               </AccordionSummary>
               <Divider />
 
-              <AccordionDetails className="bg-white  ">
+              <AccordionDetails className="bg-white ">
                 <List
                   component="nav"
                   aria-label="mailbox folders"
@@ -137,6 +135,7 @@ const FAQ = () => {
                       <ListItem
                         className="overflow-y-auto "
                         style={{ height: "150px" }}
+                        key={index}
                       >
                         <ListItemText
                           style={{

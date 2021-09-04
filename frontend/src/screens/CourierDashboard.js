@@ -11,9 +11,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
+import Grid from "@material-ui/core/Grid";
 import DeliveryPersonProfile from "../components/Shevon/DeliveryPersonProfile";
 import CourierOrdersDP from "../components/Shevon/CourierOrdersDP";
 import DeliveredOrdersDP from "../components/Shevon/DeliveredOrdersDP";
@@ -67,23 +66,17 @@ function ResponsiveDrawer(props) {
   };
 
   const drawer = (
-    <div class="bg-lightSilver " style={{ height: "1000px" }}>
+    <div className="bg-lightSilver " style={{ height: "1000px" }}>
       <div className={classes.toolbar} />
-      <div class="mt-10 mx-16 mb-3">
+      <div className="mt-10 mx-16 mb-3">
         <img
           src="https://i.ibb.co/k8C2z5B/profile-pic-1.png"
           alt="profile-pic-1"
           border="0"
         ></img>
       </div>
-      <div class="mt-2 mx-5 mb-8">
-        <Typography
-          variant="h6 text"
-          noWrap
-          class="font-extrabold text-xl ml-2"
-        >
-          Mr. Rajindu Cooray
-        </Typography>
+      <div className="mt-2 mx-5 mb-8">
+        <h6 className="font-extrabold text-xl ml-2">Mr. Rajindu Cooray</h6>
       </div>
       <List>
         <ListItem button>
@@ -91,8 +84,8 @@ function ResponsiveDrawer(props) {
             primary={"Courier Order Details"}
             onClick={() => {
               setProfileManagementDPOpen(false);
-              setCourierOrdersDPOpen(true);
               setDeliveredOrdersDPOpen(false);
+              setCourierOrdersDPOpen(true);
             }}
           />
         </ListItem>
@@ -113,9 +106,9 @@ function ResponsiveDrawer(props) {
           <ListItemText
             primary={"Profile Infromation"}
             onClick={() => {
-              setProfileManagementDPOpen(true);
               setCourierOrdersDPOpen(false);
               setDeliveredOrdersDPOpen(false);
+              setProfileManagementDPOpen(true);
             }}
           />
         </ListItem>
@@ -131,22 +124,28 @@ function ResponsiveDrawer(props) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6 text"
-            noWrap
-            className={" text-3xl font-black"}
-          >
-            Delivery Person
-          </Typography>
+          <Grid container justifyContent="flex-start">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <h6 className={" text-3xl font-black "}>Delivery Person</h6>
+          </Grid>
+          <Grid container justifyContent="flex-end">
+            <button
+              className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+              style={{
+                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+              }}
+            >
+              LogOut
+            </button>
+          </Grid>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -192,7 +191,6 @@ function ResponsiveDrawer(props) {
 }
 
 ResponsiveDrawer.propTypes = {
-
   window: PropTypes.func,
 };
 
