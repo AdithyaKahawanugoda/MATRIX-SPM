@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const RequestBookSchema = new mongoose.Schema({
+ 
   bookName: {
     type: String,
     required: true,
@@ -12,6 +13,10 @@ const RequestBookSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  language:{
+    type:String,
+    required: true,
+  }
 });
 
 const RequestBook = mongoose.model("requestBook", RequestBookSchema);
