@@ -11,7 +11,6 @@ import Grid from "@material-ui/core/Grid";
 import ReplyIcon from "@material-ui/icons/Reply";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import ReplyInquiriesModal from "./modals/ReplyInquiriesModal";
-import Icon from "@material-ui/core/Icon";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -167,11 +166,11 @@ const InquiriesManagement = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-0 font-bold text-prussianBlue ">
             CUSTOMER INQUIRIES MANAGEMENT
           </header>
-        </div>
+        </Paper>
       </Grid>
 
       <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
@@ -200,13 +199,13 @@ const InquiriesManagement = () => {
               </button>
             </div>
 
-            <div className="text-black  px-0 py-0 m-4">
-              <Icon
+            <div className="text-black  px-0 py-2 m-4">
+              <icon
                 className="text-gray-500  hover:text-halloweenOrange"
                 onClick={refresh}
               >
                 <RefreshIcon />
-              </Icon>
+              </icon>
             </div>
           </div>
 
@@ -250,14 +249,14 @@ const InquiriesManagement = () => {
                                   ? column.format(value)
                                   : value}
                                 {column.id === "action" && (
-                                  <Icon
+                                  <icon
                                     className="ml-2 hover:text-gamboge"
                                     onClick={() => {
                                       setReplyInquiriesOpen(true);
                                     }}
                                   >
                                     <ReplyIcon />
-                                  </Icon>
+                                  </icon>
                                 )}
                               </TableCell>
                             );

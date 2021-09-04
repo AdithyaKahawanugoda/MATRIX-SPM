@@ -14,7 +14,6 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import AddDPersonModal from "./modals/AddDPersonModal";
 import EditDPersonModal from "./modals/EditDPersonModal";
-import Icon from "@material-ui/core/Icon";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -213,11 +212,11 @@ const DeliveryPersonManagement = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-0 font-bold text-prussianBlue ">
             DELIVERY PERSON MANAGEMENT
           </header>
-        </div>
+        </Paper>
       </Grid>
 
       <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
@@ -246,28 +245,28 @@ const DeliveryPersonManagement = () => {
               </button>
             </div>
 
-            <div className="text-black  px-0 py-0 m-4">
-              <Icon
+            <div className="text-black  px-0 py-2 m-4">
+              <icon
                 className="text-gray-500  hover:text-halloweenOrange"
                 onClick={refresh}
               >
                 <RefreshIcon />
-              </Icon>
+              </icon>
             </div>
           </div>
 
           <div className=" flex flex-row-reverse px-0 m-3">
             <div>
               <button
-                className="bg-gamboge hover:bg-halloweenOrange text-white font-bold  px-4 pb-1 rounded-full"
+                className="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => {
                   setEditDPersonOpen(false);
                   setAddDPersonOpen(true);
                 }}
               >
-                <Icon className="mr-4">
+                <icons className="mr-4">
                   <AddCircleRoundedIcon />
-                </Icon>
+                </icons>
                 ADD NEW USER
               </button>
             </div>
@@ -277,9 +276,9 @@ const DeliveryPersonManagement = () => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    {columns.map((column, index) => (
+                    {columns.map((column) => (
                       <TableCell
-                        key={index}
+                        key={column.id}
                         align={column.align}
                         style={{
                           minWidth: column.minWidth,
@@ -296,15 +295,15 @@ const DeliveryPersonManagement = () => {
                 <TableBody>
                   {selectedRows
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
+                    .map((row) => {
                       return (
                         <TableRow
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={index}
+                          key={row.code}
                         >
-                          {columns.map((column, index) => {
+                          {columns.map((column) => {
                             const value = row[column.id];
                             return (
                               <TableCell key={column.id} align={column.align}>
@@ -312,7 +311,7 @@ const DeliveryPersonManagement = () => {
                                   ? column.format(value)
                                   : value}
                                 {column.id === "action_1" && (
-                                  <Icon
+                                  <icon
                                     className="ml-2 hover:text-green-700"
                                     onClick={() => {
                                       setAddDPersonOpen(false);
@@ -320,13 +319,13 @@ const DeliveryPersonManagement = () => {
                                     }}
                                   >
                                     <EditIcon />
-                                  </Icon>
+                                  </icon>
                                 )}
 
                                 {column.id === "action_2" && (
-                                  <Icon className="ml-2 hover:text-ferrariRed">
+                                  <icon className="ml-2 hover:text-ferrariRed">
                                     <DeleteForeverIcon />
-                                  </Icon>
+                                  </icon>
                                 )}
                               </TableCell>
                             );

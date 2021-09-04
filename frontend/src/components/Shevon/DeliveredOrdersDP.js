@@ -9,7 +9,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Grid from "@material-ui/core/Grid";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import Icon from "@material-ui/core/Icon";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -228,11 +227,11 @@ const DeliveredOrdersDP = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
             Delivered Order Details
           </header>
-        </div>
+        </Paper>
       </Grid>
 
       <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
@@ -261,13 +260,13 @@ const DeliveredOrdersDP = () => {
               </button>
             </div>
 
-            <div className="text-black  px-0 py-0 m-4">
-              <Icon
+            <div className="text-black  px-0 py-2 m-4">
+              <icon
                 className="text-gray-500  hover:text-halloweenOrange"
                 onClick={refresh}
               >
                 <RefreshIcon />
-              </Icon>
+              </icon>
             </div>
           </div>
 

@@ -7,7 +7,6 @@ import AddQaModal from "./AddQaModal";
 import EditQaModal from "./EditQaModal";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import Icon from "@material-ui/core/Icon";
 
 const validationSchema = Yup.object({
   categoryName: Yup.string().required("CategoryName required"),
@@ -100,16 +99,16 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
 
           <div className="  mt-4">
             <div
-              className=" h-14  rounded-xl   my-2 mx-0 px-5 pt-2  border-0  shadow-md bg-gamboge bg-opacity-15 hover:bg-halloweenOrange"
+              className=" h-14  rounded-xl   my-2 mx-0 px-5 pt-4  border-0  shadow-md bg-gamboge bg-opacity-15 hover:bg-halloweenOrange"
               onClick={() => {
                 setEditQaOpen(false);
                 setAddQaOpen(true);
               }}
             >
               <h5 className="text-white font-black text-md">
-                <Icon className="text-white mr-5 ">
+                <icons className="text-white mr-5 ">
                   <AddCircleRoundedIcon />
-                </Icon>{" "}
+                </icons>{" "}
                 Add New Question And Answer
               </h5>
             </div>
@@ -146,7 +145,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                 <hr></hr>
 
                 <div className="text-right py-2 px-2">
-                  <Icon
+                  <icons
                     className="mr-4 hover:text-gamboge"
                     onClick={() => {
                       setAddQaOpen(false);
@@ -154,10 +153,10 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                     }}
                   >
                     <EditIcon />
-                  </Icon>
-                  <Icon className="mr-4 hover:text-red-600">
+                  </icons>
+                  <icons className="mr-4 hover:text-red-600">
                     <DeleteForeverIcon />
-                  </Icon>
+                  </icons>
                 </div>
               </div>
 
@@ -189,7 +188,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                 <hr></hr>
 
                 <div className="text-right py-2 px-2">
-                  <Icon
+                  <icons
                     className="mr-4 hover:text-gamboge"
                     onClick={() => {
                       setAddQaOpen(false);
@@ -197,10 +196,10 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                     }}
                   >
                     <EditIcon />
-                  </Icon>
-                  <Icon className="mr-4 hover:text-red-600">
+                  </icons>
+                  <icons className="mr-4 hover:text-red-600">
                     <DeleteForeverIcon />
-                  </Icon>
+                  </icons>
                 </div>
               </div>
 
@@ -231,7 +230,7 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
 
                 <hr></hr>
                 <div className="text-right py-2 px-2">
-                  <Icon
+                  <icons
                     className="mr-4 hover:text-gamboge"
                     onClick={() => {
                       setAddQaOpen(false);
@@ -239,10 +238,10 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
                     }}
                   >
                     <EditIcon />
-                  </Icon>
-                  <Icon className="mr-4 hover:text-red-600">
+                  </icons>
+                  <icons className="mr-4 hover:text-red-600">
                     <DeleteForeverIcon />
-                  </Icon>
+                  </icons>
                 </div>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import EditDmProfileModal from "./modals/EditDmProfileModal";
 
@@ -7,11 +8,11 @@ const DeliveryManagerProfile = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-3 font-bold text-prussianBlue ">
             Profile Information
           </header>
-        </div>
+        </Paper>
       </Grid>
       <div className="grid grid-row-3">
         <div className="rounded-xl my-1 mx-1 px-5 py-5   shadow-md bg-blueSapphire bg-opacity-10">
@@ -89,7 +90,7 @@ const DeliveryManagerProfile = () => {
                 <div className="rounded-r-xl my-1 mr-20 px-4 py-4 shadow-md bg-white bg-opacity-20">
                   <input
                     className=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue "
-                    id="password"
+                    id="inline-full-name"
                     type="password"
                     placeholder="Enter Old Password"
                   ></input>
@@ -97,7 +98,7 @@ const DeliveryManagerProfile = () => {
                 <div className="rounded-r-xl my-1  mr-20 px-4 py-4 shadow-md bg-white bg-opacity-20">
                   <input
                     className=" mx-0  bg-gray-300 appearance-none border-2 border-blueSapphire rounded w-80 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-prussianBlue"
-                    id="newpassword"
+                    id="inline-full-name"
                     type="password"
                     placeholder="Enter New Password"
                   ></input>

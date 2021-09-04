@@ -4,7 +4,7 @@ import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
-import Icon from "@material-ui/core/Icon";
+
 import Button from "@material-ui/core/Button";
 
 const TrianCostDelete = ({
@@ -59,9 +59,9 @@ const TrianCostDelete = ({
         </h6>
         <hr></hr>
         <div className="text-center text-ferrariRed m-5 ">
-          <Icon>
+          <icon>
             <HighlightOffOutlinedIcon style={{ fontSize: 60 }} />
-          </Icon>
+          </icon>
         </div>
 
         <h6 className="text-center text-lg">
@@ -85,6 +85,7 @@ const TrianCostDelete = ({
             <Button
               autoFocus
               variant="contained"
+              color="black"
               onClick={() => {
                 setModalVisible(false);
               }}

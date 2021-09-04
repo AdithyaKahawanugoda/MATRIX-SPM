@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import AddStationCostModal from "./modals/AddStationCostModal";
 import EditTrainCostModal from "./modals/EditTrainCostModal";
 import DeleteTrainCostModal from "./modals/DeleteTrainCostModal";
-import Icon from "@material-ui/core/Icon";
 
 const TrainCost = () => {
   const [addTrainCostOpen, setAddTrainCostOpen] = useState(false);
@@ -33,7 +32,7 @@ const TrainCost = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 ">
         <div
           className="rounded-xl   mt-2 mx-0 px-0 py-0  border-0  shadow-md bg-lightSilver bg-opacity-20 overflow-y-auto "
           style={{ height: "490px" }}
@@ -50,33 +49,30 @@ const TrainCost = () => {
             >
               <div>
                 <h5 className="text-black font-black">
-                  <Icon className="text-gray-500 mr-5 ">
+                  <icons className="text-gray-500 mr-5 ">
                     <AddCircleRoundedIcon />
-                  </Icon>
+                  </icons>
                   Add new
                 </h5>
               </div>
             </div>
           </div>
 
-          {railWays.map((railWay, index) => (
-            <div
-              className="rounded-xl   my-2 mx-2 px-5 py-4  border-0  shadow-md bg-blueSapphire "
-              key={index}
-            >
-              <div className="grid grid-cols-2 ">
+          {railWays.map((railWay) => (
+            <div className="rounded-xl   my-2 mx-2 px-5 py-5  border-0  shadow-md bg-blueSapphire ">
+              <div className="grid grid-cols-2">
                 <div>
-                  <h5 className="text-white font-extrabold mt-2">
+                  <h5 className="text-white font-extrabold">
                     {railWay.destination}
                   </h5>
                 </div>
                 <div className="text-white ">
                   <div className="grid grid-cols-2">
                     <div className="ml-28">
-                      <h5 className="mr-14 mt-2"> Rs.{railWay.cost}</h5>
+                      <h5 className="mr-14"> Rs.{railWay.cost}</h5>
                     </div>
                     <div className="text-right">
-                      <Icon
+                      <icon
                         className="mr-2 hover:text-gamboge"
                         onClick={() => {
                           setAddTrainCostOpen(false);
@@ -86,8 +82,8 @@ const TrainCost = () => {
                         }}
                       >
                         <EditIcon />
-                      </Icon>
-                      <Icon
+                      </icon>
+                      <icon
                         className="hover:text-red-600"
                         onClick={() => {
                           setAddTrainCostOpen(false);
@@ -97,7 +93,7 @@ const TrainCost = () => {
                         }}
                       >
                         <DeleteForeverIcon />
-                      </Icon>
+                      </icon>
                     </div>
                   </div>
                 </div>

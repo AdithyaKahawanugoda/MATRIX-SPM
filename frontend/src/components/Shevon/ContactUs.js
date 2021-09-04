@@ -43,8 +43,8 @@ const ContactUs = () => {
                   }}
                 >
                   <div className="flex flex-col mb-4">
-                    <div className="flex ">
-                      <div className=" ml-6 flex-initial">
+                    <div class="flex ">
+                      <div class=" ml-6 flex-initial">
                         <label
                           className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                           htmlFor={"email"}
@@ -52,10 +52,7 @@ const ContactUs = () => {
                           Email
                         </label>
                       </div>
-                      <div
-                        className="flex-initial"
-                        style={{ marginLeft: "108px" }}
-                      >
+                      <div class="flex-initial" style={{ marginLeft: "108px" }}>
                         <input
                           className={`focus:outline-none w-96 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
                             errors.email && touched.email
@@ -77,14 +74,14 @@ const ContactUs = () => {
                       </div>
                     </div>
 
-                    <div className="flex mt-8">
-                      <div className=" ml-6 flex-initial">
+                    <div class="flex mt-8">
+                      <div class=" ml-6 flex-initial">
                         <label className="block text-sm font-medium leading-149 mb-3 md:text-lg">
                           Mobile Number
                         </label>
                       </div>
                       <div
-                        className="flex-initial  "
+                        class="flex-initial  "
                         style={{ marginLeft: "48px" }}
                       >
                         <input
@@ -108,8 +105,8 @@ const ContactUs = () => {
                       </div>
                     </div>
 
-                    <div className="flex mt-8">
-                      <div className=" ml-6 flex-initial">
+                    <div class="flex mt-8">
+                      <div class=" ml-6 flex-initial">
                         <label
                           className=" block text-sm font-medium leading-149 mb-3 md:text-lg"
                           htmlFor={"department"}
@@ -117,10 +114,7 @@ const ContactUs = () => {
                           Department
                         </label>
                       </div>
-                      <div
-                        className="flex-initial"
-                        style={{ marginLeft: "70px" }}
-                      >
+                      <div class="flex-initial" style={{ marginLeft: "70px" }}>
                         <select
                           className={`focus:outline-none w-96 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
                             errors.department && touched.department
@@ -130,10 +124,10 @@ const ContactUs = () => {
                           id="department"
                           type="text"
                           onChange={handleChange("department")}
+                          value={values.department}
                           style={{ width: "410px" }}
-                          defaultValue={"DEFAULT"}
                         >
-                          <option value="DEFAULT" disabled>
+                          <option value="" disabled selected>
                             Select your option
                           </option>
                           <option value="Account">Accounts Department</option>
@@ -149,8 +143,8 @@ const ContactUs = () => {
                       </div>
                     </div>
 
-                    <div className="flex mt-8">
-                      <div className=" ml-6 flex-initial">
+                    <div class="flex mt-8">
+                      <div class=" ml-6 flex-initial">
                         <label
                           className="block text-sm font-medium leading-149 mb-3 md:text-lg"
                           htmlFor={"email"}
@@ -158,7 +152,7 @@ const ContactUs = () => {
                           Your Message
                         </label>
                       </div>
-                      <div className="flex-initial ml-14">
+                      <div class="flex-initial ml-14">
                         <textarea
                           className={`focus:outline-none  h-28 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver  ${
                             errors.message && touched.message
@@ -184,7 +178,7 @@ const ContactUs = () => {
                   <div className="text-center mb-4 mt-10">
                     <button
                       type="submit"
-                      className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+                      class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
                       style={{
                         boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
                       }}
@@ -199,7 +193,7 @@ const ContactUs = () => {
         </div>
 
         <div
-          className="rounded-r-xl  bg-blue-400  ml-2 px-0 py-0  border-0  shadow-md bg-white bg-cover bg-center "
+          class="rounded-r-xl  bg-blue-400  ml-2 px-0 py-0  border-0  shadow-md bg-white bg-cover bg-center "
           style={{
             backgroundImage: `url("https://i.ibb.co/dL1WkDv/ww.jpg" )`,
           }}
