@@ -4,7 +4,8 @@ import ReactPaginate from "react-paginate";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Image } from "cloudinary-react";
-
+import Header from "../components/Adithya/Header";
+import Footer from "../components/Adithya/Footer";
 
 const useStyles = makeStyles({
   paginationButton: {
@@ -144,10 +145,10 @@ const AllProducts = () => {
 
   return (
     <>
-      {/* <Header /> */}
-      <div className="w-full  h-16 p-1">
-        <h1 className="text-4xl   font-bold mb-5   pl-8 pt-3 font-thinFont">
-          NEWSLETTER
+      <Header />
+      <div className="w-full  h-max p-1 mb-3">
+        <h1 className="text-4xl  mb-5   pl-8 pt-3 font-boldTallFont">
+          Newsletter
         </h1>
 
         {displayBooks}
@@ -164,6 +165,7 @@ const AllProducts = () => {
           activeLinkClassName={classes.paginationActive}
         />
       </div>
+      <Footer />
     </>
   );
 };
