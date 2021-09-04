@@ -8,7 +8,7 @@ const TodayCustomer = () => {
       <div className="w-4/5 m-auto h-full ">
         <h1 className="text-center font-bold font-sans">Today New Customers</h1>
         <div className="w-full m-auto h-4/5 ">
-          <div class="pt-10 h-4/5" style={{ margin: "auto" }}>
+          <div className="pt-10 h-4/5" style={{ margin: "auto" }}>
             <Avatar
               style={{ width: "100px", height: "100px", margin: "auto" }}
               src="/broken-image.jpg"
