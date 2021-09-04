@@ -1,12 +1,12 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import RevenueChart from "./RevenueChart";
-import SalesChart from "./SalesChart";
-import TodayBulkOrdersTable from "./TodayBulkOrdersTable";
-import TodayCustomer from "./TodayCustomer";
-import TodayRegularOrderTable from "./TodayRegularOrderTable";
-import TodayRevenueChart from "./TodayRevenueChart";
-import ToDoTable from "./ToDoTable";
+import RevenueChart from "../components/Randika/RevenueChart";
+import SalesChart from "../components/Randika/SalesChart";
+import TodayBulkOrdersTable from "../components/Randika/TodayBulkOrdersTable";
+import TodayCustomer from "../components/Randika/TodayCustomer";
+import TodayRegularOrderTable from "../components/Randika/TodayRegularOrderTable";
+import TodayRevenueChart from "../components/Randika/TodayRevenueChart";
+import ToDoTable from "../components/Randika/ToDoTable";
 
 const DeliveryDashboard = () => {
   return (
