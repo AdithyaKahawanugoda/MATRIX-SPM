@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../components/Adithya/Header";
+
 const data = [
   {
     BookName: "Anne of Green Gables",
@@ -308,7 +308,7 @@ const CategorizedProducts = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="w-full  h-16 p-2">
         <h1 className="text-4xl   font-bold mb-5  pl-8 pt-3 font-thinFont">
           SCIENCE FICTIONS

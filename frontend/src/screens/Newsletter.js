@@ -4,7 +4,7 @@ import ReactPaginate from "react-paginate";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Image } from "cloudinary-react";
-import Header from "../components/Adithya/Header";
+
 
 const useStyles = makeStyles({
   paginationButton: {
@@ -144,7 +144,7 @@ const AllProducts = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="w-full  h-16 p-1">
         <h1 className="text-4xl   font-bold mb-5   pl-8 pt-3 font-thinFont">
           NEWSLETTER
