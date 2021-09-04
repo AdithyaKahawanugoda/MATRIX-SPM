@@ -170,6 +170,14 @@ const AddedDiscounts = () => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [removeModalOpen, setRemoveModalOpen] = useState(false);
 
+  const [products, setproducts] = useState([]);
+  const [options, setOptions] = useState([]);
+
+  const [bookID, setbookID] = useState("");
+  const [discountlable, setDiscountlable] = useState("");
+  const [regularPercentage, setregularPercentage] = useState(0);
+  const [bulkPercentage, setbulkPercentage] = useState(0);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -185,46 +193,36 @@ const AddedDiscounts = () => {
     setPage(0);
   };
 
-  let products = [];
-  let lables = [];
-  const [options, setOptions] = useState([]);
-  let uniqueLables = [];
-  let data = [];
-
-  const [bookID, setbookID] = useState("");
-  const [discountlable, setDiscountlable] = useState("");
-  const [regularPercentage, setregularPercentage] = useState(0);
-  const [bulkPercentage, setbulkPercentage] = useState(0);
-
-  const setDisLables = () => {
-    uniqueLables = lables.filter((c, index) => {
-      return lables.indexOf(c) === index;
-    });
-    uniqueLables.map((item, index) => {
-      let category = {
-        value: item,
-        label: item,
-      };
-      data.push(category);
-      return 0;
-    });
-
-    setOptions(data);
-  };
-
   useEffect(() => {
     const getNewsletterItems = async () => {
       try {
         await axios
           .get("http://localhost:6500/matrix/api/admin/getProducts")
           .then((res) => {
+            let testLables = [];
+            let testProducts = [];
             for (let i = 0; i < res.data.Products.length; i++) {
               if (res.data.Products[i].discountPercentage.label) {
-                products.push(res.data.Products[i]);
-                lables.push(res.data.Products[i].discountPercentage.label);
+                testProducts.push(res.data.Products[i]);
+                testLables.push(res.data.Products[i].discountPercentage.label);
               }
             }
-            setDisLables();
+
+            setproducts(testProducts);
+            let data = [];
+            let uniqueLables = testLables.filter((c, index) => {
+              return testLables.indexOf(c) === index;
+            });
+            uniqueLables.map((item) => {
+              let category = {
+                value: item,
+                label: item,
+              };
+              data.push(category);
+              return 0;
+            });
+
+            setOptions(data);
           })
           .catch((err) => {
             alert(err.message);
