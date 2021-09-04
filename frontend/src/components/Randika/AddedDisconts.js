@@ -116,9 +116,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  // numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  // onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -305,7 +305,7 @@ const AddedDiscounts = () => {
                             component="th"
                             id={labelId}
                             scope="row"
-                            paddingLeft="3px"
+                            style={{ paddingLeft: "20px" }}
                           >
                             <h1 className="font-bold text-md ">
                               {row.publishingTitle}

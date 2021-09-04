@@ -123,9 +123,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  // numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  // onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -263,7 +263,7 @@ const AdminUsers = () => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
-                        <TableRow hover tabIndex={-1} key={row.name}>
+                        <TableRow hover tabIndex={-1} key={index}>
                           <TableCell
                             component="th"
                             id={labelId}
