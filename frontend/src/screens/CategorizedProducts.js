@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../components/Adithya/Header";
+
 const data = [
   {
     BookName: "Anne of Green Gables",
@@ -254,7 +254,7 @@ const useStyles = makeStyles({
 const CategorizedProducts = () => {
   const classes = useStyles();
 
-  const [books, setBooks] = useState(data);
+  const books = data;
   const [pageNumber, setPageNumber] = useState(0);
 
   const bookPerPage = 5;
@@ -279,10 +279,10 @@ const CategorizedProducts = () => {
                   style={{ width: "100%", height: "100%" }}
                 />
                 <div className="p-3">
-                  <h1 className="text-l  font-bold mb-1 font-thinFont text-blueSapphire font-extrabold">
+                  <h1 className="text-l   mb-1 font-thinFont text-blueSapphire font-extrabold">
                     {book.BookName}
                   </h1>
-                  <h1 className="text-sm  mb-1 mb-3"> {book.description}</h1>
+                  <h1 className="text-sm   mb-3"> {book.description}</h1>
 
                   <div className="w-full ">
                     <div className="w-max mr-1 float-left mt-1">
@@ -308,7 +308,7 @@ const CategorizedProducts = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="w-full  h-16 p-2">
         <h1 className="text-4xl   font-bold mb-5  pl-8 pt-3 font-thinFont">
           SCIENCE FICTIONS
