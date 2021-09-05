@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from "react-responsive-modal";
 import Grid from '@material-ui/core/Grid';
-import { Hidden } from "@material-ui/core";
-import * as Yup from "yup";
 import { Formik } from "formik";
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';

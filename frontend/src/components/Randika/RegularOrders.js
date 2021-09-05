@@ -20,19 +20,19 @@ function createData(col1, col2, col3, col4, col5, col6) {
 }
 
 const rows = [
-  createData("O4567","U7890", "B101", 1, 6743, "2021-05-25"),
-  createData("O4578","U7814", "B101,B102,B111", 3, 5149, "2021-05-24"),
-  createData("O7890","U7820", "B105,B108,B109,B120", 5, 2460, "2021-05-24"),
-  createData("O6709","U7878", "B151,B111,B181", 4, 6024, "2021-05-24"),
-  createData("O6789","U7823", "B141,B101,B111,B181", 4, 4939, "2021-05-25"),
-  createData("O8976","U7814", "B191,B171,B111,B101", 4, 8765, "2021-05-24"),
-  createData("O6704","U7889", "B118,B171,B181", 5, 3743, "2021-05-24"),
-  createData("O5678","U7856", "B141", 2, 9400, "2021-05-24"),
-  createData("O4578","U7812", "B178", 1, 6570, "2021-05-25"),
-  createData("O6704","U7889", "B101", 1, 9800, "2021-05-24"),
-  createData("O9856","U7885", "B191,B171,B181,B191", 4, 8120, "2021-05-24"),
-  createData("O8932","U7887", "B121,B167", 2, 9370, "2021-05-24"),
-  createData("O8963","U7863", "B171,B151,B171,B181", 4, 6340, "2021-05-25"),
+  createData("O4567", "U7890", "B101", 1, 6743, "2021-05-25"),
+  createData("O4578", "U7814", "B101,B102,B111", 3, 5149, "2021-05-24"),
+  createData("O7890", "U7820", "B105,B108,B109,B120", 5, 2460, "2021-05-24"),
+  createData("O6709", "U7878", "B151,B111,B181", 4, 6024, "2021-05-24"),
+  createData("O6789", "U7823", "B141,B101,B111,B181", 4, 4939, "2021-05-25"),
+  createData("O8976", "U7814", "B191,B171,B111,B101", 4, 8765, "2021-05-24"),
+  createData("O6704", "U7889", "B118,B171,B181", 5, 3743, "2021-05-24"),
+  createData("O5678", "U7856", "B141", 2, 9400, "2021-05-24"),
+  createData("O4578", "U7812", "B178", 1, 6570, "2021-05-25"),
+  createData("O6704", "U7889", "B101", 1, 9800, "2021-05-24"),
+  createData("O9856", "U7885", "B191,B171,B181,B191", 4, 8120, "2021-05-24"),
+  createData("O8932", "U7887", "B121,B167", 2, 9370, "2021-05-24"),
+  createData("O8963", "U7863", "B171,B151,B171,B181", 4, 6340, "2021-05-25"),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -94,9 +94,9 @@ function EnhancedTableHead(props) {
   return (
     <TableHead className=" bg-blueSapphire">
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
-            key={headCell.id}
+            key={index}
             align={"center"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -123,9 +123,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  // numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  // onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -175,8 +175,6 @@ const RegularOrders = () => {
   const [searchDate, setsearchDate] = useState("");
 
   const [revenueModalOpen, setRevenueModalOpen] = useState(false);
-
-  let tot = 0;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -258,9 +256,9 @@ const RegularOrders = () => {
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      tot += row.col4;
+
                       return (
-                        <TableRow hover tabIndex={-1} key={row.name}>
+                        <TableRow hover tabIndex={-1} key={index}>
                           <TableCell
                             component="th"
                             id={labelId}
@@ -325,7 +323,6 @@ const RegularOrders = () => {
                         </TableRow>
                       );
                     })}
-                  Total Revenue : {tot}
                 </TableBody>
               </Table>
             </TableContainer>

@@ -11,7 +11,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import DeliveryManagementNav from "../components/Shevon/DeliveryManagementNav";
 import DeliveryCostNav from "../components/Shevon/DeliveryCostNav";
@@ -84,13 +84,7 @@ function ResponsiveDrawer(props) {
         ></img>
       </div>
       <div className="mt-2 mx-5 mb-8">
-        <Typography
-          variant="h6 text"
-          noWrap
-          className="font-extrabold text-xl ml-2"
-        >
-          Mr. Shevon Krishmal
-        </Typography>
+        <h6 className="font-extrabold text-xl ml-2">Mr. Shevon Krishmal</h6>
       </div>
       <List>
         <ListItem button>
@@ -188,22 +182,28 @@ function ResponsiveDrawer(props) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6 text"
-            noWrap
-            className={" text-3xl font-black"}
-          >
-            Delivery Manager
-          </Typography>
+          <Grid container justifyContent="flex-start">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <h6 className={" text-3xl font-black "}>Delivery Manager</h6>
+          </Grid>
+          <Grid container justifyContent="flex-end">
+            <button
+              className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+              style={{
+                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+              }}
+            >
+              LogOut
+            </button>
+          </Grid>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

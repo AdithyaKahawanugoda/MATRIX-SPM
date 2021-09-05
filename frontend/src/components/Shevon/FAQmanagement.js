@@ -14,6 +14,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import EditCategoryModal from "./modals/EditCategoryModal";
 import AddCategoryModal from "./modals/AddCategoryModal";
+import Icon from "@material-ui/core/Icon";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -72,11 +73,11 @@ const FAQmanagement = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <Paper class=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
+        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
           <header className="font-contentFont text-4xl mb-0 font-bold text-prussianBlue ">
             FAQ MANAGEMENT
           </header>
-        </Paper>
+        </div>
       </Grid>
 
       <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
@@ -105,32 +106,32 @@ const FAQmanagement = () => {
               </button>
             </div>
 
-            <div className="text-black  px-0 py-2 m-4">
-              <icon
+            <div className="text-black  px-0 py-0 m-4">
+              <Icon
                 className="text-gray-500  hover:text-halloweenOrange"
                 onClick={refresh}
               >
                 <RefreshIcon />
-              </icon>
+              </Icon>
             </div>
           </div>
           <div className=" flex flex-row-reverse px-0 m-3">
             <div>
               <button
-                className="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full"
+                className="bg-gamboge hover:bg-halloweenOrange text-white font-bold pb-1 px-4 rounded-full"
                 onClick={() => {
                   setEditCategoryOpen(false);
                   setAddCategoryOpen(true);
                 }}
               >
-                <icons className="mr-4">
+                <Icon className="mr-4">
                   <AddCircleRoundedIcon />
-                </icons>
+                </Icon>
                 ADD NEW CATEGORY
               </button>
             </div>
           </div>
-          <Paper class="mt-0">
+          <Paper className="mt-0">
             <TableContainer style={{ maxHeight: "440px" }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -170,7 +171,7 @@ const FAQmanagement = () => {
                                   ? column.format(value)
                                   : value}
                                 {column.id === "action_1" && (
-                                  <icon
+                                  <Icon
                                     className="ml-2 hover:text-green-700"
                                     onClick={() => {
                                       setAddCategoryOpen(false);
@@ -178,13 +179,13 @@ const FAQmanagement = () => {
                                     }}
                                   >
                                     <EditIcon />
-                                  </icon>
+                                  </Icon>
                                 )}
 
                                 {column.id === "action_2" && (
-                                  <icon className="ml-2 hover:text-ferrariRed">
+                                  <Icon className="ml-2 hover:text-ferrariRed">
                                     <DeleteForeverIcon />
-                                  </icon>
+                                  </Icon>
                                 )}
                               </TableCell>
                             );

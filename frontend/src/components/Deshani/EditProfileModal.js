@@ -1,6 +1,5 @@
 import React,{useState,useEffect} from 'react';
 import { Modal } from "react-responsive-modal";
-import Grid from '@material-ui/core/Grid';
 import * as Yup from "yup";
 import { Formik } from "formik";
 import axios from "axios";
@@ -101,6 +100,7 @@ const updateCustomerHandler = async () =>{
           borderRadius: "10px",
           maxWidth: "800px",
           width: "100%",
+          marginTop:"7rem"
         },
       }}
       focusTrapped={true}

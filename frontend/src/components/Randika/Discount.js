@@ -109,7 +109,7 @@ const Discount = () => {
     .slice(pageVisited, pageVisited + bookPerPage)
     .map((book, index) => {
       return (
-        <div className="w-1/4 h-28 mb-4" style={{ float: "left" }}>
+        <div className="w-1/4 h-28 mb-4" style={{ float: "left" }} key={index}>
           <div className="w-full  ">
             <Checkbox
               style={{ float: "left" }}

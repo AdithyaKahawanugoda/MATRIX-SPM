@@ -249,6 +249,7 @@ const SampleNewsletterTable = () => {
                     ) {
                       return val;
                     }
+                    return null;
                   })
                   .map((requests, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
