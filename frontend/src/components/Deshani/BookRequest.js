@@ -104,9 +104,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  // numSelected: PropTypes.number.isRequired,
+  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  // onSelectAllClick: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -249,6 +249,7 @@ const SampleNewsletterTable = () => {
                     ) {
                       return val;
                     }
+                    return null;
                   })
                   .map((requests, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
