@@ -73,9 +73,9 @@ const InventoryDashboard = (props) => {
   };
 
   const drawer = (
-    <div class="bg-lightSilver " style={{ height: "1000px" }}>
+    <div className="bg-lightSilver " style={{ height: "1000px" }}>
       <div className={classes.toolbar} />
-      <div class="mt-10 m-auto mb-3 w-3/4 flex justify-center">
+      <div className="mt-10 m-auto mb-3 w-3/4 flex justify-center">
         <img
           src="https://i.ibb.co/1qjCgjz/download.jpg"
           alt="profile-pic-inventory-manager"
@@ -85,12 +85,8 @@ const InventoryDashboard = (props) => {
           className="object-contain rounded-full"
         ></img>
       </div>
-      <div class="mt-2 mx-5 mb-8">
-        <Typography
-          variant="h6 text"
-          noWrap
-          class="font-extrabold text-xl ml-2"
-        >
+      <div className="mt-2 mx-5 mb-8">
+        <Typography variant="h6" noWrap className="font-extrabold text-xl ml-2">
           Mr. Adithya Kahawanugoda
         </Typography>
       </div>
@@ -190,7 +186,7 @@ const InventoryDashboard = (props) => {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Grid container justify="flex-start">
+          <Grid container justifyContent="flex-start">
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -200,17 +196,13 @@ const InventoryDashboard = (props) => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              variant="h6 text"
-              noWrap
-              className={" text-2xl font-black "}
-            >
+            <Typography variant="h6" noWrap className={" text-2xl font-black "}>
               Inventory Manager
             </Typography>
           </Grid>
-          <Grid container justify="flex-end">
+          <Grid container justifyContent="flex-end">
             <button
-              class="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
+              className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
               style={{
                 boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
               }}
