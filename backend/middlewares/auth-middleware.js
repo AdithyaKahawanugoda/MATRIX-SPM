@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const AdminModel = require("../models/admin-models");
+const AdminModel = require("../models/admin-model");
 const CustomerModel = require("../models/customer-model");
 const InventoryManagerModel = require("../models/inventoryManger-model");
 const DeliveryManagerModel = require("../models/deliveryManager-model");
