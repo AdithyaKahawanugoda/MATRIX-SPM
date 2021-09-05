@@ -12,6 +12,7 @@ const validationSchema = Yup.object({
   department: Yup.string().required("Department is required"),
   message: Yup.string().required("Message is required"),
 });
+
 const ContactUs = () => {
   return (
     <div>
@@ -199,7 +200,7 @@ const ContactUs = () => {
         </div>
 
         <div
-          className="rounded-r-xl  bg-blue-400  ml-2 px-0 py-0  border-0  shadow-md bg-white bg-cover bg-center "
+          className="rounded-r-xl  bg-blue-400  ml-2 px-0 py-0  border-0  shadow-md bg-cover bg-center "
           style={{
             backgroundImage: `url("https://i.ibb.co/dL1WkDv/ww.jpg" )`,
           }}
