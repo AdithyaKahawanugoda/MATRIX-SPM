@@ -3,11 +3,15 @@ import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ChangeAddressModal from "../components/Deshani/ChangeAddressModal";
+import Header from '../components/Adithya/Header';
+import Footer from '../components/Adithya/Footer';
 const Checkout = () => {
 
     const [changeAddressModalOpen,setChangeAddressModalOpen] = useState(false);
 
     return (
+      <React.Fragment>
+      <Header />
         <div className='flex w-full min-h-screen justify-center items-center '>
         <div className="w-full xl:max-w-6xl sm:max-w-xl md:max-w-3xl h-3/4 mt-6 mb-10 p-8 rounded-xl shadow-lg text-black bg-gamboge">
         <h1 className='font-boldTallFont font-semibold text-4xl'>Checkout</h1>
@@ -88,7 +92,8 @@ const Checkout = () => {
           />
         )}
         </div>
-       
+        <Footer />
+        </React.Fragment>
     )
 }
 

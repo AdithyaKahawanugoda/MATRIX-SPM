@@ -1,7 +1,11 @@
 import React from 'react'
+import Header from '../components/Adithya/Header';
+import Footer from '../components/Adithya/Footer';
 
 const PlaceOrderSuccessfully = () => {
     return (
+      <React.Fragment>
+      <Header />
         <div className='flex w-full min-h-screen justify-center items-center '>
         <div className="w-full xl:max-w-6xl sm:max-w-xl md:max-w-3xl h-3/4 mt-6 mb-10 p-8 rounded-xl shadow-lg text-black bg-gamboge">
         <h1 className='font-boldTallFont font-semibold text-4xl'>Place Order Successfully</h1>
@@ -56,6 +60,8 @@ const PlaceOrderSuccessfully = () => {
         </div>
         </div>  
         </div>
+        <Footer />
+        </React.Fragment>
     )
 }
 
