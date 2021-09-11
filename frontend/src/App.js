@@ -41,7 +41,6 @@ const App = () => {
           <Route exact path="/cart" component={ShoppingCart} />
           <Route exact path="/book/:id" component={SingleProduct} />
           <Route exact path="/support" component={Support} />
-          <Route exact path="/support" component={Support} />
           <Route exact path="/offers" component={Offers} />
           <Route exact path="/admin" component={AdminDashboard} />
           <Route exact path="/checkout" component={Checkout} />

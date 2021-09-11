@@ -100,15 +100,99 @@ exports.getAllBooks = async (req, res) => {
   }
 };
 
+// get specific book
+exports.getBookByISBN = async (req, res) => {
+  const { ISBN } = req.body;
+  try {
+    const book = await ProductModel.findOne({ ISBN });
+    res.status(200).send({
+      book,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in getBookByISBN",
+    });
+  }
+};
+
+// update specific book
+exports.updateBookByISBN = async (req, res) => {
+  const {
+    publishingTitle,
+    originalTitle,
+    translator,
+    originalAuthor,
+    aboutAuthor,
+    aboutBook,
+    ISBN,
+    license,
+    quantity,
+    edition,
+    translatorContact,
+    translatorEmail,
+    press,
+    proofReader,
+    coverDesigner,
+    typeSetter,
+    weight,
+    marketPrice,
+    coverCost,
+    licenseCost,
+    writerPayment,
+    proofReadingPayment,
+    typeSetterPayment,
+    printCost,
+    encImg,
+  } = req.body;
+  if (!publishingTitle) {
+    publishingTitle = undefined;
+  }
+  if (!originalTitle) {
+    originalTitle = undefined;
+  }
+  if (!translator) {
+    translator = undefined;
+  }
+  if (!originalAuthor) {
+    originalAuthor = undefined;
+  }
+  if (!aboutAuthor) {
+    aboutAuthor = undefined;
+  }
+  if (!aboutBook) {
+    aboutBook = undefined;
+  }
+  if (!license) {
+    license = undefined;
+  }
+  if (!quantity) {
+    quantity = undefined;
+  }
+  if (!edition) {
+    edition = undefined;
+  }
+  if (!translatorContact) {
+    translatorContact = undefined;
+  }
+  try {
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in updateBookByISBN",
+    });
+  }
+};
+
 // delete specific book
-exports.deleteBook = async (req, res) => {
+exports.deleteBookByISBN = async (req, res) => {
   const { ISBN } = req.body;
   try {
     await ProductModel.deleteOne({ ISBN });
   } catch (error) {
     res.status(500).json({
       error,
-      desc: "Error occurred in deleteBook",
+      desc: "Error occurred in deleteBookByISBN",
     });
   }
 };
