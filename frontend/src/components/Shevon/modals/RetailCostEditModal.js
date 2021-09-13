@@ -34,7 +34,10 @@ const RetailCostEdit = ({
         const index = retailCost.findIndex(
           (retailCost) => retailCost._id === selectedRetailCost._id
         );
-        arr[index] = { ...values };
+        arr[index] = {
+          provincename: selectedRetailCost.provincename,
+          cost: values.cost,
+        };
         return arr;
       });
 

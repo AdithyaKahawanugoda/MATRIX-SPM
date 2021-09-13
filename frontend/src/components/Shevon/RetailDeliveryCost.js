@@ -74,7 +74,7 @@ const RetailDeliveryCost = () => {
                 <div className="text-white ">
                   <div className="grid grid-cols-2">
                     <div className="ml-32">
-                      <h5 className="mr-14 mt-2">Rs.{retailCost.cost}</h5>
+                      <h5 className="mr-14 mt-2">Rs.{retailCost.cost}.00</h5>
                     </div>
                     <div className="text-right">
                       <Icon
