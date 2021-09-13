@@ -1,14 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
-  destination: Yup.string().required("Destination is required"),
   cost: Yup.number().required("Cost is required"),
 });
 
-const BulkCostEditModal = ({ setModalVisible, modalVisible }) => {
+const BulkCostEditModal = ({
+  setModalVisible,
+  modalVisible,
+  selectedBulkCost,
+  setBulkCost,
+}) => {
+  const [isAdded, setIsAdded] = useState(false);
+
+  const updateBulkCost = async (values) => {
+    console.log(values);
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editbulk",
+
+        {
+          bulkID: selectedBulkCost._id,
+          ...values,
+        }
+      );
+
+      setBulkCost((bulkCost) => {
+        const arr = [...bulkCost];
+        const index = bulkCost.findIndex(
+          (bulkCost) => bulkCost._id === selectedBulkCost._id
+        );
+        arr[index] = {
+          provincename: selectedBulkCost.provincename,
+          cost: values.cost,
+        };
+        return arr;
+      });
+
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -28,16 +70,16 @@ const BulkCostEditModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
         <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
-          Update Western Province Cost
+          Update {selectedBulkCost.provincename} Cost
         </h6>
         <hr></hr>
 
         <Formik
-          initialValues={{ destination: "", cost: "" }}
-          validationSchema={validationSchema}
-          onSubmit={async (values) => {
-            console.log(values);
+          initialValues={{
+            cost: selectedBulkCost.cost,
           }}
+          validationSchema={validationSchema}
+          onSubmit={updateBulkCost}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
@@ -77,6 +119,10 @@ const BulkCostEditModal = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
               </div>
+
+              {isAdded && (
+                <Alert severity="success">This is a success message!</Alert>
+              )}
 
               <div className="text-center mb-4 mt-10">
                 <button
