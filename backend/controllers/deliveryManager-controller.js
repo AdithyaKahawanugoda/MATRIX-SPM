@@ -1,31 +1,6 @@
 const DeliveryManagerModel = require("../models/deliveryManager-model");
 const DeliveryCost = require("../models/deliveryCost-model");
 
-/* exports.addNewRailwayCost = async (req, res) => {
-  const {
-    bulkexpressprecentage,
-    retailexpressprecentage,
-    traincost,
-    bulkcost,
-    retailcost,
-  } = req.body;
-  console.log(req.body);
-  try {
-    const newRailway = await DeliveryCost.create({
-      ...req.body,
-    });
-    res.status(201).json({
-      newRailway,
-      desc: "New Railway Cost added",
-    });
-  } catch (error) {
-    res.status(500).json({
-      error,
-      desc: "Error occurred in railwayCost",
-    });
-  }
-}; */
-
 exports.addRailwayCost = async (req, res) => {
   const { destination, cost } = req.body;
 
@@ -75,6 +50,7 @@ const findrailwayBydestination = async (destination, res) => {
   }
 };
 
+//retreive train cost
 exports.getRailwayCost = async (req, res) => {
   try {
     const railWays = await DeliveryCost.findById("61254903d7838a311450fee9");
@@ -87,6 +63,7 @@ exports.getRailwayCost = async (req, res) => {
   }
 };
 
+//Edit train cost
 exports.editRailwayCost = async (req, res) => {
   let { railwayID, destination, cost } = req.body;
   if (!destination) {
@@ -142,6 +119,106 @@ exports.deleteRailwayCost = async (req, res) => {
     res.status(500).json({
       success: false,
       desc: "Error in railwayCost controller-" + error,
+    });
+  }
+};
+
+//Retreive Retail cost
+exports.getRetailCost = async (req, res) => {
+  try {
+    const retailCost = await DeliveryCost.findById("61254903d7838a311450fee9");
+    res.send(retailCost.retailcost);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in railwayCost",
+    });
+  }
+};
+
+//Edit Retail cost
+exports.editRetailCost = async (req, res) => {
+  let { retailID, provincename, cost } = req.body;
+  if (!provincename) {
+    provincename = undefined;
+  }
+  if (!cost) {
+    cost = undefined;
+  }
+
+  try {
+    const RailwayData = await DeliveryCost.findOneAndUpdate(
+      { "retailcost._id": retailID },
+      {
+        $set: {
+          "retailcost.$.provincename": provincename,
+          "retailcost.$.cost": cost,
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, desc: "Retail Cost Data Updated", RailwayData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in edit bulk controller-" + error,
+    });
+  }
+};
+
+//Retreive Bulk cost
+exports.getBulkCost = async (req, res) => {
+  try {
+    const bulkCost = await DeliveryCost.findById("61254903d7838a311450fee9");
+    res.send(bulkCost.bulkcost);
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in railwayCost",
+    });
+  }
+};
+
+//Edit bulk cost
+exports.editBulkCost = async (req, res) => {
+  let { bulkID, provincename, cost } = req.body;
+  if (!provincename) {
+    provincename = undefined;
+  }
+  if (!cost) {
+    cost = undefined;
+  }
+
+  try {
+    const bulkData = await DeliveryCost.findOneAndUpdate(
+      { "bulkcost._id": bulkID },
+      {
+        $set: {
+          "bulkcost.$.provincename": provincename,
+          "bulkcost.$.cost": cost,
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, desc: "bulk Cost Data Updated", bulkData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in edit bulk controller-" + error,
     });
   }
 };

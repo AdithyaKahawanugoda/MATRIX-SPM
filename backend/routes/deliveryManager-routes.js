@@ -5,6 +5,10 @@ const { getRailwayCost } = require("../controllers/deliveryManager-controller");
 const {
   editRailwayCost,
   deleteRailwayCost,
+  getRetailCost,
+  editRetailCost,
+  getBulkCost,
+  editBulkCost,
 } = require("../controllers/deliveryManager-controller");
 
 // route code
@@ -13,6 +17,10 @@ router.route("/editrailway").put(editRailwayCost);
 router.route("/getrailway").get(getRailwayCost);
 router.route("/deleterailway").put(deleteRailwayCost);
 
-// router.route("/add").post(addNewRailwayCost);
+router.route("/getretail").get(getRetailCost);
+router.route("/editretail").put(editRetailCost);
+
+router.route("/getbulk").get(getBulkCost);
+router.route("/editbulk").put(editBulkCost);
 
 module.exports = router;
