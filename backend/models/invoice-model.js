@@ -11,7 +11,7 @@ const InvoiceSchema = new mongoose.Schema({
   },
   placedAt: {
     type: Date,
-    default: Date.now,
+    default: Date(),
   },
   payment: {
     totalAmount: {

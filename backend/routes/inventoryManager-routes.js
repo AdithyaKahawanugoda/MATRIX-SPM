@@ -4,10 +4,14 @@ const { protectedInventoryManager } = require("../middlewares/auth-middleware");
 const {
   addNewBook,
   getAllBooks,
-  deleteBook,
+  deleteBookByISBN,
+  getBookByISBN,
+  updateBookByISBN,
 } = require("../controllers/inventoryManager-controller");
 // route code
-router.route("/addbook").post(addNewBook);
-router.route("/getbooks").get(getAllBooks);
-router.route("/deleteBook").get(deleteBook);
+router.route("/add-book").post(addNewBook);
+router.route("/get-books").get(getAllBooks);
+router.route("/delete-book").get(deleteBookByISBN);
+router.route("/get-book").get(getBookByISBN);
+router.route("/edit-book").put(updateBookByISBN);
 module.exports = router;
