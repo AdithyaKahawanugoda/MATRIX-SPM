@@ -1,14 +1,45 @@
-import React from "react";
+import Alert from "@material-ui/lab/Alert";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object({
-  destination: Yup.string().required("Destination is required"),
-  cost: Yup.number().required("Cost is required"),
+  retailexpressprecentage: Yup.number().required(
+    "retailexpressprecentage is required"
+  ),
 });
 
-const RetailExCostModal = ({ setModalVisible, modalVisible }) => {
+const RetailExCostModal = ({
+  setModalVisible,
+  modalVisible,
+  selectretailExCost,
+  setRetailExCost,
+}) => {
+  const [isAdded, setIsAdded] = useState(false);
+
+  const updatePercentage = async (values) => {
+    console.log(values);
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editprecentage",
+
+        {
+          retailexpressprecentage: values.retailexpressprecentage,
+        }
+      );
+
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -33,11 +64,9 @@ const RetailExCostModal = ({ setModalVisible, modalVisible }) => {
         <hr></hr>
 
         <Formik
-          initialValues={{ destination: "", cost: "" }}
+          initialValues={{ retailexpressprecentage: selectretailExCost }}
           validationSchema={validationSchema}
-          onSubmit={async (values) => {
-            console.log(values);
-          }}
+          onSubmit={updatePercentage}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
@@ -50,33 +79,36 @@ const RetailExCostModal = ({ setModalVisible, modalVisible }) => {
                 <div className="flex mt-4">
                   <div className=" mx-8 flex-initial">
                     <label className="block text-sm font-medium leading-149 mb-3 md:text-lg">
-                      Percentage(Rs) :
+                      Percentage(%) :
                     </label>
                   </div>
-                  <div
-                    className="flex-initial  "
-                    style={{ marginLeft: "20px" }}
-                  >
+                  <div className="flex-initial" style={{ marginLeft: "20px" }}>
                     <input
                       className={`focus:outline-none w-56 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
-                        errors.cost && touched.cost
+                        errors.retailexpressprecentage &&
+                        touched.retailexpressprecentage
                           ? "border-red-500"
                           : "border-gray-600"
                       } text-base`}
-                      id="cost"
+                      id="retailexpressprecentage"
                       type="Number"
                       placeholder="00.00"
-                      onChange={handleChange("cost")}
-                      value={values.cost}
+                      onChange={handleChange("retailexpressprecentage")}
+                      value={values.retailexpressprecentage}
                     />
-                    {errors.cost && touched.cost ? (
+                    {errors.retailexpressprecentage &&
+                    touched.retailexpressprecentage ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
-                        {errors.cost}
+                        {errors.retailexpressprecentage}
                       </div>
                     ) : null}
                   </div>
                 </div>
               </div>
+
+              {isAdded && (
+                <Alert severity="success">This is a success message!</Alert>
+              )}
 
               <div className="text-center mb-4 mt-10">
                 <button

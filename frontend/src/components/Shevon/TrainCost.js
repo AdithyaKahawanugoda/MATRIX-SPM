@@ -19,9 +19,9 @@ const TrainCost = () => {
   const getRailway = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6500/matrix/api/deliveryManager/getrailway"
+        "http://localhost:6500/matrix/api/deliveryManager/getCost"
       );
-      setRailWays(response.data);
+      setRailWays(response.data.traincost);
     } catch (error) {
       console.log(error);
     }

@@ -12,12 +12,17 @@ const RetailDeliveryCost = () => {
   const [retailCost, setRetailCost] = useState([]);
   const [selectedRetailCost, setSelectedRetailCost] = useState();
 
+  const [retailExCost, setRetailExCost] = useState();
+  const [selectretailExCost, setSelectretailExCost] = useState();
+
   const getRetail = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6500/matrix/api/deliveryManager/getretail"
+        "http://localhost:6500/matrix/api/deliveryManager/getCost"
       );
-      setRetailCost(response.data);
+      console.log(response.data.retailcost);
+      setRetailCost(response.data.retailcost);
+      setRetailExCost(response.data.retailexpressprecentage);
     } catch (error) {
       console.log(error);
     }
@@ -37,21 +42,24 @@ const RetailDeliveryCost = () => {
           <div className="rounded-xl   my-2 mx-2 px-5 py-5  border-0  shadow-md bg-prussianBlue bg-opacity-20  ">
             <div className="grid grid-cols-2">
               <div>
-                <h5 className="text-black">Express pecentage :</h5>
+                <h5 className="text-black mt-2">Express pecentage :</h5>
               </div>
               <div className="font-black ">
                 <div className="grid grid-cols-2">
                   <div className="ml-32">
-                    <h5 className="mr-14"> 10% </h5>
+                    <h5 className="mr-14 mt-2"> {retailExCost}%</h5>
                   </div>
-                  <div
-                    className="text-right"
-                    onClick={() => {
-                      setRetailCostEditOpen(false);
-                      setRetailExCostEditOpen(true);
-                    }}
-                  >
-                    <EditIcon />
+                  <div className="text-right">
+                    <Icon
+                      className="mr-2 hover:text-gamboge"
+                      onClick={() => {
+                        setRetailCostEditOpen(false);
+                        setRetailExCostEditOpen(true);
+                        setSelectretailExCost(retailExCost);
+                      }}
+                    >
+                      <EditIcon />
+                    </Icon>
                   </div>
                 </div>
               </div>
@@ -78,6 +86,7 @@ const RetailDeliveryCost = () => {
                     </div>
                     <div className="text-right">
                       <Icon
+                        className="mr-2 hover:text-gamboge"
                         onClick={() => {
                           setRetailExCostEditOpen(false);
                           setRetailCostEditOpen(true);
@@ -115,6 +124,8 @@ const RetailDeliveryCost = () => {
         <RetailExCostModal
           modalVisible={retailExCostOpen}
           setModalVisible={setRetailExCostEditOpen}
+          selectretailExCost={selectretailExCost}
+          setRetailExCost={setRetailExCost}
         />
       )}
     </div>

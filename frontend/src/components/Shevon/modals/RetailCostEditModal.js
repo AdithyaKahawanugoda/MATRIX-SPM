@@ -93,10 +93,7 @@ const RetailCostEdit = ({
                       Cost(Rs) :
                     </label>
                   </div>
-                  <div
-                    className="flex-initial  "
-                    style={{ marginLeft: "20px" }}
-                  >
+                  <div className="flex-initial" style={{ marginLeft: "20px" }}>
                     <input
                       className={`focus:outline-none w-56 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
                         errors.cost && touched.cost

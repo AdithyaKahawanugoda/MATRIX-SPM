@@ -15,9 +15,9 @@ const BulkDeliveryCost = () => {
   const getBulk = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6500/matrix/api/deliveryManager/getbulk"
+        "http://localhost:6500/matrix/api/deliveryManager/getCost"
       );
-      setBulkCost(response.data);
+      setBulkCost(response.data.bulkcost);
     } catch (error) {
       console.log(error);
     }
