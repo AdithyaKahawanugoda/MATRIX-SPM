@@ -12,6 +12,9 @@ const {
   deleteCategory,
   getAllCategory,
   editCategory,
+  addQA,
+  deleteQA,
+  editQA,
 } = require("../controllers/deliveryManager-controller");
 
 //delivery cost
@@ -27,5 +30,8 @@ router.route("/addcategory").post(addcategory);
 router.route("/removecategory").delete(deleteCategory);
 router.route("/getallcategory").get(getAllCategory);
 router.route("/editcategory").put(editCategory);
+router.route("/addqa").put(addQA);
+router.route("/deleteqa").put(deleteQA);
+router.route("/editQA").put(editQA);
 
 module.exports = router;

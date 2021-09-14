@@ -2,7 +2,7 @@ const DeliveryManagerModel = require("../models/deliveryManager-model");
 const DeliveryCost = require("../models/deliveryCost-model");
 const FAQ = require("../models/faq-model");
 
-/* ------------------delivery cost management--------------------- */
+/* --------------------------------------------------delivery cost management-------------------------------------------------- */
 //add DeliveryCost
 exports.addRailwayCost = async (req, res) => {
   const { destination, cost } = req.body;
@@ -238,7 +238,7 @@ exports.editprecentage = async (req, res) => {
     });
   }
 };
-/* ------------------FAQ management--------------------- */
+/* --------------------------------------------------FAQ management -------------------------------------------------- */
 //add category
 exports.addcategory = async (req, res) => {
   const { category, faq } = req.body;
@@ -323,3 +323,88 @@ exports.deleteCategory = async (req, res) => {
 };
 
 //add question and answer
+exports.addQA = async (req, res) => {
+  const { CID, question, answer } = req.body;
+
+  try {
+    const DocData = {
+      question,
+      answer,
+    };
+    const newQA = await FAQ.findOneAndUpdate(
+      { _id: CID },
+      { $push: { faq: DocData } },
+      {
+        new: true,
+      }
+    );
+
+    res.status(201).json({
+      newQA,
+      desc: "New Q and A  added",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in Q and A",
+    });
+  }
+};
+
+//Edit question and answer
+exports.editQA = async (req, res) => {
+  let { QAID, question, answer } = req.body;
+  if (!question) {
+    question = undefined;
+  }
+  if (!answer) {
+    answer = undefined;
+  }
+
+  try {
+    const DocData = await FAQ.findOneAndUpdate(
+      { "faq._id": QAID },
+      {
+        $set: {
+          "faq.$.question": question,
+          "faq.$.answer": answer,
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, desc: "Q nad A Data Updated", DocData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in editQA controller-" + error,
+    });
+  }
+};
+
+//Delete question and answer
+exports.deleteQA = async (req, res) => {
+  const { CID, QAID } = req.body;
+  console.log(req.body);
+  try {
+    const DocData = await FAQ.updateOne(
+      { _id: CID },
+      { $pull: { faq: { _id: QAID } } }
+    );
+    res
+      .status(200)
+      .json({ success: true, desc: "Q and A Data deleted", DocData });
+    console.log("sucess");
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in deleteQA controller-" + error,
+    });
+  }
+};
