@@ -5,22 +5,27 @@ const { getCost } = require("../controllers/deliveryManager-controller");
 const {
   editRailwayCost,
   deleteRailwayCost,
-
   editRetailCost,
-
   editBulkCost,
   editprecentage,
+  addcategory,
+  deleteCategory,
+  getAllCategory,
+  editCategory,
 } = require("../controllers/deliveryManager-controller");
 
-// route code
+//delivery cost
 router.route("/addrailway").put(addRailwayCost);
 router.route("/editrailway").put(editRailwayCost);
 router.route("/getcost").get(getCost);
 router.route("/deleterailway").put(deleteRailwayCost);
-
 router.route("/editretail").put(editRetailCost);
-
 router.route("/editbulk").put(editBulkCost);
 router.route("/editprecentage").put(editprecentage);
+//FAQ
+router.route("/addcategory").post(addcategory);
+router.route("/removecategory").delete(deleteCategory);
+router.route("/getallcategory").get(getAllCategory);
+router.route("/editcategory").put(editCategory);
 
 module.exports = router;

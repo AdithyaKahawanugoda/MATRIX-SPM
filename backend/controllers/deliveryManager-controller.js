@@ -1,6 +1,9 @@
 const DeliveryManagerModel = require("../models/deliveryManager-model");
 const DeliveryCost = require("../models/deliveryCost-model");
+const FAQ = require("../models/faq-model");
 
+/* ------------------delivery cost management--------------------- */
+//add DeliveryCost
 exports.addRailwayCost = async (req, res) => {
   const { destination, cost } = req.body;
 
@@ -235,3 +238,88 @@ exports.editprecentage = async (req, res) => {
     });
   }
 };
+/* ------------------FAQ management--------------------- */
+//add category
+exports.addcategory = async (req, res) => {
+  const { category, faq } = req.body;
+  console.log(req.body);
+  try {
+    const newRailway = await FAQ.create({
+      ...req.body,
+    });
+    res.status(201).json({
+      newRailway,
+      desc: "New category added",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in category",
+    });
+  }
+};
+
+//Retreive category
+exports.getAllCategory = async (req, res) => {
+  await FAQ.find()
+    .then((data) => {
+      res.status(200).send({ data: data });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+};
+
+//edit category
+exports.editCategory = async (req, res) => {
+  let { CID, category } = req.body;
+
+  if (!category) {
+    category = undefined;
+  }
+
+  try {
+    const CatagoryData = await FAQ.findOneAndUpdate(
+      { _id: CID },
+      {
+        $set: {
+          category: category,
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, desc: "category Data Updated", CatagoryData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in category controller-" + error,
+    });
+  }
+};
+
+//delete category
+exports.deleteCategory = async (req, res) => {
+  const { CID } = req.body;
+  console.log(req.body);
+  try {
+    await FAQ.deleteOne({ _id: CID });
+    res.status(200).json({
+      success: true,
+      desc: "Category removed",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in deleteCategory in Category controller - " + error,
+    });
+  }
+};
+
+//add question and answer
