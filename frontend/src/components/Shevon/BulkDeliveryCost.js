@@ -12,12 +12,16 @@ const BulkDeliveryCost = () => {
   const [bulkCost, setBulkCost] = useState([]);
   const [selectedBulkCost, setSelectedBulkCost] = useState();
 
+  const [bulkExCost, setBulkExCost] = useState();
+  const [selectbulkExCost, setSelectbulkExCost] = useState();
+
   const getBulk = async () => {
     try {
       const response = await axios.get(
         "http://localhost:6500/matrix/api/deliveryManager/getCost"
       );
       setBulkCost(response.data.bulkcost);
+      setBulkExCost(response.data.bulkexpressprecentage);
     } catch (error) {
       console.log(error);
     }
@@ -37,21 +41,24 @@ const BulkDeliveryCost = () => {
           <div className="rounded-xl   my-2 mx-2 px-5 py-5  border-0  shadow-md bg-prussianBlue bg-opacity-20  ">
             <div className="grid grid-cols-2">
               <div>
-                <h5 className="text-black">Express pecentage :</h5>
+                <h5 className="text-black mt-2">Express pecentage :</h5>
               </div>
-              <div className="text-black ">
+              <div className="font-black ">
                 <div className="grid grid-cols-2">
                   <div className="ml-32">
-                    <h5 className="mr-14"> 10% </h5>{" "}
+                    <h5 className="mr-14 mt-2"> {bulkExCost}% </h5>
                   </div>
-                  <div
-                    className="text-right "
-                    onClick={() => {
-                      setbulkCostEditOpen(false);
-                      setBulkExCostEditOpen(true);
-                    }}
-                  >
-                    <EditIcon />
+                  <div className="text-right ">
+                    <Icon
+                      className="mr-2 hover:text-gamboge"
+                      onClick={() => {
+                        setbulkCostEditOpen(false);
+                        setBulkExCostEditOpen(true);
+                        setSelectbulkExCost(bulkExCost);
+                      }}
+                    >
+                      <EditIcon />
+                    </Icon>
                   </div>
                 </div>
               </div>
@@ -76,6 +83,7 @@ const BulkDeliveryCost = () => {
                     </div>
                     <div className="text-right">
                       <Icon
+                        className="mr-2 hover:text-gamboge"
                         onClick={() => {
                           setBulkExCostEditOpen(false);
                           setbulkCostEditOpen(true);
@@ -113,6 +121,8 @@ const BulkDeliveryCost = () => {
         <BulkExCostModal
           modalVisible={bulkExCostOpen}
           setModalVisible={setBulkExCostEditOpen}
+          selectbulkExCost={selectbulkExCost}
+          setBulkExCost={setBulkExCost}
         />
       )}
     </div>
