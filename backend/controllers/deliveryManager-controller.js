@@ -50,19 +50,6 @@ const findrailwayBydestination = async (destination, res) => {
   }
 };
 
-//retreive train cost
-exports.getRailwayCost = async (req, res) => {
-  try {
-    const railWays = await DeliveryCost.findById("61254903d7838a311450fee9");
-    res.send(railWays.traincost);
-  } catch (error) {
-    res.status(500).json({
-      error,
-      desc: "Error occurred in railwayCost",
-    });
-  }
-};
-
 //Edit train cost
 exports.editRailwayCost = async (req, res) => {
   let { railwayID, destination, cost } = req.body;
@@ -100,6 +87,7 @@ exports.editRailwayCost = async (req, res) => {
   }
 };
 
+// delete
 exports.deleteRailwayCost = async (req, res) => {
   const { railwayID } = req.body;
   console.log(req.body);
@@ -123,11 +111,11 @@ exports.deleteRailwayCost = async (req, res) => {
   }
 };
 
-//Retreive Retail cost
-exports.getRetailCost = async (req, res) => {
+//Retreive  cost data
+exports.getCost = async (req, res) => {
   try {
-    const retailCost = await DeliveryCost.findById("61254903d7838a311450fee9");
-    res.send(retailCost.retailcost);
+    const Cost = await DeliveryCost.findById("61254903d7838a311450fee9");
+    res.send(Cost);
   } catch (error) {
     res.status(500).json({
       error,
@@ -173,19 +161,6 @@ exports.editRetailCost = async (req, res) => {
   }
 };
 
-//Retreive Bulk cost
-exports.getBulkCost = async (req, res) => {
-  try {
-    const bulkCost = await DeliveryCost.findById("61254903d7838a311450fee9");
-    res.send(bulkCost.bulkcost);
-  } catch (error) {
-    res.status(500).json({
-      error,
-      desc: "Error occurred in railwayCost",
-    });
-  }
-};
-
 //Edit bulk cost
 exports.editBulkCost = async (req, res) => {
   let { bulkID, provincename, cost } = req.body;
@@ -219,6 +194,44 @@ exports.editBulkCost = async (req, res) => {
     res.status(500).json({
       success: false,
       desc: "Error in edit bulk controller-" + error,
+    });
+  }
+};
+
+//edit presentages
+exports.editprecentage = async (req, res) => {
+  let { bulkexpressprecentage, retailexpressprecentage } = req.body;
+
+  if (!bulkexpressprecentage) {
+    bulkexpressprecentage = undefined;
+  }
+  if (!retailexpressprecentage) {
+    retailexpressprecentage = undefined;
+  }
+
+  try {
+    const RailwayData = await DeliveryCost.findOneAndUpdate(
+      { _id: "61254903d7838a311450fee9" },
+      {
+        $set: {
+          bulkexpressprecentage: bulkexpressprecentage,
+          retailexpressprecentage: retailexpressprecentage,
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, desc: "precentaget Data Updated", RailwayData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in precentage controller-" + error,
     });
   }
 };
