@@ -1,8 +1,34 @@
 import React from 'react';
 import { Modal } from "react-responsive-modal";
 import { Formik } from "formik";
+import axios from "axios";
 
 const DeleteProfileModal = ({setModalVisible, modalVisible}) => {
+  const deleteCustomer = async (values) =>{
+    const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
+    try{
+        await axios
+           .delete(
+               "http://localhost:6500/matrix/api/customer/deleteProfile",
+               config
+           )
+           .then((res) =>{
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userRole");
+            window.location = "/";
+           })
+           .catch((err) =>{
+               alert(err);
+           });
+    }catch(error){
+        alert("Error Occured-" + error);
+    }
+};
+
     return (
         <div>
         <Modal
@@ -23,10 +49,9 @@ const DeleteProfileModal = ({setModalVisible, modalVisible}) => {
       >
       <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
         <Formik
-  
-  
           onSubmit={async (values) => {
             console.log(values);
+            deleteCustomer(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -59,6 +84,9 @@ const DeleteProfileModal = ({setModalVisible, modalVisible}) => {
                 type="submit"
                 className="focus:outline-none bg-gray-400 text-snow-900 text-base rounded border hover:border-transparent w-40 h-10 sm:w-80 sm:h-12"
                 style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
+                onClick={() => {
+                  setModalVisible(false);
+                }}
               >
                 CANCEL
               </button>
