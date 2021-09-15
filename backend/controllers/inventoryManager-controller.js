@@ -121,6 +121,7 @@ exports.getBookByISBN = async (req, res) => {
 
 // update specific book
 exports.updateBookByISBN = async (req, res) => {
+  let uploadRes;
   const {
     publishingTitle,
     originalTitle,
@@ -222,12 +223,12 @@ exports.updateBookByISBN = async (req, res) => {
     printCost = undefined;
   }
   if (!encImg) {
-    encImg = undefined;
-  }
-  if (encImg) {
-    const uploadRes = await uploadFiles(encImg, "Book_Covers");
+    uploadRes = undefined;
   }
   try {
+    if (encImg !== undefined) {
+      uploadRes = await uploadFiles(encImg, "Book_Covers");
+    }
     const updatedBook = await ProductModel.findOneAndUpdate(
       { ISBN },
       {
@@ -330,28 +331,125 @@ exports.addNewInvoice = async (req, res) => {
 };
 
 // get all invoices
+exports.getAllInvoices = async (req, res) => {
+  try {
+    const allInvoices = await InvoiceModel.find();
+    res.status(200).send({
+      allInvoices,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in getAllInvoices",
+    });
+  }
+};
+
 // get specific invoice
+exports.getInvoiceByID = async (req, res) => {
+  const { invoiceId } = req.body;
+  try {
+    const invoice = await InvoiceModel.findOne({ invoiceId });
+    res.status(200).send({
+      invoice,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in getInvoiceByID",
+    });
+  }
+};
+
 // update specific invoice
+exports.updateInvoiceByID = async (req, res) => {
+  const { invoiceId, retailShop, totalAmount, notes, items } = req.body;
+  if (!retailShop) {
+    retailShop = undefined;
+  }
+  if (!totalAmount) {
+    totalAmount = undefined;
+  }
+  if (!notes) {
+    notes = undefined;
+  }
+  if (!items) {
+    items = undefined;
+  }
+  try {
+    const updatedInvoice = await InvoiceModel.findOneAndUpdate(
+      { invoiceId },
+      {
+        $set: {
+          invoiceId,
+          retailShop,
+          payment: { totalAmount },
+          notes,
+          items,
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+
+    res.status(200).send({
+      desc: "Invoice data updated successfully",
+      updatedInvoice,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in updateInvoiceByID",
+    });
+  }
+};
+
 // delete specific invoice
-// log deleted invoice details
+exports.deleteInvoiceByID = async (req, res) => {
+  const { invoiceId } = req.body;
+  try {
+    await InvoiceModel.deleteOne({ invoiceId });
+    await logDeletes(invoiceId, "invoice", notes, "InvoiceModel");
+    res.status(202).json({ desc: "Invoice deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in deleteInvoiceByID",
+    });
+  }
+};
 
 // update profile details
-// delete specific profile
-// log profile delete details
+exports.updateProfile = async (req, res) => {
+  let uploadRes;
+  const { username, email, encPP } = req.body;
+  if (!username) {
+    username = undefined;
+  }
+  if (!email) {
+    email = undefined;
+  }
+  if (!encPP) {
+    uploadRes = undefined;
+  }
+  try {
+    if (encPP !== undefined) {
+      uploadRes = await uploadFiles(encPP, "Profile_Pictures");
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in updateProfile",
+    });
+  }
+};
 
-// log deleted book details
-// const logBookDeletes = async (ISBN, res) => {
-//   try {
-//     const deletedBookLog = await BookDeleteLogModel.create({
-//       ISBN
-//     })
-//   } catch (error) {
-//     res.status(422).json({
-//       error,
-//       desc: "Error occurred in logBookDeletes",
-//     });
-//   }
-// };
+// password reset
+
+// delete specific profile
 
 // check ISBN duplicates
 const findBookByISBN = async (ISBN, res) => {
@@ -397,3 +495,20 @@ const uploadFiles = async (file, preSetName) => {
 };
 
 // manage file deletes
+
+// log deleted invoice details
+const logDeletes = async (id, type, notes, modelName) => {
+  try {
+    const logResponse = await `${modelName}`.create({
+      id,
+      notes,
+      type,
+    });
+    return logResponse;
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in logDeletes",
+    });
+  }
+};
