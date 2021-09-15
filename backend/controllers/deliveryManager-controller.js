@@ -1,6 +1,8 @@
 const DeliveryManagerModel = require("../models/deliveryManager-model");
 const DeliveryCost = require("../models/deliveryCost-model");
 const FAQ = require("../models/faq-model");
+const ContactUs = require("../models/contactUs-model");
+const sendEmail = require("../utils/SendEmail");
 
 /* --------------------------------------------------delivery cost management-------------------------------------------------- */
 //add DeliveryCost
@@ -327,20 +329,20 @@ exports.addQA = async (req, res) => {
   const { CID, question, answer } = req.body;
 
   try {
-    const DocData = {
+    const faqdata = {
       question,
       answer,
     };
-    const newQA = await FAQ.findOneAndUpdate(
+    const DocData = await FAQ.findOneAndUpdate(
       { _id: CID },
-      { $push: { faq: DocData } },
+      { $push: { faq: faqdata } },
       {
         new: true,
       }
     );
 
     res.status(201).json({
-      newQA,
+      DocData,
       desc: "New Q and A  added",
     });
   } catch (error) {
@@ -405,6 +407,79 @@ exports.deleteQA = async (req, res) => {
     res.status(500).json({
       success: false,
       desc: "Error in deleteQA controller-" + error,
+    });
+  }
+};
+/* --------------------------------------------------Customer InquiriesManagement -------------------------------------------------- */
+//add customer inquiry
+exports.addCusInquiry = async (req, res) => {
+  const { email, mobileNumber, department, description, reply } = req.body;
+  console.log(req.body);
+  try {
+    const DocData = await ContactUs.create({
+      ...req.body,
+    });
+    res.status(201).json({
+      DocData,
+      desc: "New inquiry added",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in inquiry",
+    });
+  }
+};
+
+//retrieve customer inquiries
+exports.getAllInquiries = async (req, res) => {
+  await ContactUs.find()
+    .then((data) => {
+      res.status(200).send({ data: data });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error.message });
+    });
+};
+
+//send email and save reply
+exports.addReply = async (req, res) => {
+  const { InquirID, replynote, email } = req.body;
+  console.log(req.body);
+  try {
+    const replydata = {
+      replynote,
+    };
+
+    const DocData = await ContactUs.findOneAndUpdate(
+      { _id: InquirID },
+      { $push: { reply: replydata } },
+      {
+        new: true,
+      }
+    );
+    console.log(email);
+    sendEmail({
+      to: email,
+      subject: `investigation result of #${InquirID} Inquiry ID`,
+      text: `<h5>Dear sir/madam,</h5>
+      <p>
+      Thank you for feedback about APURU POTH! <br />
+      ${replynote}
+      <br />
+      Thank you.
+      </p>
+      `,
+    });
+
+    res.status(201).json({
+      DocData,
+      desc: "reply added",
+    });
+  } catch (error) {
+    res.status(500).send({
+      status: "Internal Server Error in new reply create",
+      error: error.message,
     });
   }
 };

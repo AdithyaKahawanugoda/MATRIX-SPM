@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { addRailwayCost } = require("../controllers/deliveryManager-controller");
-const { getCost } = require("../controllers/deliveryManager-controller");
 const {
+  addRailwayCost,
+  getCost,
   editRailwayCost,
   deleteRailwayCost,
   editRetailCost,
@@ -15,6 +15,9 @@ const {
   addQA,
   deleteQA,
   editQA,
+  addCusInquiry,
+  getAllInquiries,
+  addReply,
 } = require("../controllers/deliveryManager-controller");
 
 //delivery cost
@@ -32,6 +35,10 @@ router.route("/getallcategory").get(getAllCategory);
 router.route("/editcategory").put(editCategory);
 router.route("/addqa").put(addQA);
 router.route("/deleteqa").put(deleteQA);
-router.route("/editQA").put(editQA);
+router.route("/editqa").put(editQA);
+//customerInquiries
+router.route("/addinquir").post(addCusInquiry);
+router.route("/getallinquiries").get(getAllInquiries);
+router.route("/addreply").put(addReply);
 
 module.exports = router;
