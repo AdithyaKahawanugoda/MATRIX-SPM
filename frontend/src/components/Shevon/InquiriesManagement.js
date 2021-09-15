@@ -12,6 +12,8 @@ import ReplyIcon from "@material-ui/icons/Reply";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import ReplyInquiriesModal from "./modals/ReplyInquiriesModal";
 import Icon from "@material-ui/core/Icon";
+import ReplyedModal from "./modals/ReplyedModal";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -19,17 +21,27 @@ const columns = [
   { id: "customerEmail", label: "CustomerEmail", minWidth: 50 },
   { id: "mobileNo", label: "Mobile Number", minWidth: 60 },
   { id: "message", label: "Message", minWidth: 390 },
-  { id: "action", label: "Action", minWidth: 80 },
+  { id: "action1", label: "Action1", minWidth: 80 },
+  { id: "action2", label: "Action2", minWidth: 80 },
 ];
 
-function createData(no, code, customerEmail, mobileNo, message, action) {
+function createData(
+  no,
+  code,
+  customerEmail,
+  mobileNo,
+  message,
+  action1,
+  action2
+) {
   return {
     no,
     code,
     customerEmail,
     mobileNo,
     message,
-    action,
+    action1,
+    action2,
   };
 }
 
@@ -137,6 +149,7 @@ const rows = [
 
 const InquiriesManagement = () => {
   const [replyInquiriesOpen, setReplyInquiriesOpen] = useState(false);
+  const [replyedOpen, setReplyedOpen] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -249,10 +262,22 @@ const InquiriesManagement = () => {
                                 {column.format && typeof value === "number"
                                   ? column.format(value)
                                   : value}
-                                {column.id === "action" && (
+                                {column.id === "action1" && (
                                   <Icon
                                     className="ml-2 hover:text-gamboge"
                                     onClick={() => {
+                                      setReplyInquiriesOpen(false);
+                                      setReplyedOpen(true);
+                                    }}
+                                  >
+                                    <AttachFileIcon />
+                                  </Icon>
+                                )}
+                                {column.id === "action2" && (
+                                  <Icon
+                                    className="ml-2 hover:text-gamboge"
+                                    onClick={() => {
+                                      setReplyedOpen(false);
                                       setReplyInquiriesOpen(true);
                                     }}
                                   >
@@ -284,6 +309,12 @@ const InquiriesManagement = () => {
         <ReplyInquiriesModal
           modalVisible={replyInquiriesOpen}
           setModalVisible={setReplyInquiriesOpen}
+        />
+      )}
+      {replyedOpen && (
+        <ReplyedModal
+          modalVisible={replyedOpen}
+          setModalVisible={setReplyedOpen}
         />
       )}
     </div>
