@@ -6,6 +6,8 @@ import { Image } from "cloudinary-react";
 import ClampLines from "react-clamp-lines";
 import Select from "react-select";
 import Hidden from "@material-ui/core/Hidden";
+import Header from "../components/Adithya/Header";
+import Footer from "../components/Adithya/Footer";
 
 const useStyles = makeStyles({
   paginationButton: {
@@ -101,13 +103,18 @@ const AllProducts = () => {
     .slice(pageVisited, pageVisited + bookPerPage)
     .map((book, index) => {
       return (
-        <div className="w-full m-auto h-max mb-1  " key={index}>
-          <div className="lg:w-1/5 md:w-1/2 sm:w-full h-max float-left mb-5 mt-5 p-4">
+        <div className="w-full m-auto h-full mb-1  " key={index}>
+          <div className="lg:w-1/5 md:w-1/2 sm:w-full h-max  float-left mb-5 mt-5 p-4">
             <div className="w-full h-max shadow-lg">
               <p className="font-fatKidFont  text-lg mb-3 text-center">
                 {book.publishingTitle}
               </p>
-              <div className=" h-52 w-48  m-auto ">
+              <div
+                className=" h-52 w-48  m-auto "
+                onClick={() => {
+                  window.location = `/book/${book._id}`;
+                }}
+              >
                 <Image
                   className="w-full h-full object-contain "
                   cloudName="grid1234"
@@ -140,7 +147,7 @@ const AllProducts = () => {
 
                   <div className="w-full h-10">
                     <div
-                      className="w-max h-9 float-right bg-red rounded-3xl bg-red-700 p-2 transform hover:scale-110 motion-reduce:transform-none"
+                      className="cursor-pointer w-max h-9 float-right bg-red rounded-3xl bg-ferrariRed p-2 transform hover:scale-110 motion-reduce:transform-none"
                       onClick={() => {
                         setsearchTerm(book.discountPercentage.label);
                       }}
@@ -197,75 +204,114 @@ const AllProducts = () => {
   };
 
   return (
-    <div className="w-full  h-16 p-1">
-      <div className="w-full h-16">
-        <div className=" lg:w-1/6 md:w-full float-left">
-          <h1 className="text-4xl font-bold mb-5   lg:pl-8 pt-3 font-thinFont ml-3">
-            OFFERS
-          </h1>
-        </div>
-        <div className="text-2xl lg:w-5/6 md:w-full float-left h-max p-4">
-          <p className="text-2xl font-thinFont">
-            Don't miss out this valuable offers!
-          </p>
-        </div>
-      </div>
-      <Hidden only={["lg", "xl"]}>
-        <div>
-          <Select
-            options={options}
-            onChange={(event) => {
-              setsearchTerm(event.value);
-            }}
-            className="basic-multi-select"
-          />
-        </div>
-      </Hidden>
-      <Hidden only={["md", "sm", "xs"]}>
-        <div className="w-full h-16 bg-yellow-400 p-3  ">
-          <div className="w-max h-9 bg-red rounded-3xl bg-red-500 p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
-            <p
-              className=" text-white font-bold text-center text-sm"
-              onClick={() => {
-                setsearchTerm("");
-              }}
-            >
-              ALL OFFERS
+    <>
+      <Header />
+      <div className="w-full  h-full p-1">
+        <div className="w-full h-16">
+          <div className=" lg:w-1/6 md:w-full float-left">
+            <h1 className="text-4xl font-bold mb-5   lg:pl-8 pt-3 font-thinFont ml-3">
+              OFFERS
+            </h1>
+          </div>
+          <div className="text-2xl lg:w-5/6 md:w-full float-left h-max p-4">
+            <p className="text-2xl font-thinFont">
+              Don't miss out this valuable offers!
             </p>
           </div>
-          {options.map((offers, index) => {
-            return (
-              <div className="w-max h-9 bg-red rounded-3xl bg-halloweenOrange p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
-                <p
-                  className="text-white font-bold text-center text-sm"
-                  onClick={() => {
-                    setsearchTerm(offers.value);
-                  }}
-                >
-                  {offers.value}
-                </p>
-              </div>
-            );
-          })}
         </div>
-      </Hidden>
+        <Hidden only={["lg", "xl"]}>
+          <div>
+            <Select
+              options={options}
+              onChange={(event) => {
+                setsearchTerm(event.value);
+              }}
+              className="basic-multi-select"
+            />
+          </div>
+        </Hidden>
+        <Hidden only={["md", "sm", "xs"]}>
+          <div className="w-full h-16 bg-yellow-400 p-3  ">
+            <div className="cursor-pointer w-max h-9 bg-red rounded-3xl bg-red-500 p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+              <p
+                className=" text-white font-bold text-center text-sm"
+                onClick={() => {
+                  setsearchTerm("");
+                }}
+              >
+                ALL OFFERS
+              </p>
+            </div>
+            {options.map((offers, index) => {
+              return (
+                <div>
+                  {searchTerm &&
+                    offers.value
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) && (
+                      <div className="cursor-pointer w-max h-9 bg-red rounded-3xl bg-ferrariRed p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+                        <p
+                          className="text-white font-bold text-center text-sm"
+                          onClick={() => {
+                            setsearchTerm(offers.value);
+                          }}
+                        >
+                          {offers.value}
+                        </p>
+                      </div>
+                    )}
+                  {searchTerm &&
+                    !offers.value
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) && (
+                      <div className="cursor-pointer w-max h-9 bg-red rounded-3xl bg-halloweenOrange p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none bg-opacity-40">
+                        <p
+                          className="text-white font-bold text-center text-sm"
+                          onClick={() => {
+                            setsearchTerm(offers.value);
+                          }}
+                        >
+                          {offers.value}
+                        </p>
+                      </div>
+                    )}
+                  {!searchTerm && (
+                    <div className="cursor-pointer w-max h-9 bg-opacity-40  rounded-3xl bg-halloweenOrange p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+                      <p
+                        className="text-white font-bold text-center text-sm"
+                        onClick={() => {
+                          setsearchTerm(offers.value);
+                        }}
+                      >
+                        {offers.value}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Hidden>
 
-      <div className="mb-4 w-full h-max ">{displayBooks}</div>
+        <div className="mb-4 w-full h-max ">{displayBooks}</div>
 
-      <div className="w-max">
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={pageCount}
-          onPageChange={changePage}
-          containerClassName={classes.paginationButton}
-          previousLinkClassName={classes.previousBttn}
-          nextLinkClassName={classes.nextBttn}
-          disabledClassName={classes.paginationDisabled}
-          activeLinkClassName={classes.paginationActive}
-        />
+        <div className="w-max">
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={pageCount}
+            onPageChange={changePage}
+            containerClassName={classes.paginationButton}
+            previousLinkClassName={classes.previousBttn}
+            nextLinkClassName={classes.nextBttn}
+            disabledClassName={classes.paginationDisabled}
+            activeLinkClassName={classes.paginationActive}
+          />
+        </div>
       </div>
-    </div>
+
+      <Footer />
+    </>
   );
 };
 
