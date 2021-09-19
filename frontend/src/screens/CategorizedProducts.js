@@ -1,229 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { makeStyles } from "@material-ui/core/styles";
-
-const data = [
-  {
-    BookName: "Anne of Green Gables",
-    img: "https://i.ibb.co/zn6sSHM/download-1.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Dracula",
-    img: "https://i.ibb.co/sQDTJ78/download-5.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "A Town Like Alice",
-    img: "https://i.ibb.co/9Ns64V0/download-2.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "The Color Purple",
-    img: "https://i.ibb.co/MBNrv9s/download-3.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Frankenstein",
-    img: "https://i.ibb.co/LvnXySj/download-4.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Animal Farm",
-    img: "https://i.ibb.co/M1drW98/download-6.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "The Handmaid's Tale",
-    img: "https://i.ibb.co/tPyPrJS/download.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Barney's Version",
-    img: "https://i.ibb.co/pxyhJ0X/images-1.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Breakfast of Champions",
-    img: "https://i.ibb.co/YL6BRSm/images-3.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "The Brothers Karamazov",
-    img: "https://i.ibb.co/2WFNjK0/images-4.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Brave New World",
-    img: "https://i.ibb.co/7J9K9vm/images-5.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "City of Thieves",
-    img: "https://i.ibb.co/NLmqS82/images-6.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Don Quixote",
-    img: "https://i.ibb.co/FDNLntg/images-7.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Disgrace",
-    img: "https://i.ibb.co/b2NZ8PH/images-8.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Crime and Punishment",
-    img: "https://i.ibb.co/Wx9R4Vr/images-9.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Doomsday Book",
-    img: "https://i.ibb.co/C6T8DcW/images-10.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Your House Will Pay",
-    img: "https://i.ibb.co/M1xKjc9/images-11.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Rebecca",
-    img: "https://i.ibb.co/RjYmp9z/images-12.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "The Silence of the Lambs",
-    img: "https://i.ibb.co/zxJ83f7/images.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-  {
-    BookName: "Shutter Island",
-    img: "https://i.ibb.co/NLmqS82/images-6.jpg",
-    description:
-      "Ulysses chronicles the passage of Leopold Bloom through Dublin during an ordinary day, June 16, 1904. The title parallels and alludes to Odysseus (Latinised into Ulysses), the hero of Homer's Odyss.",
-    price: "960",
-    discount: {
-      lable: "SUMMER OFF",
-      percentage: "20",
-    },
-  },
-];
+import { Image } from "cloudinary-react";
+import ClampLines from "react-clamp-lines";
+import Select from "react-select";
+import Hidden from "@material-ui/core/Hidden";
+import Header from "../components/Adithya/Header";
+import Footer from "../components/Adithya/Footer";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles({
   paginationButton: {
@@ -236,10 +21,10 @@ const useStyles = makeStyles({
     paddingTop: "10px",
 
     "& a": {
-      margin: "8px",
+      margin: "3px",
       border: "1px solid #065774",
       color: "#065774",
-      padding: "10px",
+      padding: "5px",
       borderRadius: "5px",
       cursor: "ponter",
     },
@@ -251,46 +36,133 @@ const useStyles = makeStyles({
   },
 });
 
-const CategorizedProducts = () => {
-  const classes = useStyles();
+const AllProducts = () => {
+  const { catname } = useParams();
 
-  const books = data;
+  const classes = useStyles();
+  const [searchTerm, setsearchTerm] = useState(catname);
+  const [products, setproducts] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  const [options, setOptions] = useState([]);
+  let filterd = false;
+
+  useEffect(() => {
+    const getNewsletterItems = async () => {
+      try {
+        await axios
+          .get("http://localhost:6500/matrix/api/admin/getProducts")
+          .then((res) => {
+            let testLables = [];
+            let testProducts = [];
+            for (let i = 0; i < res.data.Products.length; i++) {
+              if (res.data.Products[i].category) {
+                testProducts.push(res.data.Products[i]);
+                testLables.push(res.data.Products[i].category);
+              }
+            }
+
+            setproducts(testProducts);
+            let data = [];
+            let uniqueLables = testLables.filter((c, index) => {
+              return testLables.indexOf(c) === index;
+            });
+            uniqueLables.map((item) => {
+              let category = {
+                value: item,
+                label: item,
+              };
+              data.push(category);
+              return 0;
+            });
+
+            setOptions(data);
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      } catch (err) {
+        alert("error :" + err);
+      }
+    };
+    getNewsletterItems();
+  }, []);
 
   const bookPerPage = 5;
-  const pageVisited = pageNumber * bookPerPage;
+  let pageVisited = pageNumber * bookPerPage;
 
-  const displayBooks = books
+  const displayBooks = products
+    .filter((val) => {
+      if (searchTerm === "") {
+        return val;
+      } else if (
+        val.category.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        return val;
+      }
+      return null;
+    })
     .slice(pageVisited, pageVisited + bookPerPage)
     .map((book, index) => {
       return (
-        <div key={index} className="w-full margin-auto h-auto">
-          <div className="w-1/5 float-left p-3 ">
-            <div
-              className="w-full float-left shadow-2xl rounded-lg"
-              style={{ height: "35vw" }}
-            >
-              <div style={{ height: "18vw" }}>
-                <img
-                  src={book.img}
-                  alt="petshop-design-with-cat-and-dog-vector-21771960"
-                  border="0"
-                  className="rounded-t-lg"
+        <div className="w-full m-auto h-full mb-1  " key={index}>
+          <div className="lg:w-1/5 md:w-1/2 sm:w-full h-max  float-left mb-5 mt-5 p-4">
+            <div className="w-full h-max shadow-lg">
+              <p className="font-fatKidFont  text-lg mb-3 text-center">
+                {book.publishingTitle}
+              </p>
+              <div
+                className=" h-52 w-48  m-auto "
+                onClick={() => {
+                  window.location = `/book/${book._id}`;
+                }}
+              >
+                <Image
+                  className="w-full h-full object-contain "
+                  cloudName="grid1234"
+                  publicId={book.bookImage.imagePublicId}
                   style={{ width: "100%", height: "100%" }}
                 />
-                <div className="p-3">
-                  <h1 className="text-l   mb-1 font-thinFont text-blueSapphire font-extrabold">
-                    {book.BookName}
-                  </h1>
-                  <h1 className="text-sm   mb-3"> {book.description}</h1>
+              </div>
+              <div className="w-full p-4">
+                <div>
+                  <p className="font-thinFont font-bold text-sm text-gray-600">
+                    {book.translator}
+                  </p>
 
-                  <div className="w-full ">
-                    <div className="w-max mr-1 float-left mt-1">
-                      <h1 className="text-l  font-bold ">RS.{book.price}</h1>
-                    </div>
-                    <div className="w-max bg-ferrariRed float-left h-8 rounded-full p-3 pt-1">
-                      {book.discount.lable} {book.discount.percentage}%
-                    </div>
+                  <ClampLines
+                    text={book.aboutBook}
+                    id="really-unique-id"
+                    lines={3}
+                    ellipsis="....."
+                    moreText=""
+                    className="custom-class text-md font-medievalFont text-black"
+                    innerElement="p"
+                  />
+                  {!book.discountPercentage.label && (
+                    <p className="font-bold text-lg">
+                      Rs.
+                      {book.marketPrice}/=
+                    </p>
+                  )}
+                  {book.discountPercentage.label && (
+                    <p className="font-bold text-lg">
+                      <del className="text-gray-400">Rs.{book.marketPrice}</del>{" "}
+                      Rs.
+                      {book.marketPrice -
+                        (book.discountPercentage.regular * book.marketPrice) /
+                          100}
+                    </p>
+                  )}
+
+                  <div className="w-full h-10">
+                    {book.discountPercentage.label && (
+                      <div className="cursor-pointer w-max h-9 float-right bg-red rounded-3xl bg-ferrariRed p-2 transform hover:scale-110 motion-reduce:transform-none">
+                        <p className="text-white font-bold text-sm">
+                          {book.discountPercentage.label}{" "}
+                          {book.discountPercentage.regular}%
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -299,36 +171,122 @@ const CategorizedProducts = () => {
         </div>
       );
     });
+  let filterBooks = [];
 
-  const pageCount = Math.ceil(books.length / bookPerPage);
-
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
+  const getPageCount = () => {
+    products
+      .filter((val) => {
+        if (searchTerm === "") {
+          return val.length;
+        } else if (
+          val.category.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+          return val;
+        }
+        return 0;
+      })
+      .map((filterBook, index) => {
+        filterBooks.push(filterBook);
+        return 0;
+      });
   };
 
+  let pageCount = 0;
+  if (searchTerm) {
+    getPageCount();
+    pageCount = Math.ceil(filterBooks.length / bookPerPage);
+  } else {
+    pageCount = Math.ceil(products.length / bookPerPage);
+  }
+
+  const changePage = ({ selected }) => {
+    if (filterd) {
+      setPageNumber(0);
+    } else {
+      setPageNumber(selected);
+    }
+  };
   return (
     <>
-      {/* <Header /> */}
-      <div className="w-full  h-16 p-2">
-        <h1 className="text-4xl   font-bold mb-5  pl-8 pt-3 font-thinFont">
-          SCIENCE FICTIONS
-        </h1>
-        {displayBooks}
+      <Header />
+      <div className="w-full  h-full p-1">
+        <div className="w-full h-16">
+          <div className=" w-full float-left">
+            <h1 className="text-4xl font-bold mb-5   lg:pl-8 pt-3 font-thinFont ml-3">
+              Categories
+            </h1>
+          </div>
+        </div>
+        <Hidden only={["lg", "xl"]}>
+          <div>
+            <Select
+              options={options}
+              onChange={(event) => {
+                setsearchTerm(event.value);
+              }}
+              className="basic-multi-select"
+            />
+          </div>
+        </Hidden>
+        <Hidden only={["md", "sm", "xs"]}>
+          <div className="w-full h-16 bg-yellow-400 p-3  ">
+            {options.map((offers, index) => {
+              return (
+                <div>
+                  {offers.value
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) && (
+                    <div className="cursor-pointer w-max h-9 bg-red rounded-3xl bg-ferrariRed p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+                      <p
+                        className="text-white font-bold text-center text-sm"
+                        onClick={() => {
+                          setsearchTerm(offers.value);
+                        }}
+                      >
+                        {offers.value.toUpperCase()}
+                      </p>
+                    </div>
+                  )}
+                  {!offers.value
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) && (
+                    <div className="cursor-pointer w-max h-9 bg-red rounded-3xl bg-halloweenOrange p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none bg-opacity-50">
+                      <p
+                        className="text-white font-bold text-center text-sm"
+                        onClick={() => {
+                          setsearchTerm(offers.value);
+                        }}
+                      >
+                        {offers.value.toUpperCase()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </Hidden>
 
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={pageCount}
-          onPageChange={changePage}
-          containerClassName={classes.paginationButton}
-          previousLinkClassName={classes.previousBttn}
-          nextLinkClassName={classes.nextBttn}
-          disabledClassName={classes.paginationDisabled}
-          activeLinkClassName={classes.paginationActive}
-        />
+        <div className="mb-4 w-full h-max ">{displayBooks}</div>
+
+        <div className="w-max">
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={pageCount}
+            onPageChange={changePage}
+            containerClassName={classes.paginationButton}
+            previousLinkClassName={classes.previousBttn}
+            nextLinkClassName={classes.nextBttn}
+            disabledClassName={classes.paginationDisabled}
+            activeLinkClassName={classes.paginationActive}
+          />
+        </div>
       </div>
+
+      <Footer />
     </>
   );
 };
 
-export default CategorizedProducts;
+export default AllProducts;
