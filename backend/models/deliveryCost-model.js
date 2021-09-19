@@ -1,36 +1,49 @@
 const mongoose = require("mongoose");
 
 const DeliveryCostSchema = new mongoose.Schema({
-  BulkExpressPrecentage: {
+  bulkexpressprecentage: {
     type: Number,
-    required: [true, "Please provide a Bulk Express Precentage"],
+    required: [false, "Please provide a Bulk Express Precentage"],
   },
 
-  RetailExpressPrecentage: {
+  retailexpressprecentage: {
     type: Number,
-    required: [true, "Please provide a Retail Express Precentage"],
+    required: [false, "Please provide a Retail Express Precentage"],
   },
 
-  RetailCost: [
+  retailcost: [
     {
-      ProvinceName: {
+      provincename: {
         type: String,
         required: [true, "Please provide a province"],
       },
-      Cost: {
+      cost: {
         type: Number,
         required: [true, "Please provide a cost"],
       },
     },
   ],
 
-  BulkCost: [
+  bulkcost: [
     {
-      StationName: {
+      provincename: {
+        type: String,
+        required: [true, "Please provide a province"],
+      },
+      cost: {
+        type: Number,
+        required: [true, "Please provide a cost"],
+      },
+    },
+  ],
+
+  traincost: [
+    {
+      destination: {
         type: String,
         required: [true, "Please provide a station name"],
       },
-      Cost: {
+      cost: {
         type: Number,
         required: [true, "Please provide a cost"],
       },

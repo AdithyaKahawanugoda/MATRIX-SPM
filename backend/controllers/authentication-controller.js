@@ -73,8 +73,8 @@ exports.registerCustomer = async (req, res) => {
       res.status(201).json({ success: true, token, role: "customer" });
     } catch (error) {
       res.status(500).json({
-        success: false,
-        desc: "Error in registerCustomer controller-" + error,
+        error,
+        desc: "Error occurred in registerCustomer" + error,
       });
     }
   }
