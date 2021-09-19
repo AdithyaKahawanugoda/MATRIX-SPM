@@ -8,13 +8,17 @@ const {
   getBookByISBN,
   updateBookByISBN,
   addNewInvoice,
+  passwordReset,
 } = require("../controllers/inventoryManager-controller");
 // books
-router.route("/add-book").post(addNewBook);
+router.route("/add-book").post(protectedInventoryManager, addNewBook);
 router.route("/get-books").get(getAllBooks);
 router.route("/get-book").get(getBookByISBN);
-router.route("/delete-book").delete(deleteBookByISBN);
-router.route("/edit-book").put(updateBookByISBN);
+router
+  .route("/delete-book")
+  .delete(protectedInventoryManager, deleteBookByISBN);
+router.route("/edit-book").put(protectedInventoryManager, updateBookByISBN);
+router.route("/password-rest").put(protectedInventoryManager, passwordReset);
 // invoices
-router.route("/add-invoice").post(addNewInvoice);
+router.route("/add-invoice").post(protectedInventoryManager, addNewInvoice);
 module.exports = router;

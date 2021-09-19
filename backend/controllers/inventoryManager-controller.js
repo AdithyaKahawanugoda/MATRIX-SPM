@@ -2,6 +2,7 @@ const InventoryManagerModel = require("../models/inventoryManger-model");
 const ProductModel = require("../models/product-model");
 const InvoiceModel = require("../models/invoice-model");
 const { cloudinary } = require("../utils/cloudinary");
+const bcrypt = require("bcryptjs");
 
 // add new book
 exports.addNewBook = async (req, res) => {
@@ -439,6 +440,30 @@ exports.updateProfile = async (req, res) => {
     if (encPP !== undefined) {
       uploadRes = await uploadFiles(encPP, "Profile_Pictures");
     }
+    const updatedUser = await InventoryManagerModel.findByIdAndUpdate(
+      { _id: req.user._id },
+      {
+        $set: {
+          role: "inventoryManager",
+          username,
+          email,
+          password: undefined,
+          profilePicture: {
+            imagePublicId: uploadRes.imagePublicId,
+            imageSecURL: uploadRes.imageSecURL,
+          },
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+    res.status(200).json({
+      updatedUser,
+      desc: "Profile updated successfully",
+    });
   } catch (error) {
     res.status(500).json({
       error,
@@ -448,6 +473,49 @@ exports.updateProfile = async (req, res) => {
 };
 
 // password reset
+exports.passwordReset = async (req, res) => {
+  const { password, newPassword } = req.body;
+  const user = await InventoryManagerModel.findOne({
+    email: req.user.email,
+  }).select("+password");
+  try {
+    const isMatch = await user.matchPasswords(password);
+    if (isMatch) {
+      const salt = await bcrypt.genSalt(10);
+      const newHashedPassword = await bcrypt.hash(newPassword, salt);
+      await InventoryManagerModel.updateOne(
+        { _id: req.user._id },
+        {
+          $set: {
+            role: "inventoryManager",
+            username: req.user.username,
+            email: req.user.email,
+            password: newHashedPassword,
+            profilePicture: {
+              imagePublicId: undefined,
+              imageSecURL: undefined,
+            },
+          },
+        },
+        {
+          omitUndefined: true,
+        }
+      );
+      res.status(200).send({
+        desc: "Password updated successfully",
+      });
+    } else {
+      res.status(400).json({
+        desc: "Invalid current password, please enter correct password.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in passwordReset",
+    });
+  }
+};
 
 // delete specific profile
 
