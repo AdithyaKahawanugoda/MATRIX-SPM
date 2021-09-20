@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -56,6 +57,7 @@ const InventoryDashboardStyles = makeStyles((theme) => ({
 }));
 
 const InventoryDashboard = (props) => {
+  const history = useHistory();
   const { window } = props;
   const classes = InventoryDashboardStyles();
   const theme = useTheme();
@@ -70,6 +72,12 @@ const InventoryDashboard = (props) => {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const logOutHandler = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole");
+    history.push("/admin-login");
   };
 
   const drawer = (
@@ -206,6 +214,7 @@ const InventoryDashboard = (props) => {
               style={{
                 boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
               }}
+              onClick={logOutHandler}
             >
               LogOut
             </button>

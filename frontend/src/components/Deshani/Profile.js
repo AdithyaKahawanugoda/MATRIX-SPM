@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditProfileModal from "./EditProfileModal";
 import EditPpModal from "./EditPpModal";
 import DeleteProfileModal from "./DeleteProfileModal";
-// import { Image } from "cloudinary-react";
+import { Image } from "cloudinary-react";
 import axios from "axios";
 
 
@@ -42,6 +42,7 @@ const Profile = props => {
                 setAddress(res.data.customer.address);
                 setPhone(res.data.customer.phone);
                 setProfilePic(res.data.customer.profilePicture.imagePublicId);
+                console.log(res.data.customer.profilePicture.imagePublicId);
               })
               .catch((err) =>{
                 alert("Error occured!!! :"+err);
@@ -59,7 +60,11 @@ const Profile = props => {
         <div className='flex flex-col space-y-2 bg w-full xl:max-w-6xl sm:max-w-xl md:max-w-3xl h-4/5 mt-3 mb-10 p-8 rounded-xl shadow-lg text-black bg-gamboge'>
         <h1 className='font-boldTallFont font-semibold text-4xl'>Profile</h1>
         <div className=" justify-center items-center w-40 ml-96" style={{marginLeft:"28rem"}}>
-        <img src="https://i.ibb.co/Zd7q5vd/photo-1572460418264-695212ed493a.jpg" alt="profile pic" border="0" className=" w-40 h-40 mr-14 rounded-xl"></img>
+        <Image 
+            className='w-40 h-40 mr-14 rounded-xl'
+            cloudName="grid1234"
+            publicId={profilepic}
+        />
         
         </div>
          
@@ -144,6 +149,7 @@ const Profile = props => {
           <EditPpModal 
           modalVisible={editPpOpen}
           setModalVisible={setEditPpOpen}
+         
           />
         )}
         {deleteModalOpen && (

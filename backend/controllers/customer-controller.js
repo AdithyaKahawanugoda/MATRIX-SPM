@@ -4,11 +4,12 @@ const { cloudinary } = require("../utils/cloudinary");
 const sendEmail = require("../utils/SendEmail");
 const OrderModel = require("../models/order-model");
 const RequestBook = require("../models/requestBook-model");
+const mongoose = require("mongoose");
 // const easyinvoice = require('easyinvoice');
 // const fs = require('fs');
 // const path = require('path');
 
-//fetch customer profile 
+//fetch customer profile
 exports.getCustomerProfile = async (req,res) =>{
     try{
         if(!req.user) {
@@ -25,7 +26,7 @@ exports.getCustomerProfile = async (req,res) =>{
     }catch(error) {
         res.status(500).json({
             success:false,
-            desc:"Error in getCustomerProfile controller - "+error, 
+            desc:"Error in getCustomerProfile controller - "+error,
         });
     }
 };
@@ -67,91 +68,95 @@ exports.updateCustomerProfile = async (req,res) => {
 //update profile picture
 exports.updateProfilePicture = async (req, res) => {
     const { fileEnc } = req.body;
-  
+
     try {
-      const destroyedImage = await cloudinary.uploader.destroy(
-        req.user.profilePicture.imagePublicId
-      );
-      if (destroyedImage) {
-        try {
-          const uploadedResponse = await cloudinary.uploader.upload(fileEnc, {
-            upload_preset: "Profile_Pictures",
-          });
-  
-          try {
-            const updatedCustomer = await CustomerModel.findByIdAndUpdate(
-              { _id: req.user._id },
-              {
-                profileImage: {
-                  imagePublicId: uploadedResponse.public_id,
-                  imageSecURL: uploadedResponse.secure_url,
-                },
-              },
-              {
-                new: true,
-                upsert: false,
-              }
-            );
-            res.status(200).send({
-              success: true,
-              desc: " updated successfully",
-              updatedCustomer,
-            });
-          } catch (error) {
+        const destroyedImage = await cloudinary.uploader.destroy(
+            req.user.profilePicture.imagePublicId
+        );
+
+        if (destroyedImage) {
+            try {
+                const uploadedResponse = await cloudinary.uploader.upload(fileEnc, {
+                    upload_preset: "Profile_Pictures",
+                });
+
+                try {
+                    const updatedCustomer = await CustomerModel.findByIdAndUpdate(
+                        { _id: req.user._id },
+                        {
+                            $set: {
+                                profilePicture: {
+                                    imagePublicId: uploadedResponse.public_id,
+                                    imageSecURL: uploadedResponse.secure_url,
+                                },
+                            },
+                        },
+                        {
+                            new: true,
+                            upsert: false,
+                            omitUndefined: true,
+                        }
+                    );
+                    res.status(200).send({
+                        success: true,
+                        desc: " updated successfully",
+                        updatedCustomer,
+                    });
+                } catch (error) {
+                    res.status(500).json({
+                        success: false,
+                        desc: "Error in updating customer profileImage data-" + error,
+                    });
+                }
+            } catch (error) {
+                res.status(500).json({
+                    success: false,
+                    desc: "Error in uploading new image-" + error,
+                });
+            }
+        } else {
             res.status(500).json({
-              success: false,
-              desc: "Error in updating customer profileImage data-" + error,
+                success: false,
+                desc: "Error in previous image remove-" + error,
             });
-          }
-        } catch (error) {
-          res.status(500).json({
-            success: false,
-            desc: "Error in uploading new image-" + error,
-          });
         }
-      } else {
-        res.status(500).json({
-          success: false,
-          desc: "Error in previous image remove-" + error,
-        });
-      }
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        desc: "Error in updateProfilePicture controller-" + error,
-      });
+        res.status(500).json({
+            success: false,
+            desc: "Error in updateProfilePicture controller-" + error,
+        });
     }
-  };
+};
 
 //delete customer profile
 exports.deleteCustomerProfile = async(req,res) =>{
-    
-        if (!mongoose.Types.ObjectId.isValid(req.user._id))
-            return res.status(404).send(`No Customer with id: ${req.user._id}`);
-    
-        try {
-            await CustomerModel.findByIdAndRemove(req.user._id);
-            const deletedCustomer = await DeleteCustomerModel.create({
-                customerID:req.user._id
-            });
-            const cloudinaryRes = await cloudinary.uploader.destroy(
-                req.user.profileImage.imagePublicId
-            );
-            res.status(200).send({
-                success: true,
-                desc: "Customer deleted successfully",
-                deleteCustomer,
-                cloudinaryRes,
 
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                desc: "Error in delete Customer Profile controller-" + error,
-            });
-        }
-  
-    
+    if (!mongoose.Types.ObjectId.isValid(req.user._id))
+        return res.status(404).send(`No Customer with id: ${req.user._id}`);
+
+    try {
+        await CustomerModel.findByIdAndRemove(req.user._id);
+        const deletedCustomer = await DeletedCustomerModel.create({
+            customerID:req.user._id
+        });
+        const cloudinaryRes = await cloudinary.uploader.destroy(
+            req.user.profilePicture.imagePublicId
+        );
+        res.status(200).send({
+            success: true,
+            desc: "Customer deleted successfully",
+            deletedCustomer,
+            cloudinaryRes,
+
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            desc: "Error in delete Customer Profile controller-" + error,
+        });
+    }
+
+
 };
 
 
@@ -207,64 +212,64 @@ exports.getCartItems = async(req,res) =>{
     let cusId = req.user._id;
 
     await CustomerModel.findById(cusId)
-    .then((customer) =>{
-        res.status(200).send({status:"Cart fetched",cart:customer.cart});
-    })
-    .catch((err) =>{
-        res.status(500).send({
-            status: "Internal server Error in fetching customer",
-            error:err.message,
-        });
-    })
+        .then((customer) =>{
+            res.status(200).send({status:"Cart fetched",cart:customer.cart});
+        })
+        .catch((err) =>{
+            res.status(500).send({
+                status: "Internal server Error in fetching customer",
+                error:err.message,
+            });
+        })
 };
 
 //fetch orders placed by a specific customer
 exports.getOrders = async (req, res, next) => {
-  let orders;
+    let orders;
 
-  try {
-    orders = await OrderModel.find(
-      { buyerID: req.user._id },
-      "_id billAmount deliveryAddress deliveryStatus orderData"
-    );
+    try {
+        orders = await OrderModel.find(
+            { buyerID: req.user._id },
+            "_id billAmount deliveryAddress deliveryStatus orderData"
+        );
 
-    res.status(200).send({ orders: orders });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      desc: "Internal Server Error",
-    });
-  }
+        res.status(200).send({ orders: orders });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            desc: "Internal Server Error",
+        });
+    }
 };
 
 //add order
 exports.addOrder = async (req, res) => {
-  const buyerID = req.user._id;
-  let address = req.user.address;
+    const buyerID = req.user._id;
+    let address = req.user.address;
 
-  const { billAmount, deliveryAddress, status, orderData } = req.body;
+    const { billAmount, deliveryAddress, status, orderData } = req.body;
 
-  if (req.body.deliveryAddress) {
-    address = deliveryAddress;
-  }
+    if (req.body.deliveryAddress) {
+        address = deliveryAddress;
+    }
 
-  const deliveryStatus = {
-    status: status,
-  };
+    const deliveryStatus = {
+        status: status,
+    };
 
-  try {
-    const newDelOrder = await OrderModel.create({
-      buyerID,
-      billAmount,
-      deliveryAddress: address,
-      deliveryStatus,
-      orderData,
-    });
+    try {
+        const newDelOrder = await OrderModel.create({
+            buyerID,
+            billAmount,
+            deliveryAddress: address,
+            deliveryStatus,
+            orderData,
+        });
 
-    sendEmail({
-      to: req.user.email,
-      subject: "Order has been placed!",
-      text: `<h5>Dear ${req.user.username},</h5>
+        sendEmail({
+            to: req.user.email,
+            subject: "Order has been placed!",
+            text: `<h5>Dear ${req.user.username},</h5>
       <p>
       Thank you for ordering from APURU POTH! <br />
       We're excited for you to receive your order #${newDelOrder._id} and will notify you once it's on its way. We hope you had a great shopping experience! You can check your order status from your profile.
@@ -272,44 +277,44 @@ exports.addOrder = async (req, res) => {
       Thank you.
       </p>
       `,
-    });
+        });
 
-    res.status(201).send({
-      status: "Order has created successfully",
-    });
-  } catch (error) {
-    res.status(500).send({
-      status: "Internal Server Error in new order create",
-      error: error.message,
-    });
-  }
+        res.status(201).send({
+            status: "Order has created successfully",
+        });
+    } catch (error) {
+        res.status(500).send({
+            status: "Internal Server Error in new order create",
+            error: error.message,
+        });
+    }
 };
 
 //Request Translation Book
 exports.createRequestBook = async(req,res) => {
-  const {
-    bookName,
-    author,
-    description,
-    language,
-  } = req.body;
+    const {
+        bookName,
+        author,
+        description,
+        language,
+    } = req.body;
 
-  try{
-    const requestBook = await RequestBook.create({
-     
-      bookName,
-      author,
-      description,
-      language
-    });
-    res.status(201).json(requestBook);
-  }catch(error){
-    res.status(500).json({
-      success:false,
-      desc:"Error in adding Request translation book",
-      error:error.message,
-    });
-  }
+    try{
+        const requestBook = await RequestBook.create({
+
+            bookName,
+            author,
+            description,
+            language
+        });
+        res.status(201).json(requestBook);
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            desc:"Error in adding Request translation book",
+            error:error.message,
+        });
+    }
 };
 
 // //invoice generation
@@ -376,7 +381,7 @@ exports.createRequestBook = async(req,res) => {
 // // INVOICE PDF FUNCTION
 // const invoicePdf = async ()=>{
 //   //Create your invoice! Easy!
- 
+
 //     let result = await easyinvoice.createInvoice(data);
 //     fs.writeFileSync(`./invoice/invoice${Date.now()}.pdf`, result.pdf, 'base64');
 
