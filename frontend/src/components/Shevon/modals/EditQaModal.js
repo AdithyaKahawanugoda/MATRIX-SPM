@@ -8,7 +8,13 @@ const validationSchema = Yup.object({
   answer: Yup.string().required("Answer is required"),
 });
 
-const EditQaModal = ({ setModalVisible, modalVisible }) => {
+const EditQaModal = ({
+  setModalVisible,
+  modalVisible,
+  editQuestion,
+  geta,
+  getq,
+}) => {
   return (
     <Modal
       open={modalVisible}
@@ -33,10 +39,10 @@ const EditQaModal = ({ setModalVisible, modalVisible }) => {
         <hr></hr>
 
         <Formik
-          initialValues={{ question: "", answer: "" }}
+          initialValues={{ question: getq, answer: geta }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            console.log(values);
+            editQuestion(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (

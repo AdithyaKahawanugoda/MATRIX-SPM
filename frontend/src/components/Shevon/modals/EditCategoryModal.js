@@ -5,17 +5,112 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 import AddQaModal from "./AddQaModal";
 import EditQaModal from "./EditQaModal";
+import DeleteModal from "./DeleteQandAmodal";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import Icon from "@material-ui/core/Icon";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   categoryName: Yup.string().required("CategoryName required"),
 });
 
-const EditFaqModal = ({ setModalVisible, modalVisible }) => {
+const EditFaqModal = ({
+  setModalVisible,
+  modalVisible,
+  selectedTuple,
+  setFetchedRows,
+  setSelectedRows,
+  getdata,
+  useQuestions,
+  CID,
+}) => {
   const [addQaOPen, setAddQaOpen] = useState(false);
   const [editQaOPen, setEditQaOpen] = useState(false);
+  const [deleteOpen, setdeleteOpen] = useState(false);
+
+  const [questions, setQuestions] = useQuestions;
+
+  const [QAID, setQAID] = useState();
+  const [getq, setgetq] = useState();
+  const [geta, setgeta] = useState();
+
+  const updateCategory = async (values) => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editcategory",
+        {
+          CID: selectedTuple,
+          category: values.categoryName,
+        }
+      );
+      const filterFunc = (rows) =>
+        rows.map((row) => {
+          if (row.code === selectedTuple)
+            return { ...row, categoryName: values.categoryName };
+          else return row;
+        });
+      setFetchedRows(filterFunc);
+      setSelectedRows(filterFunc);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addQuestion = async (values) => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/addQA",
+        {
+          CID: selectedTuple,
+          question: values.question,
+          answer: values.answer,
+        }
+      );
+      setQuestions((questions) => [...questions, { ...values }]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editQuestion = async (values) => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editqa",
+        {
+          QAID,
+          question: values.question,
+          answer: values.answer,
+        }
+      );
+      setQuestions((questions) =>
+        questions.map((question) => {
+          if (question._id === QAID)
+            return { question: values.question, answer: values.answer };
+          else return question;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteQuestion = async () => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/deleteqa",
+        {
+          CID,
+          QAID,
+        }
+      );
+      setQuestions((questions) =>
+        questions.filter((ques) => ques._id !== QAID)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -42,10 +137,11 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
           <hr></hr>
 
           <Formik
-            initialValues={{ categoryName: "" }}
+            initialValues={{ categoryName: getdata }}
             validationSchema={validationSchema}
             onSubmit={async (values) => {
               console.log(values);
+              updateCategory(values);
             }}
           >
             {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -103,13 +199,14 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
               className=" h-14  rounded-xl   my-2 mx-0 px-5 pt-2  border-0  shadow-md bg-gamboge bg-opacity-15 hover:bg-halloweenOrange"
               onClick={() => {
                 setEditQaOpen(false);
+                setdeleteOpen(false);
                 setAddQaOpen(true);
               }}
             >
               <h5 className="text-white font-black text-md">
                 <Icon className="text-white mr-5 ">
                   <AddCircleRoundedIcon />
-                </Icon>{" "}
+                </Icon>
                 Add New Question And Answer
               </h5>
             </div>
@@ -118,145 +215,82 @@ const EditFaqModal = ({ setModalVisible, modalVisible }) => {
               className="mt-4  shadow-md bg-blueSapphire rounded-xl px-3 py-1 overflow-y-auto"
               style={{ maxHeight: "300px" }}
             >
-              <div className="bg-lightSilver rounded-xl  my-2 ">
-                <div className="py-2 px-2 font-black">
-                  Do you sell audiobooks and / or ebooks?
-                </div>
-
-                <hr></hr>
-
+              {questions.map((question) => (
                 <div
-                  className="py-2 px-2 overflow-y-auto"
-                  style={{ maxHeight: "100px" }}
+                  key={question._id}
+                  className="bg-lightSilver rounded-xl  my-2 "
                 >
-                  Both ebooks and audiobooks are available via distribution
-                  partnerships with Hummingbird / My Must Reads (ebooks) and
-                  Libro.FM (audiobooks). When available, you can see both ebook
-                  and audiobook links on any book product page. Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.
-                </div>
+                  <div className="py-2 px-2 font-black">
+                    {question.question}
+                  </div>
 
-                <hr></hr>
+                  <hr></hr>
 
-                <div className="text-right py-2 px-2">
-                  <Icon
-                    className="mr-4 hover:text-gamboge"
-                    onClick={() => {
-                      setAddQaOpen(false);
-                      setEditQaOpen(true);
-                    }}
+                  <div
+                    className="py-2 px-2 overflow-y-auto"
+                    style={{ maxHeight: "100px" }}
                   >
-                    <EditIcon />
-                  </Icon>
-                  <Icon className="mr-4 hover:text-red-600">
-                    <DeleteForeverIcon />
-                  </Icon>
+                    {question.answer}
+                  </div>
+
+                  <hr></hr>
+
+                  <div className="text-right py-2 px-2">
+                    <Icon
+                      className="mr-4 hover:text-gamboge"
+                      onClick={() => {
+                        setAddQaOpen(false);
+                        setdeleteOpen(false);
+                        setEditQaOpen(true);
+                        setQAID(question._id);
+                        setgetq(question.question);
+                        setgeta(question.answer);
+                      }}
+                    >
+                      <EditIcon />
+                    </Icon>
+                    <Icon
+                      className="mr-4 hover:text-red-600"
+                      onClick={() => {
+                        setAddQaOpen(false);
+                        setEditQaOpen(false);
+                        setdeleteOpen(true);
+                        setQAID(question._id);
+                      }}
+                    >
+                      <DeleteForeverIcon />
+                    </Icon>
+                  </div>
                 </div>
-              </div>
-
-              <div className="bg-lightSilver rounded-xl  my-2 ">
-                <div className="py-2 px-2 font-black">
-                  Do you sell audiobooks and / or ebooks?
-                </div>
-
-                <hr></hr>
-
-                <div
-                  className="py-2 px-2 overflow-y-auto"
-                  style={{ maxHeight: "100px" }}
-                >
-                  Both ebooks and audiobooks are available via distribution
-                  partnerships with Hummingbird / My Must Reads (ebooks) and
-                  Libro.FM (audiobooks). When available, you can see both ebook
-                  and audiobook links on any book product page. Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.
-                </div>
-
-                <hr></hr>
-
-                <div className="text-right py-2 px-2">
-                  <Icon
-                    className="mr-4 hover:text-gamboge"
-                    onClick={() => {
-                      setAddQaOpen(false);
-                      setEditQaOpen(true);
-                    }}
-                  >
-                    <EditIcon />
-                  </Icon>
-                  <Icon className="mr-4 hover:text-red-600">
-                    <DeleteForeverIcon />
-                  </Icon>
-                </div>
-              </div>
-
-              <div className="bg-lightSilver rounded-xl  my-2 ">
-                <div className="py-2 px-2 font-black">
-                  Do you sell audiobooks and / or ebooks?
-                </div>
-
-                <hr></hr>
-
-                <div
-                  className="py-2 px-2 overflow-y-auto"
-                  style={{ maxHeight: "100px" }}
-                >
-                  Both ebooks and audiobooks are available via distribution
-                  partnerships with Hummingbird / My Must Reads (ebooks) and
-                  Libro.FM (audiobooks). When available, you can see both ebook
-                  and audiobook links on any book product page. Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.
-                </div>
-
-                <hr></hr>
-                <div className="text-right py-2 px-2">
-                  <Icon
-                    className="mr-4 hover:text-gamboge"
-                    onClick={() => {
-                      setAddQaOpen(false);
-                      setEditQaOpen(true);
-                    }}
-                  >
-                    <EditIcon />
-                  </Icon>
-                  <Icon className="mr-4 hover:text-red-600">
-                    <DeleteForeverIcon />
-                  </Icon>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </Modal>
 
       {addQaOPen && (
-        <AddQaModal modalVisible={addQaOPen} setModalVisible={setAddQaOpen} />
+        <AddQaModal
+          modalVisible={addQaOPen}
+          setModalVisible={setAddQaOpen}
+          addQuestion={addQuestion}
+        />
       )}
+
       {editQaOPen && (
         <EditQaModal
           modalVisible={editQaOPen}
           setModalVisible={setEditQaOpen}
+          editQuestion={editQuestion}
+          getq={getq}
+          geta={geta}
+        />
+      )}
+
+      {deleteOpen && (
+        <DeleteModal
+          modalVisible={deleteOpen}
+          setModalVisible={setdeleteOpen}
+          deleteQuestion={deleteQuestion}
         />
       )}
     </div>

@@ -8,7 +8,7 @@ const validationSchema = Yup.object({
   answer: Yup.string().required("Answer is required"),
 });
 
-const AddQaModal = ({ setModalVisible, modalVisible }) => {
+const AddQaModal = ({ setModalVisible, modalVisible, addQuestion }) => {
   return (
     <Modal
       open={modalVisible}
@@ -36,7 +36,7 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
           initialValues={{ question: "", answer: "" }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            console.log(values);
+            addQuestion(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (

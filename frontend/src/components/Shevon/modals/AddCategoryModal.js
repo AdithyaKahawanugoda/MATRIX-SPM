@@ -2,12 +2,33 @@ import React from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   categoryName: Yup.string().required("Category Name is required"),
 });
 
-const AddCategoryModal = ({ setModalVisible, modalVisible }) => {
+const AddCategoryModal = ({
+  setModalVisible,
+  modalVisible,
+  setSelectedRows,
+}) => {
+  const addCategory = async (values) => {
+    const response = await axios.post(
+      "http://localhost:6500/matrix/api/deliveryManager/addcategory",
+      { category: values.categoryName }
+    );
+    setSelectedRows((selectedRows) => [
+      ...selectedRows,
+      {
+        no: selectedRows.length + 1,
+        code: response.data.newRailway._id,
+        categoryName: values.categoryName,
+      },
+    ]);
+    console.log(response);
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -36,6 +57,7 @@ const AddCategoryModal = ({ setModalVisible, modalVisible }) => {
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            addCategory(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (

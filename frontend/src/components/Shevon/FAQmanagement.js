@@ -15,6 +15,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import EditCategoryModal from "./modals/EditCategoryModal";
 import AddCategoryModal from "./modals/AddCategoryModal";
 import Icon from "@material-ui/core/Icon";
+import axios from "axios";
+import DeleteCatModal from "./modals/DeleteCatModal";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -24,40 +26,63 @@ const columns = [
   { id: "action_2", label: "Action", minWidth: 80 },
 ];
 
-function createData(no, code, categoryName) {
+function createData(no, code, categoryName, faq) {
   return {
     no,
     code,
     categoryName,
+    faq,
   };
 }
 
-const rows = [
+/* const rows = [
   createData(1, "000001", "General FAQ"),
   createData(2, "000002", "Shipping and Delivery FAQ"),
   createData(3, "000003", "Biling FAQ"),
   createData(4, "000004", "Faulty Order FAQ"),
-];
+]; */
 
 const FAQmanagement = () => {
   const [addCategoryOpen, setAddCategoryOpen] = useState(false);
   const [editCategoryOpen, setEditCategoryOpen] = useState(false);
+  const [deleteCategoryOpen, setDeleteCategoryOpen] = useState(false);
+  const [selectedTuple, setSelectedTuple] = useState();
+  const [getdata, setgetdata] = useState();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [fetchedRows, setFetchedRows] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [CID, setCID] = useState();
+
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
-    setSelectedRows(rows);
+    (async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:6500/matrix/api/deliveryManager/getallcategory"
+        );
+        const data = response.data.FAQ.map((category, index) =>
+          createData(index + 1, category._id, category.category, category.faq)
+        );
+        setFetchedRows(data);
+        setSelectedRows(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, []);
 
   const search = () => {
-    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+    setSelectedRows(
+      fetchedRows.filter((row) => !row.categoryName.indexOf(searchKey.trim()))
+    );
   };
 
   const refresh = () => {
-    setSelectedRows(rows);
+    setSelectedRows(fetchedRows);
     setSearchKey("");
   };
 
@@ -175,7 +200,16 @@ const FAQmanagement = () => {
                                     className="ml-2 hover:text-green-700"
                                     onClick={() => {
                                       setAddCategoryOpen(false);
+                                      setDeleteCategoryOpen(false);
                                       setEditCategoryOpen(true);
+                                      setSelectedTuple(row.code);
+                                      setgetdata(row.categoryName);
+                                      setQuestions(
+                                        selectedRows.filter(
+                                          (inner) => inner.code === row.code
+                                        )[0].faq
+                                      );
+                                      setCID(row.code);
                                     }}
                                   >
                                     <EditIcon />
@@ -183,7 +217,15 @@ const FAQmanagement = () => {
                                 )}
 
                                 {column.id === "action_2" && (
-                                  <Icon className="ml-2 hover:text-ferrariRed">
+                                  <Icon
+                                    className="ml-2 hover:text-ferrariRed"
+                                    onClick={() => {
+                                      setAddCategoryOpen(false);
+                                      setEditCategoryOpen(false);
+                                      setDeleteCategoryOpen(true);
+                                      setSelectedTuple(row.code);
+                                    }}
+                                  >
                                     <DeleteForeverIcon />
                                   </Icon>
                                 )}
@@ -199,7 +241,7 @@ const FAQmanagement = () => {
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
-              count={rows.length}
+              count={setSelectedRows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -213,12 +255,30 @@ const FAQmanagement = () => {
         <EditCategoryModal
           modalVisible={editCategoryOpen}
           setModalVisible={setEditCategoryOpen}
+          selectedTuple={selectedTuple}
+          getdata={getdata}
+          setSelectedRows={setSelectedRows}
+          setFetchedRows={setFetchedRows}
+          useQuestions={[questions, setQuestions]}
+          CID={CID}
         />
       )}
+
       {addCategoryOpen && (
         <AddCategoryModal
           modalVisible={addCategoryOpen}
           setModalVisible={setAddCategoryOpen}
+          setSelectedRows={setSelectedRows}
+        />
+      )}
+
+      {deleteCategoryOpen && (
+        <DeleteCatModal
+          modalVisible={deleteCategoryOpen}
+          setModalVisible={setDeleteCategoryOpen}
+          selectedTuple={selectedTuple}
+          setSelectedRows={setSelectedRows}
+          setFetchedRows={setFetchedRows}
         />
       )}
     </div>
