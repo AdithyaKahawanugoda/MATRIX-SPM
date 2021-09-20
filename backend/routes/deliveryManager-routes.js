@@ -18,6 +18,9 @@ const {
   addCusInquiry,
   getAllInquiries,
   addReply,
+  getAllDeliveryPerson,
+  deleteDeliveryPerson,
+  editDeliveryPerson,
 } = require("../controllers/deliveryManager-controller");
 
 //delivery cost
@@ -40,5 +43,9 @@ router.route("/editqa").put(editQA);
 router.route("/addinquir").post(addCusInquiry);
 router.route("/getallinquiries").get(getAllInquiries);
 router.route("/addreply").put(addReply);
+//deliveryPerson
+router.route("/getalldp").get(getAllDeliveryPerson);
+router.route("/editdp").put(editDeliveryPerson);
+router.route("/removedp").delete(deleteDeliveryPerson);
 
 module.exports = router;

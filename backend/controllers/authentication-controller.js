@@ -82,22 +82,14 @@ exports.registerCustomer = async (req, res) => {
 
 // register new delivery person
 exports.registerDeliveryPerson = async (req, res) => {
-  const { username, email, password, phone, ppEnc } = req.body;
-  let existingEmail = await findEmailDuplicates(email, res);
+  const { username, email, password, phone, profilePicture, deliveryHistory } =
+    req.body;
+  console.log(req.body);
+  let existingEmail = await findDPEmailDuplicates(email, res);
   if (existingEmail === null) {
     try {
-      const ppUploadRes = await cloudinary.uploader.upload(ppEnc, {
-        upload_preset: "Profile_Pictures",
-      });
       const deliveryPerson = await DeliveryPersonModel.create({
-        email,
-        username,
-        password,
-        profilePicture: {
-          imagePublicId: ppUploadRes.public_id,
-          imageSecURL: ppUploadRes.secure_url,
-        },
-        phone,
+        ...req.body,
       });
       const token = await deliveryPerson.getSignedToken();
       res.status(201).json({ success: true, token, role: "deliveryPerson" });
@@ -107,6 +99,25 @@ exports.registerDeliveryPerson = async (req, res) => {
         desc: "Error in registerDeliveryPerson controller-" + error,
       });
     }
+  }
+};
+// find duplicated user emails before register new delivery person
+const findDPEmailDuplicates = async (email, res) => {
+  try {
+    const existingAccount = await DeliveryPersonModel.findOne({ email: email });
+    if (existingAccount) {
+      res.status(401).json({
+        success: false,
+        desc: "Email already exist - Please check again",
+      });
+    } else {
+      return existingAccount;
+    }
+  } catch (err) {
+    res.status(422).json({
+      success: false,
+      desc: "Error occured in findUserByEmail segment-" + err,
+    });
   }
 };
 

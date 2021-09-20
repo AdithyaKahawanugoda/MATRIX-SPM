@@ -1,8 +1,10 @@
 const DeliveryManagerModel = require("../models/deliveryManager-model");
+const bcrypt = require("bcryptjs");
 const DeliveryCost = require("../models/deliveryCost-model");
 const FAQ = require("../models/faq-model");
 const ContactUs = require("../models/contactUs-model");
 const sendEmail = require("../utils/SendEmail");
+const DeliveryPerson = require("../models/deliveryPerson-model");
 
 /* --------------------------------------------------delivery cost management-------------------------------------------------- */
 //add DeliveryCost
@@ -263,13 +265,15 @@ exports.addcategory = async (req, res) => {
 
 //Retreive category
 exports.getAllCategory = async (req, res) => {
-  await FAQ.find()
-    .then((data) => {
-      res.status(200).send({ data: data });
-    })
-    .catch((error) => {
-      res.status(500).send({ error: error.message });
+  try {
+    const DocData = await FAQ.find();
+    res.status(200).send({ FAQ: DocData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in fetching getAllCategory -" + err,
     });
+  }
 };
 
 //edit category
@@ -480,6 +484,109 @@ exports.addReply = async (req, res) => {
     res.status(500).send({
       status: "Internal Server Error in new reply create",
       error: error.message,
+    });
+  }
+};
+/* --------------------------------------------------Delivery person Management -------------------------------------------------- */
+//Retreive all delivery DeliveryPerson
+exports.getAllDeliveryPerson = async (req, res) => {
+  try {
+    const DocData = await DeliveryPerson.find();
+    res.status(200).send({ DeliveryPerson: DocData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in fetching getAllDeliveryPerson -" + err,
+    });
+  }
+};
+
+//edit delivery person
+exports.editDeliveryPerson = async (req, res) => {
+  let { DPID, username, email, phone, password } = req.body;
+
+  if (!username) {
+    username = undefined;
+  }
+  if (!email) {
+    email = undefined;
+  }
+  if (!phone) {
+    phone = undefined;
+  }
+  if (!password) {
+    password = undefined;
+  }
+  let existingEmail = await findDPEmailDuplicates(email, res);
+  if (existingEmail === null) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const npassword = await bcrypt.hash(password, salt);
+
+      const CatagoryData = await DeliveryPerson.findOneAndUpdate(
+        { _id: DPID },
+        {
+          $set: {
+            username: username,
+            email: email,
+            phone: phone,
+            password: npassword,
+          },
+        },
+        {
+          new: true,
+          upsert: false,
+          omitUndefined: true,
+        }
+      );
+
+      res
+        .status(200)
+        .json({ success: true, desc: "category Data Updated", CatagoryData });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        desc: "Error in category controller-" + error,
+      });
+    }
+  }
+};
+
+// find duplicated user emails before register new delivery person
+const findDPEmailDuplicates = async (email, res) => {
+  try {
+    const existingAccount = await DeliveryPerson.findOne({ email: email });
+    if (existingAccount) {
+      res.status(401).json({
+        success: false,
+        desc: "Email already exist - Please check again",
+      });
+    } else {
+      return existingAccount;
+    }
+  } catch (err) {
+    res.status(422).json({
+      success: false,
+      desc: "Error occured in findUserByEmail segment-" + err,
+    });
+  }
+};
+
+// delete delivery person
+exports.deleteDeliveryPerson = async (req, res) => {
+  const { DPID } = req.body;
+  console.log(req.body);
+  try {
+    await DeliveryPerson.deleteOne({ _id: DPID });
+    res.status(200).json({
+      success: true,
+      desc: "DeliveryPerson removed",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc:
+        "Error in DeliveryPerson in deleteDeliveryPerson controller - " + error,
     });
   }
 };

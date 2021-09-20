@@ -33,14 +33,14 @@ const DeliveryPersonSchema = new mongoose.Schema({
     imagePublicId: {
       type: String,
       required: [
-        true,
+        false,
         "Error with cloudinary service! Can not find the paper URL.",
       ],
     },
     imageSecURL: {
       type: String,
       required: [
-        true,
+        false,
         "Error with cloudinary service! Can not find the paper URL.",
       ],
     },
