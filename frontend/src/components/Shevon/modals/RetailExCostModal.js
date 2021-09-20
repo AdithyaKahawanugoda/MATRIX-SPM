@@ -29,7 +29,7 @@ const RetailExCostModal = ({
           retailexpressprecentage: values.retailexpressprecentage,
         }
       );
-
+      setRetailExCost(values.retailexpressprecentage);
       setTimeout(() => {
         setModalVisible(false);
       }, 3000);

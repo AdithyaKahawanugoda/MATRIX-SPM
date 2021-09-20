@@ -3,10 +3,16 @@ import { Modal } from "react-responsive-modal";
 import AddQaModal from "./AddQaModal";
 import EditQaModal from "./EditQaModal";
 
-const ReplyedModal = ({ setModalVisible, modalVisible }) => {
+const ReplyedModal = ({
+  setModalVisible,
+  modalVisible,
+  useReply,
+  getinqiur,
+}) => {
   const [addQaOPen, setAddQaOpen] = useState(false);
   const [editQaOPen, setEditQaOpen] = useState(false);
 
+  console.log(useReply);
   return (
     <div>
       <Modal
@@ -27,103 +33,46 @@ const ReplyedModal = ({ setModalVisible, modalVisible }) => {
       >
         <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
           <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
-            Reply for #ID#
+            Reply for #{getinqiur.code}
           </h6>
           <hr></hr>
+
+          <div className="  mt-4">
+            <h5 className="ml-0  font-black text-base text-left">
+              Customer Inquiry
+            </h5>
+
+            <p className="ml-4 mt-4 text-left">{getinqiur.message}</p>
+            <p className="ml-0  font-black text-xs text-right">
+              Created Date: {getinqiur.cDate}
+            </p>
+          </div>
 
           <div className="  mt-4">
             <div
               className="mt-4  shadow-md bg-blueSapphire rounded-xl px-3 py-1 overflow-y-auto"
               style={{ maxHeight: "300px" }}
             >
-              <div className="bg-lightSilver rounded-xl  my-2 ">
-                <div className="py-2 px-2 font-black">
-                  Do you sell audiobooks and / or ebooks?
+              {useReply.map((rep, index) => (
+                <div key={index} className="bg-lightSilver rounded-xl  my-2 ">
+                  <div className="py-2 px-2 font-black">Reply {index + 1}</div>
+
+                  <hr></hr>
+
+                  <div
+                    className="py-2 px-2 overflow-y-auto"
+                    style={{ maxHeight: "100px" }}
+                  >
+                    {rep.replynote}
+                  </div>
+
+                  <hr></hr>
+
+                  <div className="text-right py-2 px-2">
+                    Replyed Date: {rep.replyedAt}
+                  </div>
                 </div>
-
-                <hr></hr>
-
-                <div
-                  className="py-2 px-2 overflow-y-auto"
-                  style={{ maxHeight: "100px" }}
-                >
-                  Both ebooks and audiobooks are available via distribution
-                  partnerships with Hummingbird / My Must Reads (ebooks) and
-                  Libro.FM (audiobooks). When available, you can see both ebook
-                  and audiobook links on any book product page. Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.
-                </div>
-
-                <hr></hr>
-
-                <div className="text-right py-2 px-2">Date</div>
-              </div>
-
-              <div className="bg-lightSilver rounded-xl  my-2 ">
-                <div className="py-2 px-2 font-black">
-                  Do you sell audiobooks and / or ebooks?
-                </div>
-
-                <hr></hr>
-
-                <div
-                  className="py-2 px-2 overflow-y-auto"
-                  style={{ maxHeight: "100px" }}
-                >
-                  Both ebooks and audiobooks are available via distribution
-                  partnerships with Hummingbird / My Must Reads (ebooks) and
-                  Libro.FM (audiobooks). When available, you can see both ebook
-                  and audiobook links on any book product page. Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.
-                </div>
-
-                <hr></hr>
-
-                <div className="text-right py-2 px-2">Date</div>
-              </div>
-
-              <div className="bg-lightSilver rounded-xl  my-2 ">
-                <div className="py-2 px-2 font-black">
-                  Do you sell audiobooks and / or ebooks?
-                </div>
-
-                <hr></hr>
-
-                <div
-                  className="py-2 px-2 overflow-y-auto"
-                  style={{ maxHeight: "100px" }}
-                >
-                  Both ebooks and audiobooks are available via distribution
-                  partnerships with Hummingbird / My Must Reads (ebooks) and
-                  Libro.FM (audiobooks). When available, you can see both ebook
-                  and audiobook links on any book product page. Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.Both ebooks and
-                  audiobooks are available via distribution partnerships with
-                  Hummingbird / My Must Reads (ebooks) and Libro.FM
-                  (audiobooks). When available, you can see both ebook and
-                  audiobook links on any book product page.
-                </div>
-
-                <hr></hr>
-                <div className="text-right py-2 px-2">Date</div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

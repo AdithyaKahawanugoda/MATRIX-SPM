@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -10,7 +11,27 @@ const validationSchema = Yup.object({
   message: Yup.string().required("Message is required"),
 });
 
-const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
+const ReplyInquiriesModal = ({
+  setModalVisible,
+  modalVisible,
+  rowid,
+  getemail,
+}) => {
+  const addreply = async (values) => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/addreply",
+        {
+          InquirID: rowid,
+          replynote: values.message,
+          email: getemail,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -35,10 +56,11 @@ const ReplyInquiriesModal = ({ setModalVisible, modalVisible }) => {
         <hr></hr>
 
         <Formik
-          initialValues={{ email: "", message: "" }}
+          initialValues={{ email: getemail, message: "" }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            addreply(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (

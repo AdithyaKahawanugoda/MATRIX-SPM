@@ -20,7 +20,7 @@ const RetailDeliveryCost = () => {
       const response = await axios.get(
         "http://localhost:6500/matrix/api/deliveryManager/getCost"
       );
-      console.log(response.data.retailcost);
+      console.log(response.data.retailexpressprecentage);
       setRetailCost(response.data.retailcost);
       setRetailExCost(response.data.retailexpressprecentage);
     } catch (error) {
