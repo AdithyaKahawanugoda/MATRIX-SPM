@@ -248,11 +248,11 @@ exports.addcategory = async (req, res) => {
   const { category, faq } = req.body;
   console.log(req.body);
   try {
-    const newRailway = await FAQ.create({
+    const DocData = await FAQ.create({
       ...req.body,
     });
     res.status(201).json({
-      newRailway,
+      DocData,
       desc: "New category added",
     });
   } catch (error) {

@@ -2,6 +2,7 @@ import React from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   userName: Yup.string().trim().uppercase().required("User Name is required"),
@@ -21,10 +22,36 @@ const validationSchema = Yup.object({
     .integer()
     .min(10, "Please enter a valid phone number")
     .required("Phone number is required"),
-  province: Yup.string().trim().uppercase().required("Province is required"),
 });
 
-const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
+const AddDPersonModal = ({
+  setModalVisible,
+  modalVisible,
+  setSelectedRows,
+}) => {
+  const addDperson = async (values) => {
+    const response = await axios.post(
+      "http://localhost:6500/matrix/api/auth/deliveryperson",
+      {
+        username: values.userName,
+        email: values.email,
+        password: values.confirmpassword,
+        phone: values.mobileNum,
+      }
+    );
+    setSelectedRows((selectedRows) => [
+      ...selectedRows,
+      {
+        no: selectedRows.length + 1,
+        userId: response.data.deliveryPerson._id,
+        name: values.userName,
+        email: values.email,
+        mobile: values.mobileNum,
+      },
+    ]);
+    console.log(response);
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -53,13 +80,13 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
             userName: "",
             email: "",
             mobileNum: "",
-            province: "",
             password: "",
             confirmpassword: "",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            addDperson(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -152,49 +179,6 @@ const AddDPersonModal = ({ setModalVisible, modalVisible }) => {
                     {errors.mobileNum && touched.mobileNum ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
                         {errors.mobileNum}
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
-                  <div className=" my-1">
-                    <label
-                      className="block text-sm font-medium leading-149  md:text-lg"
-                      htmlFor={"province"}
-                    >
-                      Province :
-                    </label>
-                  </div>
-                  <div className=" col-span-2">
-                    <select
-                      className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
-                        errors.province && touched.province
-                          ? "border-red-500"
-                          : "border-gray-600"
-                      } text-base`}
-                      id="province"
-                      type="text"
-                      placeholder="Railway station name"
-                      onChange={handleChange("province")}
-                      value={values.province}
-                    >
-                      <option value="" disabled>
-                        Select your option
-                      </option>
-                      <option value="wp">Western Province</option>
-                      <option value="CP">Central Province</option>
-                      <option value="EP">Eastern Province</option>
-                      <option value="NP">Northern Province</option>
-                      <option value="SP">Southern Province</option>
-                      <option value="NWP">North Western Province</option>
-                      <option value="NCP">North Central Province</option>
-                      <option value="UP">Uva Province</option>
-                      <option value="SP">Sabaragamuwa Province</option>
-                    </select>
-                    {errors.province && touched.province ? (
-                      <div className="text-red-500 text-xs mt-1 md:text-sm">
-                        {errors.province}
                       </div>
                     ) : null}
                   </div>

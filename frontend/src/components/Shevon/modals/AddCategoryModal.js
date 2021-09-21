@@ -22,7 +22,7 @@ const AddCategoryModal = ({
       ...selectedRows,
       {
         no: selectedRows.length + 1,
-        code: response.data.newRailway._id,
+        code: response.data.DocData._id,
         categoryName: values.categoryName,
       },
     ]);

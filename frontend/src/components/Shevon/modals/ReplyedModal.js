@@ -68,7 +68,7 @@ const ReplyedModal = ({
 
                   <hr></hr>
 
-                  <div className="text-right py-2 px-2">
+                  <div className="text-right py-2 px-2 font-black text-xs">
                     Replyed Date: {rep.replyedAt}
                   </div>
                 </div>

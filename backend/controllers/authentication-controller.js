@@ -92,7 +92,9 @@ exports.registerDeliveryPerson = async (req, res) => {
         ...req.body,
       });
       const token = await deliveryPerson.getSignedToken();
-      res.status(201).json({ success: true, token, role: "deliveryPerson" });
+      res
+        .status(201)
+        .json({ success: true, token, role: "deliveryPerson", deliveryPerson });
     } catch (error) {
       res.status(500).json({
         success: false,
