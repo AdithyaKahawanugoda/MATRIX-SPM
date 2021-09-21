@@ -57,6 +57,25 @@ const CustomerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "products",
       },
+      unitPrice: {
+        type: Number,
+      },
+      proImg: {
+        type: String,
+      },
+      originalTitle: {
+        type: String,
+      },
+      originalAuthor: {
+        type: String,
+      },
+      aboutBook: {
+        type: String,
+      },
+      weight: {
+        type: Number,
+        required: true,
+      },
     },
   ],
   wishList: [
