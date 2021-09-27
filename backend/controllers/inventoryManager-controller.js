@@ -1,4 +1,5 @@
 const InventoryManagerModel = require("../models/inventoryManger-model");
+const DeletedProfileModel = require("../models/deletedProfile-model");
 const ProductModel = require("../models/product-model");
 const InvoiceModel = require("../models/invoice-model");
 const { cloudinary } = require("../utils/cloudinary");
@@ -106,7 +107,7 @@ exports.getAllBooks = async (req, res) => {
 
 // get specific book
 exports.getBookByISBN = async (req, res) => {
-  const { ISBN } = req.body;
+  const ISBN = req.params.isbn;
   try {
     const book = await ProductModel.findOne({ ISBN });
     res.status(200).send({
@@ -122,8 +123,7 @@ exports.getBookByISBN = async (req, res) => {
 
 // update specific book
 exports.updateBookByISBN = async (req, res) => {
-  let uploadRes;
-  const {
+  let {
     publishingTitle,
     originalTitle,
     translator,
@@ -131,10 +131,9 @@ exports.updateBookByISBN = async (req, res) => {
     aboutAuthor,
     aboutBook,
     ISBN,
+    inStockQuantity,
     category,
     license,
-    quantity,
-    edition,
     translatorContact,
     translatorEmail,
     press,
@@ -149,7 +148,6 @@ exports.updateBookByISBN = async (req, res) => {
     proofReadingPayment,
     typeSetterPayment,
     printCost,
-    encImg,
   } = req.body;
   if (!publishingTitle) {
     publishingTitle = undefined;
@@ -172,11 +170,8 @@ exports.updateBookByISBN = async (req, res) => {
   if (!license) {
     license = undefined;
   }
-  if (!quantity) {
-    quantity = undefined;
-  }
-  if (!edition) {
-    edition = undefined;
+  if (!inStockQuantity) {
+    inStockQuantity = undefined;
   }
   if (!translatorContact) {
     translatorContact = undefined;
@@ -223,13 +218,11 @@ exports.updateBookByISBN = async (req, res) => {
   if (!printCost) {
     printCost = undefined;
   }
-  if (!encImg) {
-    uploadRes = undefined;
-  }
   try {
-    if (encImg !== undefined) {
-      uploadRes = await uploadFiles(encImg, "Book_Covers");
-    }
+    // if (encImg) {
+    //   console.log("within upload cover img");
+    //   uploadRes = await uploadFiles(encImg, "Book_Covers");
+    // }
     const updatedBook = await ProductModel.findOneAndUpdate(
       { ISBN },
       {
@@ -243,8 +236,7 @@ exports.updateBookByISBN = async (req, res) => {
           ISBN,
           category,
           license,
-          print: { quantity, edition },
-          inStockQuantity: quantity,
+          inStockQuantity,
           translatorContact,
           translatorEmail,
           press,
@@ -253,10 +245,6 @@ exports.updateBookByISBN = async (req, res) => {
           typeSetter,
           weight,
           marketPrice,
-          bookImage: {
-            imagePublicId: uploadRes.public_id,
-            imageSecURL: uploadRes.secure_url,
-          },
           charges: {
             coverCost,
             licenseCost,
@@ -285,12 +273,44 @@ exports.updateBookByISBN = async (req, res) => {
   }
 };
 
+// update cover image
+exports.updateCoverImageByISBN = async (req, res) => {
+  const { ISBN, imgPID, encImg } = req.body;
+  try {
+    const deleteResponse = await deleteFiles(imgPID);
+    const uploadRes = await uploadFiles(encImg, "Book_Covers");
+    if (deleteResponse && uploadRes) {
+      const updatedBook = await ProductModel.findOneAndUpdate(
+        { ISBN },
+        {
+          $set: {
+            bookImage: {
+              imagePublicId: uploadRes.public_id,
+              imageSecURL: uploadRes.secure_url,
+            },
+          },
+        }
+      );
+      res.status(200).send({
+        desc: "Book cover image updated successfully",
+        updatedBook,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in updateCoverImageByISBN",
+    });
+  }
+};
+
 // delete specific book
 exports.deleteBookByISBN = async (req, res) => {
   const { ISBN } = req.body;
   try {
     await ProductModel.deleteOne({ ISBN });
-    res.status(202).json({ desc: "Book deleted successfully" });
+    const logResponse = logDeletes(ISBN, "BOOK", "DELETE NOTE");
+    res.status(202).json({ desc: "Book deleted successfully", logResponse });
   } catch (error) {
     res.status(500).json({
       error,
@@ -423,6 +443,18 @@ exports.deleteInvoiceByID = async (req, res) => {
   }
 };
 
+// get profile details
+exports.getProfile = async (req, res) => {
+  try {
+    res.status(200).json({ profile: req.user });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in getProfile",
+    });
+  }
+};
+
 // update profile details
 exports.updateProfile = async (req, res) => {
   let uploadRes;
@@ -518,6 +550,29 @@ exports.passwordReset = async (req, res) => {
 };
 
 // delete specific profile
+exports.deleteAccount = async (req, res) => {
+  const { reason, note } = req.body;
+  try {
+    const deleteResponse = await InventoryManagerModel.findByIdAndDelete({
+      id: req.user._id,
+    });
+    const deleteLog = await DeletedProfileModel.create({
+      profileID: req.user._id,
+      reason,
+      note,
+    });
+    res.status(202).send({
+      desc: "Account deleted successfully",
+      deleteResponse,
+      deleteLog,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in deleteAccount",
+    });
+  }
+};
 
 // check ISBN duplicates
 const findBookByISBN = async (ISBN, res) => {
@@ -563,13 +618,24 @@ const uploadFiles = async (file, preSetName) => {
 };
 
 // manage file deletes
-
-// log deleted invoice details
-const logDeletes = async (id, type, notes, modelName) => {
+const deleteFiles = async (filePID) => {
   try {
-    const logResponse = await `${modelName}`.create({
-      id,
-      notes,
+    const deleteResponse = await cloudinary.uploader.destroy(filePID);
+    return deleteResponse;
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in deleteFiles",
+    });
+  }
+};
+
+// log deleted invoices and books
+const logDeletes = async (docID, type, note) => {
+  try {
+    const logResponse = await DeletedInventoryDocsModel.create({
+      docID,
+      note,
       type,
     });
     return logResponse;
