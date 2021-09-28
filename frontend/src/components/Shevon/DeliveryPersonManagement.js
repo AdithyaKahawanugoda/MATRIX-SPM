@@ -113,7 +113,7 @@ const DeliveryPersonManagement = () => {
         <div className="rounded-xl   mt-0 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
           <div className="rounded-lg flex bg-gray-100">
             <div className="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
-              Search Order ID:
+              Search user name:
             </div>
             <div className="flex-initial px-0 py-2 m-2">
               <input

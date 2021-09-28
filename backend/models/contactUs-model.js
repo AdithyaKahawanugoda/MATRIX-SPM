@@ -4,7 +4,6 @@ const ContactUsSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please provide a email"],
-    unique: true,
   },
   mobileNumber: {
     type: Number,
