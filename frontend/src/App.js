@@ -5,7 +5,7 @@ import { BrowserRouter as BRouter, Switch, Route } from "react-router-dom";
 import Home from "./screens/Home";
 import AboutUs from "./screens/AboutUs";
 import AllProducts from "./screens/AllProducts";
-// import CategorizedProducts from "./screens/CategorizedProducts";
+import CategorizedProducts from "./screens/CategorizedProducts";
 import CourierDashboard from "./screens/CourierDashboard";
 import CustomerProfile from "./screens/CustomerProfile";
 import DeliveryDashboard from "./screens/DeliveryDashboard";
@@ -17,7 +17,7 @@ import ShoppingCart from "./screens/ShoppingCart";
 import SingleProduct from "./screens/SingleProduct";
 import Support from "./screens/Support";
 import AdminDashboard from "./screens/AdminDashboard";
-// import Offers from "./screens/Offers";
+import Offers from "./screens/Offers";
 import Checkout from "./screens/Checkout";
 import OrderSuccess from "./screens/PlaceOrderSuccessfully";
 import AdminLogin from "./screens/AdminLogin";
@@ -30,7 +30,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/about" component={AboutUs} />
           <Route exact path="/books" component={AllProducts} />
-          {/* <Route exact path="/category/books" component={CategorizedProducts} /> */}
+          <Route exact path="/category/books" component={CategorizedProducts} />
           <Route exact path="/courier" component={CourierDashboard} />
           <Route exact path="/customer" component={CustomerProfile} />
           <Route exact path="/delivery" component={DeliveryDashboard} />
@@ -41,7 +41,7 @@ const App = () => {
           <Route exact path="/cart" component={ShoppingCart} />
           <Route exact path="/book/:id" component={SingleProduct} />
           <Route exact path="/support" component={Support} />
-          {/* <Route exact path="/offers" component={Offers} /> */}
+          <Route exact path="/offers" component={Offers} />
           <Route exact path="/admin" component={AdminDashboard} />
           <Route exact path="/checkout" component={Checkout} />
           <Route exact path="/order-success" component={OrderSuccess} />

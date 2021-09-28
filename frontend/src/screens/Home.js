@@ -1,5 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+import { Hidden } from "@material-ui/core";
+
 import HomeTopBanner from "../components/Adithya/HomeTopBanner";
 import HomeCarousal from "../components/Adithya/HomeCarousal";
 import HomeCategories from "../components/Adithya/HomeCategories";
@@ -30,13 +32,16 @@ const Home = () => {
               justifyContent="center"
               alignItems="center"
             >
-              <Grid item xs={3}>
-                <img
-                  alt="home-side-img"
-                  src="https://i.ibb.co/hfsdHHq/rd9123-large-0-005ba5ba5ba5ba-733-733.jpg"
-                />
-              </Grid>
-              <Grid item xs={8}>
+              <Hidden only={["sm", "xs"]}>
+                <Grid item xs={4}>
+                  <img
+                    alt="home-side-img"
+                    src="https://i.ibb.co/hfsdHHq/rd9123-large-0-005ba5ba5ba5ba-733-733.jpg"
+                    className="px-8"
+                  />
+                </Grid>
+              </Hidden>
+              <Grid item xs={12} md={8}>
                 <div className=" m-auto">
                   <HomeCarousal />
                 </div>
