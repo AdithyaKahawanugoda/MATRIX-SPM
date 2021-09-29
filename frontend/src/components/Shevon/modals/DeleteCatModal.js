@@ -90,7 +90,7 @@ const DeleteCatModal = ({
                 setModalVisible(false);
               }}
             >
-              Disagree
+              Cancel
             </Button>
           </div>
         </div>

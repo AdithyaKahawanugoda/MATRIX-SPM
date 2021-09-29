@@ -9,6 +9,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Icon from "@material-ui/core/Icon";
+import generatePDF from "./DeliveryReport";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -284,7 +285,23 @@ const DeliveredOrders = () => {
         <header className="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
           DELIVERD ORDER HISTORY
         </header>
-
+        <div className="rounded-xl my-1 mx-2 px-5 py-5   shadow-md bg-prussianBlue bg-opacity-30">
+          <div className="grid grid-cols-2">
+            <div>
+              <h6 className=" mt-2 font-black text-lg text-left">
+                Monthly Delivery Report
+              </h6>
+            </div>
+            <div className=" mt-0 mb-0 text-right">
+              <button
+                className="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full"
+                onClick={() => generatePDF(rows)}
+              >
+                Generate
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
           <div className="rounded-lg flex bg-gray-100">
             <div className="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
