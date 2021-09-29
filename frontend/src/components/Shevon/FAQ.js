@@ -32,24 +32,24 @@ const FAQ = () => {
       <div className="mt-4 mx-16 py-6 px-10 rounded-xl  border-0  shadow-md bg-blueSapphire bg-opacity-10">
         <h6 className="ml-4 mt-2 mb-2 font-black text-3xl">FAQ</h6>
         <hr />
-        <div className=" py-6">
+        <div className=" py-6 px-10">
           {faqdata.map(({ category, faq }) => (
             <Accordion
               style={{
                 backgroundColor: "#6D7B8D",
-                borderRadius: "50px  50px 0px 0px",
+                borderRadius: "20px  20px 20px 20px",
               }}
               className="mt-2"
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon className="text-white mr-4 " />}
                 aria-controls="panel1a-content"
-                style={{ backgroundColor: "", borderRadius: "50px" }}
+                style={{ backgroundColor: "", borderRadius: "5px" }}
                 className="border-0"
               >
                 <div
                   variant="h6 "
-                  className="py-4 text-white pl-4 text-xl font-black font-thinKidFont"
+                  className="py-3 text-white pl-10 text-xl font-black font-thinKidFont"
                 >
                   {category}
                 </div>
