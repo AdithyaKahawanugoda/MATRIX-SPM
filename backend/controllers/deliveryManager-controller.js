@@ -5,6 +5,7 @@ const FAQ = require("../models/faq-model");
 const ContactUs = require("../models/contactUs-model");
 const sendEmail = require("../utils/SendEmail");
 const DeliveryPerson = require("../models/deliveryPerson-model");
+const Order = require("../models/order-model");
 
 /* --------------------------------------------------delivery cost management-------------------------------------------------- */
 //add DeliveryCost
@@ -587,6 +588,20 @@ exports.deleteDeliveryPerson = async (req, res) => {
       success: false,
       desc:
         "Error in DeliveryPerson in deleteDeliveryPerson controller - " + error,
+    });
+  }
+};
+
+/* --------------------------------------------------Order Management -------------------------------------------------- */
+//get all orders
+exports.getAllOrders = async (req, res) => {
+  try {
+    const DocData = await Order.find();
+    res.status(200).send({ Order: DocData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in fetching getAllOrders -" + error,
     });
   }
 };

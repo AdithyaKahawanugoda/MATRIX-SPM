@@ -10,263 +10,93 @@ import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Icon from "@material-ui/core/Icon";
 import generatePDF from "./DeliveryReport";
+import axios from "axios";
+import moment from "moment";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
   { id: "code", label: "OrderID", minWidth: 30 },
-  { id: "name", label: "CustomerName", minWidth: 50 },
-  { id: "address", label: "Address", minWidth: 160 },
-  { id: "weight", label: "Weight", minWidth: 30 },
-  { id: "orderType", label: "OrderType", minWidth: 100 },
-  { id: "paymentType", label: "PaymentType", minWidth: 80 },
-  { id: "orderDate", label: "OrderDate", minWidth: 80 },
-  { id: "deliveryType", label: "DeliveryType", minWidth: 80 },
-  { id: "deliveryStatus", label: "DeliveryStatus", minWidth: 80 },
-  { id: "deliveredDate", label: "DeliveredDate", minWidth: 80 },
+  { id: "buyerId", label: "buyerId", minWidth: 50 },
+  { id: "address", label: "Address", minWidth: 20 },
+  { id: "price", label: "price", minWidth: 30 },
+  { id: "purchasedDate", label: "purchasedDate", minWidth: 100 },
+  { id: "deliveryType", label: "DeliveryStatus", minWidth: 100 },
 ];
 
+//initail commit
 function createData(
   no,
   code,
-  name,
+  buyerId,
   address,
-  weight,
-  orderType,
-  paymentType,
-  orderDate,
-  deliveryType,
-  deliveryStatus,
-  deliveredDate
+  price,
+  purchasedDate,
+  deliveryType
 ) {
   return {
     no,
     code,
-    name,
+    buyerId,
     address,
-    weight,
-    orderType,
-    paymentType,
-    orderDate,
+    price,
+    purchasedDate,
     deliveryType,
-    deliveryStatus,
-    deliveredDate,
   };
 }
-
-const rows = [
-  createData(
-    1,
-    "000001",
-    "Tony Russell",
-    "Mr. Tony Russell, Coalecroft  909, Ontario - 7480, Hungary",
-    0.5 + "kg",
-    "Retail",
-    "Paid",
-    "8/9/2021",
-    "Express",
-    "Delivered",
-    "8/12/2021"
-  ),
-  createData(
-    2,
-    "000002",
-    "Doug Wilton",
-    "Mr. Doug Wilton, Longleigh   1845, Glendale - 5576, Panama",
-    0.3 + "kg",
-    "Retail",
-    "Paid",
-    "6/16/2021",
-    "Normal",
-    "Delivered",
-    "6/22/2021"
-  ),
-  createData(
-    3,
-    "000003",
-    "Roger Cobb",
-    "Mr. Roger Cobb, Sundown 7120, Tokyo - 2368, Mali",
-    0.9 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "7/8/2021",
-    "Express",
-    "Delivered",
-    "7/11/2021"
-  ),
-  createData(
-    4,
-    "000004",
-    "Bryon Radley",
-    "Mr. Bryon Radley, Bales  9695, Houston - 6560, Serbia",
-    70 + "kg",
-    "Bulk",
-    "Invoice",
-    "4/25/2021",
-    "Express",
-    "Delivered",
-    "4/28/2021"
-  ),
-  createData(
-    5,
-    "000005",
-    "Fred Carter",
-    "Mr. Fred Carter, Bloomsbury  8925, Otawa - 4818, Panama",
-    0.2 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "2/12/2021",
-    "Normal",
-    "Delivered",
-    "2/19/2021"
-  ),
-  createData(
-    6,
-    "000006",
-    "Martin Talbot",
-    "Mr. Martin Talbot, Aberavon  426, Oakland - 2273, Ireland",
-    0.6 + "kg",
-    "Retail",
-    "Paid",
-    "4/4/2021",
-    "Express",
-    "Delivered",
-    "4/7/2021"
-  ),
-  createData(
-    7,
-    "000007",
-    "John Clifton",
-    "Mr. John Clifton, Lexington 93, Glendale - 6215, Vatican City",
-    0.8 + "kg",
-    "Retail",
-    "Paid",
-    "6/4/2021",
-    "Normal",
-    "Delivered",
-    "6/11/2021"
-  ),
-  createData(
-    8,
-    "000008",
-    "Nate Hobson",
-    "Mr. Nate Hobson, Blendon    9754, Henderson - 0324, Central African Republic",
-    5 + "kg",
-    "Bulk",
-    "Invoice",
-    "7/31/2021",
-    "Express",
-    "Delivered",
-    "8/2/2021"
-  ),
-  createData(
-    9,
-    "000009",
-    "Madelyn Woods",
-    "Mrs. Madelyn Woods, Fairfield  2525, Lyon - 6460, Korea, North",
-    45 + "kg",
-    "Bulk",
-    "Invoice",
-    "4/23/2021",
-    "Express",
-    "Delivered",
-    "4/26/2021"
-  ),
-  createData(
-    10,
-    "000010",
-    "Cara Reynolds",
-    "Mrs. Cara Reynolds, Lincoln 3001, Venice - 8061, Kyrgyzstan",
-    0.3 + "kg",
-    "Retail",
-    "Paid",
-    "2/17/2021",
-    "Normal",
-    "Delivered",
-    "2/24/2021"
-  ),
-  createData(
-    11,
-    "000011",
-    "Nick Walton",
-    "Mr. Nick Walton, Unwin  6947, St. Louis - 6607, Togo",
-    0.8 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "2/1/2021",
-    "Express",
-    "Delivered",
-    "2/4/2021"
-  ),
-  createData(
-    12,
-    "000012",
-    "Gwenyth Buckley",
-    "Mrs. Gwenyth Buckley, Blanchard  2566, Pittsburgh - 2071, Fiji",
-    10 + "kg",
-    "Bulk",
-    "Invoice",
-    "4/20/2021",
-    "Normal",
-    "Delivered",
-    "4/27/2021"
-  ),
-  createData(
-    13,
-    "000013",
-    "Johnathan Isaac",
-    "Mr. Johnathan Isaac, Thoresby   5619, Santa Ana - 0765, Nigeria",
-    0.5 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "1/2/2021",
-    "Normal",
-    "Delivered",
-    "1/9/2021"
-  ),
-  createData(
-    14,
-    "000014",
-    "Doris Knight",
-    "Ms. Doris Knight, Eldon  2417, Henderson - 7173, Malawi",
-    0.1 + "kg",
-    "Retail",
-    "Paid",
-    "2/28/2021",
-    "Express",
-    "Delivered",
-    "3/2/2021"
-  ),
-  createData(
-    15,
-    "000015",
-    "Eileen Truscott",
-    "Mrs. Eileen Truscott, Vine  8883, Paris - 0678, Namibia",
-    0.7 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "2/7/2021",
-    "Normal",
-    "Delivered",
-    "2/14/2021"
-  ),
-];
 
 const DeliveredOrders = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [fetchedRows, setFetchedRows] = useState([]);
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
-    setSelectedRows(rows);
-  }, []);
+    (async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:6500/matrix/api/deliveryManager/getallorders"
+        );
+        const data = response.data.Order.filter(
+          (data) => data.deliveryStatus === "delivered"
+        ).map((order, index) =>
+          createData(
+            index + 1,
+            order._id,
+            order.buyerID,
+            order.deliveryAddress,
+            order.billAmount,
+            moment(order.updatedTime).format("lll"),
+            order.deliveryStatus
+          )
+        );
 
+        /*   const finalData = data.filter((data) => {
+          if (data.deliveryStatus === "pending") {
+            return data;
+          }
+          return null;
+        }); */
+        // const finalData = data.filter(
+        //   (data) => data.deliveryType === "delivered"
+        // );
+
+        console.log(data);
+        setFetchedRows(data);
+        setSelectedRows(data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
   const search = () => {
-    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+    setSelectedRows(
+      fetchedRows.filter((row) => !row.code.indexOf(searchKey.trim()))
+    );
   };
 
   const refresh = () => {
-    setSelectedRows(rows);
+    setSelectedRows(fetchedRows);
     setSearchKey("");
   };
 
@@ -295,7 +125,7 @@ const DeliveredOrders = () => {
             <div className=" mt-0 mb-0 text-right">
               <button
                 className="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full"
-                onClick={() => generatePDF(rows)}
+                onClick={() => generatePDF(fetchedRows)}
               >
                 Generate
               </button>
@@ -388,7 +218,7 @@ const DeliveredOrders = () => {
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
-              count={rows.length}
+              count={setSelectedRows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

@@ -12,7 +12,14 @@ const generatePDF = (tickets) => {
 
   //define the columns we want and their titles
   //const tableColumn = ["Id", "Title", "Issue", "Status", "Closed on"];
-  const tableColumn = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+  const tableColumn = [
+    "Number",
+    "orderID",
+    "BuyerID",
+    "Address",
+    "Price",
+    "CreatedDate",
+  ];
   //define an empty array of rows
   const tableRows = [];
 
@@ -21,19 +28,15 @@ const generatePDF = (tickets) => {
     const ticketData = [
       ticket.no,
       ticket.code,
-      ticket.name,
+      ticket.buyerId,
       ticket.address,
-      ticket.weight,
-      ticket.orderType,
-      ticket.paymentType,
-      ticket.orderDate,
-      ticket.deliveryType,
-      ticket.deliveryStatus,
-      ticket.deliveredDate,
+      ticket.price,
+      ticket.purchasedDate,
+
       //ticket.request,
       //ticket.status,
       //called to format the date on the ticket
-      moment(new Date()).format("DD/MM/YYYY"),
+      // moment(new Date()).format("DD/MM/YYYY"),
       //format(new Date(ticket.updated_at), "yyyy-MM-dd")
     ];
     //push each tickcet's info into a row

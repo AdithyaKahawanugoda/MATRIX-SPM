@@ -8,7 +8,6 @@ const OrderSchema = new mongoose.Schema({
   },
   deiveryPersonID: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "deliverypeople",
   },
   billAmount: {
@@ -29,14 +28,12 @@ const OrderSchema = new mongoose.Schema({
     default: Date(),
   },
   deliveryStatus: {
-    status: {
-      type: String,
-      default: "pending",
-    },
-    updatedTime: {
-      type: Date,
-      default: Date.now,
-    },
+    type: String,
+    default: "pending",
+  },
+  updatedTime: {
+    type: Date,
+    default: Date.now,
   },
   orderData: [
     {

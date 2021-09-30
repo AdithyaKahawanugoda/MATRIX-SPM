@@ -50,6 +50,7 @@ const DeliveryPersonSchema = new mongoose.Schema({
       orderID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+        ref: "order",
       },
       placedAt: {
         type: Date,
