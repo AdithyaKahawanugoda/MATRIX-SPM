@@ -1,7 +1,10 @@
 const InventoryManagerModel = require("../models/inventoryManger-model");
+const DeletedProfileModel = require("../models/deletedProfile-model");
+const DeletedInventoryDocsModel = require("../models/deletedInventoryDocs-model");
 const ProductModel = require("../models/product-model");
 const InvoiceModel = require("../models/invoice-model");
 const { cloudinary } = require("../utils/cloudinary");
+const bcrypt = require("bcryptjs");
 
 // add new book
 exports.addNewBook = async (req, res) => {
@@ -105,7 +108,7 @@ exports.getAllBooks = async (req, res) => {
 
 // get specific book
 exports.getBookByISBN = async (req, res) => {
-  const { ISBN } = req.body;
+  const ISBN = req.params.isbn;
   try {
     const book = await ProductModel.findOne({ ISBN });
     res.status(200).send({
@@ -121,8 +124,7 @@ exports.getBookByISBN = async (req, res) => {
 
 // update specific book
 exports.updateBookByISBN = async (req, res) => {
-  let uploadRes;
-  const {
+  let {
     publishingTitle,
     originalTitle,
     translator,
@@ -130,10 +132,9 @@ exports.updateBookByISBN = async (req, res) => {
     aboutAuthor,
     aboutBook,
     ISBN,
+    inStockQuantity,
     category,
     license,
-    quantity,
-    edition,
     translatorContact,
     translatorEmail,
     press,
@@ -148,7 +149,6 @@ exports.updateBookByISBN = async (req, res) => {
     proofReadingPayment,
     typeSetterPayment,
     printCost,
-    encImg,
   } = req.body;
   if (!publishingTitle) {
     publishingTitle = undefined;
@@ -171,11 +171,8 @@ exports.updateBookByISBN = async (req, res) => {
   if (!license) {
     license = undefined;
   }
-  if (!quantity) {
-    quantity = undefined;
-  }
-  if (!edition) {
-    edition = undefined;
+  if (!inStockQuantity) {
+    inStockQuantity = undefined;
   }
   if (!translatorContact) {
     translatorContact = undefined;
@@ -222,13 +219,11 @@ exports.updateBookByISBN = async (req, res) => {
   if (!printCost) {
     printCost = undefined;
   }
-  if (!encImg) {
-    uploadRes = undefined;
-  }
   try {
-    if (encImg !== undefined) {
-      uploadRes = await uploadFiles(encImg, "Book_Covers");
-    }
+    // if (encImg) {
+    //   console.log("within upload cover img");
+    //   uploadRes = await uploadFiles(encImg, "Book_Covers");
+    // }
     const updatedBook = await ProductModel.findOneAndUpdate(
       { ISBN },
       {
@@ -242,8 +237,7 @@ exports.updateBookByISBN = async (req, res) => {
           ISBN,
           category,
           license,
-          print: { quantity, edition },
-          inStockQuantity: quantity,
+          inStockQuantity,
           translatorContact,
           translatorEmail,
           press,
@@ -252,10 +246,6 @@ exports.updateBookByISBN = async (req, res) => {
           typeSetter,
           weight,
           marketPrice,
-          bookImage: {
-            imagePublicId: uploadRes.public_id,
-            imageSecURL: uploadRes.secure_url,
-          },
           charges: {
             coverCost,
             licenseCost,
@@ -284,12 +274,44 @@ exports.updateBookByISBN = async (req, res) => {
   }
 };
 
+// update cover image
+exports.updateCoverImageByISBN = async (req, res) => {
+  const { ISBN, imgPID, encImg } = req.body;
+  try {
+    const deleteResponse = await deleteFiles(imgPID);
+    const uploadRes = await uploadFiles(encImg, "Book_Covers");
+    if (deleteResponse && uploadRes) {
+      const updatedBook = await ProductModel.findOneAndUpdate(
+        { ISBN },
+        {
+          $set: {
+            bookImage: {
+              imagePublicId: uploadRes.public_id,
+              imageSecURL: uploadRes.secure_url,
+            },
+          },
+        }
+      );
+      res.status(200).send({
+        desc: "Book cover image updated successfully",
+        updatedBook,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in updateCoverImageByISBN",
+    });
+  }
+};
+
 // delete specific book
 exports.deleteBookByISBN = async (req, res) => {
-  const { ISBN } = req.body;
+  const ISBN = req.params.isbn;
   try {
     await ProductModel.deleteOne({ ISBN });
-    res.status(202).json({ desc: "Book deleted successfully" });
+    const logResponse = await logDeletes(ISBN, "BOOK", "DELETE NOTE", res);
+    res.status(202).json({ desc: "Book deleted successfully", logResponse });
   } catch (error) {
     res.status(500).json({
       error,
@@ -347,9 +369,9 @@ exports.getAllInvoices = async (req, res) => {
 
 // get specific invoice
 exports.getInvoiceByID = async (req, res) => {
-  const { invoiceId } = req.body;
+  const invoiceId = req.params.invoiceId;
   try {
-    const invoice = await InvoiceModel.findOne({ invoiceId });
+    const invoice = await InvoiceModel.findOne({ _id: invoiceId });
     res.status(200).send({
       invoice,
     });
@@ -363,7 +385,8 @@ exports.getInvoiceByID = async (req, res) => {
 
 // update specific invoice
 exports.updateInvoiceByID = async (req, res) => {
-  const { invoiceId, retailShop, totalAmount, notes, items } = req.body;
+  let { retailShop, invoiceId, notes, totalAmount, status, items } = req.body;
+
   if (!retailShop) {
     retailShop = undefined;
   }
@@ -376,16 +399,18 @@ exports.updateInvoiceByID = async (req, res) => {
   if (!items) {
     items = undefined;
   }
+  if (!status) {
+    status = undefined;
+  }
   try {
-    const updatedInvoice = await InvoiceModel.findOneAndUpdate(
+    const updatedInvoice = await InvoiceModel.updateOne(
       { invoiceId },
       {
         $set: {
-          invoiceId,
           retailShop,
-          payment: { totalAmount },
+          invoiceId,
+          payment: { totalAmount, status },
           notes,
-          items,
         },
       },
       {
@@ -394,7 +419,7 @@ exports.updateInvoiceByID = async (req, res) => {
         omitUndefined: true,
       }
     );
-
+    console.log(updatedInvoice);
     res.status(200).send({
       desc: "Invoice data updated successfully",
       updatedInvoice,
@@ -409,15 +434,27 @@ exports.updateInvoiceByID = async (req, res) => {
 
 // delete specific invoice
 exports.deleteInvoiceByID = async (req, res) => {
-  const { invoiceId } = req.body;
+  const invoiceId = req.params.invoiceId;
   try {
     await InvoiceModel.deleteOne({ invoiceId });
-    await logDeletes(invoiceId, "invoice", notes, "InvoiceModel");
+    await logDeletes(invoiceId, "INVOICE", "DELETE NOTE", res);
     res.status(202).json({ desc: "Invoice deleted successfully" });
   } catch (error) {
     res.status(500).json({
       error,
       desc: "Error occurred in deleteInvoiceByID",
+    });
+  }
+};
+
+// get profile details
+exports.getProfile = async (req, res) => {
+  try {
+    res.status(200).json({ profile: req.user });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in getProfile",
     });
   }
 };
@@ -439,6 +476,30 @@ exports.updateProfile = async (req, res) => {
     if (encPP !== undefined) {
       uploadRes = await uploadFiles(encPP, "Profile_Pictures");
     }
+    const updatedUser = await InventoryManagerModel.findByIdAndUpdate(
+      { _id: req.user._id },
+      {
+        $set: {
+          role: "inventoryManager",
+          username,
+          email,
+          password: undefined,
+          profilePicture: {
+            imagePublicId: uploadRes.imagePublicId,
+            imageSecURL: uploadRes.imageSecURL,
+          },
+        },
+      },
+      {
+        new: true,
+        upsert: false,
+        omitUndefined: true,
+      }
+    );
+    res.status(200).json({
+      updatedUser,
+      desc: "Profile updated successfully",
+    });
   } catch (error) {
     res.status(500).json({
       error,
@@ -448,8 +509,74 @@ exports.updateProfile = async (req, res) => {
 };
 
 // password reset
+exports.passwordReset = async (req, res) => {
+  const { password, newPassword } = req.body;
+  const user = await InventoryManagerModel.findOne({
+    email: req.user.email,
+  }).select("+password");
+  try {
+    const isMatch = await user.matchPasswords(password);
+    if (isMatch) {
+      const salt = await bcrypt.genSalt(10);
+      const newHashedPassword = await bcrypt.hash(newPassword, salt);
+      await InventoryManagerModel.updateOne(
+        { _id: req.user._id },
+        {
+          $set: {
+            role: "inventoryManager",
+            username: req.user.username,
+            email: req.user.email,
+            password: newHashedPassword,
+            profilePicture: {
+              imagePublicId: undefined,
+              imageSecURL: undefined,
+            },
+          },
+        },
+        {
+          omitUndefined: true,
+        }
+      );
+      res.status(200).send({
+        desc: "Password updated successfully",
+      });
+    } else {
+      res.status(400).json({
+        desc: "Invalid current password, please enter correct password.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in passwordReset",
+    });
+  }
+};
 
 // delete specific profile
+exports.deleteAccount = async (req, res) => {
+  const { reason, note } = req.body;
+  try {
+    const deleteResponse = await InventoryManagerModel.findByIdAndDelete({
+      id: req.user._id,
+    });
+    const deleteLog = await DeletedProfileModel.create({
+      profileID: req.user._id,
+      reason,
+      note,
+    });
+    res.status(202).send({
+      desc: "Account deleted successfully",
+      deleteResponse,
+      deleteLog,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in deleteAccount",
+    });
+  }
+};
 
 // check ISBN duplicates
 const findBookByISBN = async (ISBN, res) => {
@@ -495,14 +622,25 @@ const uploadFiles = async (file, preSetName) => {
 };
 
 // manage file deletes
-
-// log deleted invoice details
-const logDeletes = async (id, type, notes, modelName) => {
+const deleteFiles = async (filePID) => {
   try {
-    const logResponse = await `${modelName}`.create({
-      id,
-      notes,
+    const deleteResponse = await cloudinary.uploader.destroy(filePID);
+    return deleteResponse;
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in deleteFiles",
+    });
+  }
+};
+
+// log deleted invoices and books
+const logDeletes = async (docID, type, note, res) => {
+  try {
+    const logResponse = await DeletedInventoryDocsModel.create({
+      docID,
       type,
+      note,
     });
     return logResponse;
   } catch (error) {

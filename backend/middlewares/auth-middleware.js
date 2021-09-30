@@ -7,7 +7,7 @@ const DeliveryPersonModel = require("../models/deliveryPerson-model");
 
 exports.protectedAdmin = async (req, res, next) => {
   let token;
-  token = tokenValidate(req);
+  token = tokenValidate(req, res);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await AdminModel.findById(decoded.id);
@@ -23,7 +23,7 @@ exports.protectedAdmin = async (req, res, next) => {
 };
 exports.protectedCustomer = async (req, res, next) => {
   let token;
-  token = tokenValidate(req);
+  token = tokenValidate(req, res);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await CustomerModel.findById(decoded.id);
@@ -39,7 +39,7 @@ exports.protectedCustomer = async (req, res, next) => {
 };
 exports.protectedInventoryManager = async (req, res, next) => {
   let token;
-  token = tokenValidate(req);
+  token = tokenValidate(req, res);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await InventoryManagerModel.findById(decoded.id);
@@ -55,7 +55,7 @@ exports.protectedInventoryManager = async (req, res, next) => {
 };
 exports.protectedDeliveryManager = async (req, res, next) => {
   let token;
-  token = tokenValidate(req);
+  token = tokenValidate(req, res);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await DeliveryManagerModel.findById(decoded.id);
@@ -71,7 +71,7 @@ exports.protectedDeliveryManager = async (req, res, next) => {
 };
 exports.protectedDeliveryPerson = async (req, res, next) => {
   let token;
-  token = tokenValidate(req);
+  token = tokenValidate(req, res);
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await DeliveryPersonModel.findById(decoded.id);
@@ -85,7 +85,7 @@ exports.protectedDeliveryPerson = async (req, res, next) => {
     invalidUserResponse(res, err);
   }
 };
-const tokenValidate = (reqObj) => {
+const tokenValidate = (reqObj, res) => {
   let token;
   if (
     reqObj.headers.authorization &&
@@ -93,7 +93,6 @@ const tokenValidate = (reqObj) => {
   ) {
     token = reqObj.headers.authorization.split(" ")[1];
   }
-
   if (!token) {
     res.status(401).json({ success: false, desc: "Not Authorized to Access" });
   }
