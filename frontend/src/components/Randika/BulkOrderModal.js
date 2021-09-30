@@ -64,7 +64,7 @@ const RevenueModal = ({ setModalVisible, modalVisible, currentOrder }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {currentOrder.map((row, index) => (
+                  {currentOrder.items.map((row, index) => (
                     <TableRow key={index}>
                       <TableCell align="center">{index + 1}</TableCell>
 
@@ -86,13 +86,11 @@ const RevenueModal = ({ setModalVisible, modalVisible, currentOrder }) => {
                         )}
                       </TableCell>
                       <TableCell align="center">
-                        <h1 className="font-bold text-md">
-                          {row.productID.publishingTitle}
-                        </h1>
+                        {row.productID && (
+                          <h1 className="font-bold text-md">{row.productID.publishingTitle}</h1>
+                        )}
                       </TableCell>
-                      <TableCell align="center">
-                        <h1 className="font-bold text-md">{row.quantity}</h1>
-                      </TableCell>
+                      <TableCell align="center"><h1 className="font-bold text-md">{row.quantity}</h1></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

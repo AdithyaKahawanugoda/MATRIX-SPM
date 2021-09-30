@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -13,26 +14,6 @@ import Paper from "@material-ui/core/Paper";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import UserModal from "./UserModal";
-
-function createData(col1, col2, col3, col4) {
-  return { col1, col2, col3, col4 };
-}
-
-const rows = [
-  createData("U985", "customer1", "cus1@gmail.com"),
-  createData("U986", "customer2", "cus2@gmail.com"),
-  createData("U987", "customer3", "cus3@gmail.com"),
-  createData("U988", "customer4", "cus4@gmail.com"),
-  createData("U989", "customer5", "cus5@gmail.com"),
-  createData("U910", "customer6", "cus6@gmail.com"),
-  createData("U911", "customer7", "cus7@gmail.com"),
-  createData("U912", "customer8", "cus8@gmail.com"),
-  createData("U913", "customer9", "cus9@gmail.com"),
-  createData("U914", "customer10", "cus10@gmail.com"),
-  createData("U915", "customer13", "cus11@gmail.com"),
-  createData("U916", "customer14", "cus12@gmail.com"),
-  createData("U917", "customer15", "cus13@gmail.com"),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,9 +37,9 @@ function stableSort(array, comparator, searchTerm) {
       if (searchTerm === "") {
         return val;
       } else if (
-        val.col1.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.col2.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.col3 === searchTerm
+        val._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        val.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        val.email.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
         return val;
       }
@@ -176,6 +157,30 @@ const AdminUsers = () => {
 
   const [userModalOpen, setUserModalOpen] = useState(false);
 
+  const [customers, setcustomers] = useState([]);
+  const [cusID, setcusID] = useState("");
+
+  const getCustomers = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getNewUsers", config)
+
+        .then((res) => {
+          setcustomers(res.data.customers);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -191,20 +196,21 @@ const AdminUsers = () => {
     setPage(0);
   };
 
+  useEffect(() => {
+    getCustomers();
+  }, []);
+
   return (
     <div className="w-11/12 h-auto p-4 mt-1 m-auto pt-5 rounded-xl bg-blueSapphire bg-opacity-30">
       <h1 className="text-4xl text-center text-prussianBlue font-bold mb-5">
         All Users
       </h1>
       <div className="w-full h-auto bg-white p-3 rounded-xl">
-        <div className="w-full mb-1 p-1 bg-blueSapphire bg-opacity-30 rounded-lg  h-14">
-          <SearchIcon
-            style={{ float: "left", fontSize: 40, marginLeft: "10px" }}
-          />
+        <div className="w-max mb-1 p-1 bg-blueSapphire rounded-lg  h-14 bg-opacity-30">
           <div className="w-2/3 h-16" style={{ float: "left" }}>
             <input
               type="text"
-              className="w-full h-11 p-5 "
+              className="w-60 h-11 p-5 rounded-3xl m-2 mt-0"
               id="code"
               placeholder="Search Here"
               value={searchTerm}
@@ -214,13 +220,26 @@ const AdminUsers = () => {
               style={{ float: "left" }}
             ></input>
           </div>
-          <ReplayIcon
-            style={{ float: "left" }}
-            className="m-3"
-            onClick={() => {
-              setsearchTerm("");
-            }}
-          />
+
+          {searchTerm && (
+            // <div className="cursor-pointer w-max mt-1 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+            //   <p
+            //     className=" text-white font-bold text-center text-sm"
+            //     onClick={() => {
+            //       setsearchTerm("");
+            //     }}
+            //   >
+            //     Clear
+            //   </p>
+            // </div>
+            <ReplayIcon
+              style={{ float: "left" }}
+              className="m-3"
+              onClick={() => {
+                setsearchTerm("");
+              }}
+            />
+          )}
         </div>
 
         <div className={classes.root}>
@@ -236,22 +255,26 @@ const AdminUsers = () => {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                  rowCount={customers.length}
                 />
                 <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy), searchTerm)
+                  {stableSort(
+                    customers,
+                    getComparator(order, orderBy),
+                    searchTerm
+                  )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .filter((val) => {
                       if (searchTerm === "") {
                         return val;
                       } else if (
-                        val.col1
+                        val._id
                           .toLowerCase()
                           .includes(searchTerm.toLowerCase()) ||
-                        val.col2
+                        val.username
                           .toLowerCase()
                           .includes(searchTerm.toLowerCase()) ||
-                        val.col3
+                        val.email
                           .toLowerCase()
                           .includes(searchTerm.toLowerCase())
                       ) {
@@ -269,13 +292,19 @@ const AdminUsers = () => {
                             id={labelId}
                             scope="row"
                             padding="none"
-                            align="center"
+                            align="left"
                             style={{ paddingLeft: "20px" }}
                           >
-                            {row.col1}
+                            <h1 className="font-bold text-md">{row._id}</h1>
                           </TableCell>
-                          <TableCell align="center">{row.col2}</TableCell>
-                          <TableCell align="center">{row.col3}</TableCell>
+                          <TableCell align="left">
+                            <h1 className="font-bold text-md">
+                              {row.username}
+                            </h1>
+                          </TableCell>
+                          <TableCell align="left">
+                            <h1 className="font-bold text-md">{row.email}</h1>
+                          </TableCell>
 
                           <TableCell align="center">
                             {" "}
@@ -290,6 +319,7 @@ const AdminUsers = () => {
                               }}
                               onClick={() => {
                                 setUserModalOpen(true);
+                                setcusID(row._id);
                               }}
                             >
                               Placed Orders
@@ -304,7 +334,7 @@ const AdminUsers = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={customers.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -317,6 +347,7 @@ const AdminUsers = () => {
         <UserModal
           setModalVisible={setUserModalOpen}
           modalVisible={userModalOpen}
+          cusID={cusID}
         />
       )}
     </div>

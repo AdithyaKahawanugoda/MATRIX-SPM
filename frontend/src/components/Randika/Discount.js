@@ -4,7 +4,6 @@ import ReactPaginate from "react-paginate";
 import { makeStyles } from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
-import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -62,7 +61,7 @@ const Discount = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [products, setProducts] = useState([]);
 
-  const bookPerPage = 8;
+  const bookPerPage = 10;
   const pageVisited = pageNumber * bookPerPage;
 
   // const handleChange = (event) => {
@@ -109,31 +108,46 @@ const Discount = () => {
     .slice(pageVisited, pageVisited + bookPerPage)
     .map((book, index) => {
       return (
-        <div className="w-1/4 h-28 mb-4" style={{ float: "left" }} key={index}>
-          <div className="w-full  ">
-            <Checkbox
-              style={{ float: "left" }}
-              inputProps={{
-                "aria-label": "uncontrolled-checkbox",
-              }}
-              onClick={() => {
-                selectedBook.push(book._id);
-              }}
-            />
-          </div>
-
-          <div className="w-4/5 h-28 ">
-            <div className="h-4/5">
-              <Image
-                className="w-full h-full object-contain "
-                cloudName="grid1234"
-                publicId={book.bookImage.imagePublicId}
-                style={{ width: "80px", height: "80px" }}
+        <div
+          className="w-1/4 h-full mb-4 "
+          style={{ float: "left" }}
+          key={index}
+        >
+          <div className="w-full h-full">
+            <div>
+              <Checkbox
+                style={{ float: "left" }}
+                inputProps={{
+                  "aria-label": "uncontrolled-checkbox",
+                }}
+                onClick={() => {
+                  selectedBook.push(book._id);
+                }}
               />
             </div>
 
-            <div className="w-full h-1/5 ml-10">
-              <h1>{book.publishingTitle}</h1>
+            <div className="w-4/5 h-full">
+              <div className=" h-full ">
+                {book.bookImage && (
+                  <Image
+                    className="w-full h-full object-contain "
+                    cloudName="grid1234"
+                    publicId={book.bookImage.imagePublicId}
+                    style={{ width: "70%", height: "150px" }}
+                  />
+                )}
+              </div>
+
+              <div className="w-full h-max ml-10">
+                <h1 className="  font-boldTallFont">{book.publishingTitle}</h1>
+              </div>
+              <div className="w-full h-max ml-10">
+                {book.discountPercentage.label && (
+                  <h1 className=" text-white font-boldTallFont bg-red-700 rounded-2xl w-max p-1">
+                    {book.discountPercentage.label}
+                  </h1>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -147,7 +161,7 @@ const Discount = () => {
   };
 
   useEffect(() => {
-    const getNewsletterItems = async () => {
+    const getProducts = async () => {
       try {
         await axios
           .get("http://localhost:6500/matrix/api/admin/getProducts")
@@ -161,7 +175,7 @@ const Discount = () => {
         alert("error :" + err);
       }
     };
-    getNewsletterItems();
+    getProducts();
   }, []);
 
   return (
@@ -321,18 +335,16 @@ const Discount = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={9}>
             <div>
-              <h1 className="ml-20 text-lg font-bold ">Select Books</h1>
+        
 
               <div className="w-2/3 mb-1 p-1 bg-blueSapphire rounded-lg  h-14 bg-opacity-30 m-auto">
-                <SearchIcon
-                  style={{ float: "left", fontSize: 40, marginLeft: "10px" }}
-                />
-                <div className="w-2/3 h-16" style={{ float: "left" }}>
+               
+                <div className="w-4/5 h-16" style={{ float: "left" }}>
                   <input
                     type="text"
-                    className="w-full h-11 p-5 "
+                    className="w-full h-11 p-5 rounded-3xl"
                     id="code"
-                    placeholder="Search Here"
+                    placeholder="Search book name here"
                     value={searchTerm}
                     onChange={(event) => {
                       setsearchTerm(event.target.value);

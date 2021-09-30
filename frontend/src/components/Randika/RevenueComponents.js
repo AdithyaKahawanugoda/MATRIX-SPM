@@ -9,13 +9,13 @@ const RevenueComponents = () => {
     <div className="w-full h-auto p-1   ">
       {!openRegularOrders && (
         <div
-          className="w-48  h-9 rounded-full bg-gamboge transform hover:scale-110 motion-reduce:transform-none"
+          className="w-48 pt-1 h-9 rounded-full bg-gamboge transform hover:scale-110 motion-reduce:transform-none"
           onClick={() => {
             setOpenRegularOrders(true);
           }}
         >
           <h1
-            className=" text-lg font-bold text-center m-auto mt-1"
+            className=" text-lg font-bold text-center m-auto"
             style={{ color: "white" }}
           >
             View Regular Orders
@@ -25,13 +25,13 @@ const RevenueComponents = () => {
 
       {openRegularOrders && (
         <div
-          className="w-48  h-9 rounded-full bg-gamboge transform hover:scale-110 motion-reduce:transform-none"
+          className="w-48  h-9 pt-1 rounded-full bg-gamboge transform hover:scale-110 motion-reduce:transform-none"
           onClick={() => {
             setOpenRegularOrders(false);
           }}
         >
           <h1
-            className=" text-lg font-bold text-center m-auto mt-1"
+            className=" text-lg font-bold text-center m-auto "
             style={{ color: "white" }}
           >
             View Bulk Orders

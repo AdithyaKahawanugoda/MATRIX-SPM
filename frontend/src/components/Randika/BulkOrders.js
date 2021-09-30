@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import moment from "moment";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -10,29 +12,10 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import ReplayIcon from "@material-ui/icons/Replay";
 
 import TextField from "@material-ui/core/TextField";
-
-function createData(col1, col2, col3, col4, col5, col6) {
-  return { col1, col2, col3, col4, col5, col6 };
-}
-
-const rows = [
-  createData("O4567", "Gunasena PVT LTD", "B108", 37, 67430, "2021-05-25"),
-  createData("O4578", "Samudra", "B105", 250, 51490, "2021-05-24"),
-  createData("O7890", "Sarasavi", "B856", 160, 24600, "2021-05-24"),
-  createData("O6709", "Lake House", "B856", 159, 60240, "2021-05-24"),
-  createData("O6789", "Sarasavi", "B896", 16, 4939, "2021-05-25"),
-  createData("O8976", "Gunasena PVT LTD", "B853", 32, 8765, "2021-05-24"),
-  createData("O6704", "Lake House", "B896", 90, 3743, "2021-05-24"),
-  createData("O5678", "Sarasavi", "B236", 50, 9400, "2021-05-24"),
-  createData("O4578", "Sarasavi", "B846", 260, 6570, "2021-05-25"),
-  createData("O6704", "Samudra", "B813", 225, 9800, "2021-05-24"),
-  createData("O9856", "Samudra", "B896", 586, 8120, "2021-05-24"),
-  createData("O8932", "Gunasena PVT LTD", "B812", 190, 9370, "2021-05-24"),
-  createData("O8963", "Gunasena PVT LTD", "B823", 180, 6340, "2021-05-25"),
-];
+import BulkOrderModal from "./BulkOrderModal";
+import generatePDF from "./AdminRevenueReports";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -49,13 +32,16 @@ function getComparator(order, orderBy) {
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
 function stableSort(array, comparator, searchDate) {
   const stabilizedThis = array
     .filter((val) => {
       if (searchDate === "") {
         return val;
-      } else if (val.col6.toLowerCase().includes(searchDate.toLowerCase())) {
+      } else if (
+        moment(val.placedAt)
+          .format("YYYY-MM-DD")
+          .includes(searchDate.toLowerCase())
+      ) {
         return val;
       }
       return null;
@@ -77,10 +63,10 @@ const headCells = [
     label: "Order ID",
   },
   { id: "col2", numeric: true, disablePadding: false, label: "Customer" },
-  { id: "col3", numeric: true, disablePadding: false, label: "Book ID" },
-  { id: "col4", numeric: true, disablePadding: false, label: "QTY" },
-  { id: "col5", numeric: true, disablePadding: false, label: "Net Tot" },
-  { id: "col6", numeric: true, disablePadding: false, label: "Date" },
+  { id: "col3", numeric: true, disablePadding: false, label: "Items" },
+  { id: "col4", numeric: true, disablePadding: false, label: "Net Tot" },
+  { id: "col5", numeric: true, disablePadding: false, label: "Date" },
+  { id: "col6", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -92,9 +78,9 @@ function EnhancedTableHead(props) {
   return (
     <TableHead className=" bg-blueSapphire">
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
-            key={headCell.id}
+            key={index}
             align={"center"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -163,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BulkOrders = () => {
+const RegularOrders = () => {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -171,7 +157,29 @@ const BulkOrders = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchDate, setsearchDate] = useState("");
+  const [bulkorders, setbulkorders] = useState([]);
+  const [currentOrder, setCurrentOrder] = useState("");
 
+  const [revenueModalOpen, setRevenueModalOpen] = useState(false);
+
+  const getBulkOrders = async () => {
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getBulkOrders")
+        .then((res) => {
+          setbulkorders(res.data.bulkorders);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  useEffect(() => {
+    getBulkOrders();
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -193,6 +201,45 @@ const BulkOrders = () => {
       <h1 className="text-4xl text-center text-prussianBlue font-bold mb-5">
         Bulk Orders
       </h1>
+
+      <div className="w-11/12 h-10  m-auto mb-2">
+        <button
+          type="submit"
+          className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-48 h-10 sm:w-80 sm:h-12 bg-gamboge  float-right"
+          style={{
+            boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+            color: "white",
+          }}
+          onClick={() => {
+            if (!searchDate) {
+              generatePDF(bulkorders, "bulk");
+            }
+            if (searchDate) {
+              let filteredRegularOrders = [];
+              bulkorders
+                .filter((val) => {
+                  if (searchDate === "") {
+                    return val;
+                  } else if (
+                    moment(val.placedAt)
+                      .format("YYYY-MM-DD")
+                      .includes(searchDate.toLowerCase())
+                  ) {
+                    return val;
+                  }
+                  return null;
+                })
+                .map((regOrders) => {
+                  return filteredRegularOrders.push(regOrders);
+                });
+
+              generatePDF(filteredRegularOrders, "bulk");
+            }
+          }}
+        >
+          Generate Report
+        </button>
+      </div>
       <div className="w-full h-auto bg-white p-3 rounded-xl">
         <div className="w-full h-16 mb-1 p-1 bg-blueSapphire bg-opacity-30 rounded-lg">
           <div className="w-max h-16" style={{ float: "left" }}>
@@ -201,7 +248,9 @@ const BulkOrders = () => {
                 id="date"
                 label="Choose Date"
                 type="date"
-                defaultValue="2021-05-23"
+                defaultValue={moment(new Date())
+                  .format("YYYY-MM-DD")
+                  .includes(searchDate.toLowerCase())}
                 className={classes.textField}
                 InputLabelProps={{
                   shrink: true,
@@ -212,13 +261,18 @@ const BulkOrders = () => {
               />
             </form>
           </div>
-          <ReplayIcon
-            style={{ float: "left" }}
-            className="m-4"
-            onClick={() => {
-              setsearchDate("");
-            }}
-          />
+          {searchDate && (
+            <div className="cursor-pointer w-max mt-3 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+              <p
+                className=" text-white font-bold text-center text-sm"
+                onClick={() => {
+                  setsearchDate("");
+                }}
+              >
+                Clear
+              </p>
+            </div>
+          )}
         </div>
 
         <div className={classes.root}>
@@ -234,17 +288,21 @@ const BulkOrders = () => {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                  rowCount={bulkorders.length}
                 />
                 <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy), searchDate)
+                  {stableSort(
+                    bulkorders,
+                    getComparator(order, orderBy),
+                    searchDate
+                  )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .filter((val) => {
                       if (searchDate === "") {
                         return val;
                       } else if (
-                        val.col6
-                          .toLowerCase()
+                        moment(val.placedAt)
+                          .format("YYYY-MM-DD")
                           .includes(searchDate.toLowerCase())
                       ) {
                         return val;
@@ -253,7 +311,7 @@ const BulkOrders = () => {
                     })
                     .map((row, index) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
-               
+
                       return (
                         <TableRow hover tabIndex={-1} key={index}>
                           <TableCell
@@ -264,37 +322,63 @@ const BulkOrders = () => {
                             align="left"
                             style={{ paddingLeft: "20px" }}
                           >
-                            {row.col1}
+                            <h1 className="font-bold text-md">{row._id}</h1>
                           </TableCell>
                           <TableCell
                             align="left"
                             style={{ paddingLeft: "45px" }}
                           >
-                            {row.col2}
+                            <h1 className="font-bold text-md">
+                              {" "}
+                              {row.retailShop}
+                            </h1>
                           </TableCell>
                           <TableCell
                             align="left"
                             style={{ paddingLeft: "35px" }}
                           >
-                            {row.col3}
+                            <h1 className="font-bold text-md">
+                              {row.items.length}
+                            </h1>
                           </TableCell>
                           <TableCell
                             align="left"
                             style={{ paddingLeft: "28px" }}
                           >
-                            {row.col4}
+                            <h1 className="font-bold text-md">
+                              Rs.{row.payment.totalAmount}
+                            </h1>
                           </TableCell>
                           <TableCell
                             align="left"
                             style={{ paddingLeft: "28px" }}
                           >
-                            Rs.{row.col5}
+                            <h1 className="font-bold text-md">
+                              {moment(row.placedAt).format("MM-DD-YYYY")}
+                            </h1>
                           </TableCell>
+
                           <TableCell
                             align="left"
-                            style={{ paddingLeft: "28px" }}
+                            style={{ paddingLeft: "20px" }}
                           >
-                            {row.col6}
+                            {" "}
+                            <button
+                              type="submit"
+                              className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12"
+                              style={{
+                                boxShadow:
+                                  "0px 10px 15px rgba(3, 17, 86, 0.25)",
+                                float: "right",
+                                color: "white",
+                              }}
+                              onClick={() => {
+                                setRevenueModalOpen(true);
+                                setCurrentOrder(row);
+                              }}
+                            >
+                              View More
+                            </button>
                           </TableCell>
                         </TableRow>
                       );
@@ -305,7 +389,7 @@ const BulkOrders = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={bulkorders.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -314,8 +398,15 @@ const BulkOrders = () => {
           </Paper>
         </div>
       </div>
+      {revenueModalOpen && (
+        <BulkOrderModal
+          setModalVisible={setRevenueModalOpen}
+          modalVisible={revenueModalOpen}
+          currentOrder={currentOrder}
+        />
+      )}
     </div>
   );
 };
 
-export default BulkOrders;
+export default RegularOrders;

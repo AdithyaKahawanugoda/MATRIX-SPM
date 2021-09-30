@@ -12,7 +12,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
 
 const AdminNewsletter = () => {
-  const [addNewItemOpen, setAddNewItemOpen] = useState(false);
+  const [addNewItemOpen, setAddNewItemOpen] = useState(true);
 
   const [searchTerm, setsearchTerm] = useState("");
 
@@ -29,9 +29,14 @@ const AdminNewsletter = () => {
   useEffect(() => {
     const getNewsletterItems = async () => {
       const array = [];
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
       try {
         await axios
-          .get("http://localhost:6500/matrix/api/admin/getNewsletters")
+          .get("http://localhost:6500/matrix/api/admin/getNewsletters", config)
           .then((res) => {
             for (let i = res.data.Newsletters.length - 1; i >= 0; i--) {
               array.push(res.data.Newsletters[i]);
@@ -75,30 +80,41 @@ const AdminNewsletter = () => {
           <Grid container spacing={1} className="bg-white rounded-lg">
             <Grid item xs={12} sm={6} md={9}>
               <div className=" m-1 pr-10">
-                <div className="w-full mb-1 p-1 mt-3 bg-lightSilver rounded-lg  h-14">
-                  <SearchIcon
-                    style={{ float: "left", fontSize: 40, marginLeft: "10px" }}
-                  />
-                  <div className="w-11/12 h-16 " style={{ float: "left" }}>
-                    <input
-                      type="text"
-                      className="w-5/6 h-11 p-5 "
-                      id="code"
-                      placeholder="Search Here"
-                      value={searchTerm}
-                      onChange={(event) => {
-                        setsearchTerm(event.target.value);
-                      }}
-                      style={{ float: "left" }}
-                    ></input>
+                <div className="w-max mb-1 p-1 mt-3 bg-lightSilver rounded-lg  h-14">
+                  <div className="w-max h-16 " style={{ float: "left" }}>
+                    <div className="w-max h-16" style={{ float: "left" }}>
+                      <input
+                        type="text"
+                        className="w-60 h-11 p-5 rounded-3xl m-2 mt-0"
+                        id="code"
+                        placeholder="Search Here"
+                        value={searchTerm}
+                        onChange={(event) => {
+                          setsearchTerm(event.target.value);
+                        }}
+                        style={{ float: "left" }}
+                      ></input>
+                    </div>
 
-                    <ReplayIcon
-                      style={{ float: "left" }}
-                      className="m-3"
-                      onClick={() => {
-                        setsearchTerm("");
-                      }}
-                    />
+                    {searchTerm && (
+                      // <div className="cursor-pointer w-max mt-1 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+                      //   <p
+                      //     className=" text-white font-bold text-center text-sm"
+                      //     onClick={() => {
+                      //       setsearchTerm("");
+                      //     }}
+                      //   >
+                      //     Clear
+                      //   </p>
+                      // </div>
+                      <ReplayIcon
+                        style={{ float: "left" }}
+                        className="m-3"
+                        onClick={() => {
+                          setsearchTerm("");
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -130,11 +146,10 @@ const AdminNewsletter = () => {
             style={{ maxHeight: "500px" }}
           >
             {newsletterItems
-              .filter((val) => {               
+              .filter((val) => {
                 if (searchTerm === "") {
                   return val;
-                } else
-                 if (
+                } else if (
                   val.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   val.description
                     .toLowerCase()
@@ -148,7 +163,7 @@ const AdminNewsletter = () => {
               .map((row, index) => {
                 return (
                   <div
-                    className="w-2/3 h- m-auto bg-white shadow-2xl "
+                    className="w-2/3 h- m-auto bg-white shadow-2xl rounded-lg"
                     key={index}
                   >
                     <div className=" h-96 m-5 pt-5">
@@ -169,7 +184,7 @@ const AdminNewsletter = () => {
                         <div className="w-1/3  h-60" style={{ float: "left" }}>
                           <div className="w-full h-full p-1">
                             <Image
-                              className="w-full h-full object-contain"
+                              className="w-full h-full object-contain "
                               cloudName="grid1234"
                               publicId={row.coverImage.imagePublicId}
                             />

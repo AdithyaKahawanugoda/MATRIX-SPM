@@ -5,6 +5,7 @@ const sendEmail = require("../utils/SendEmail");
 const OrderModel = require("../models/order-model");
 const RequestBook = require("../models/requestBook-model");
 const ProductModel = require("../models/product-model");
+const ReviewModel = require("../models/review-model");
 const mongoose = require("mongoose");
 // const easyinvoice = require('easyinvoice');
 // const fs = require('fs');
@@ -263,7 +264,7 @@ exports.addOrder = async (req, res) => {
   const buyerID = req.user._id;
   let address = req.user.address;
 
-  const { billAmount, deliveryAddress, deliveryFee, orderData } = req.body;
+  const { billAmount, deliveryAddress,  orderData } = req.body;
 
   if (req.body.deliveryAddress) {
     address = deliveryAddress;
@@ -274,7 +275,6 @@ exports.addOrder = async (req, res) => {
       buyerID,
       billAmount,
       deliveryAddress: address,
-      deliveryFee,
       orderData,
     });
 
@@ -321,8 +321,6 @@ const updateStock = async (inStockQuantity, id) => {
   console.log(updateQty);
 };
 
-
-
 //Request Translation Book
 exports.createRequestBook = async(req,res) => {
     const {
@@ -349,6 +347,178 @@ exports.createRequestBook = async(req,res) => {
         });
     }
 };
+
+//add product to wishlist (Update method)
+exports.addToWishList = async (req, res) => {
+    const productID = req.body.productID;
+    const prName = req.body.pName;
+    const pImg = req.body.pimg;
+    const uPrice = req.body.unitPrice;
+    const bookauthor = req.body.bAuthor;
+    const description = req.body.about;
+    const bookWeight = req.body.weight;
+    const CustomerId = req.user._id;
+  
+    try {
+      const wishlist = {
+        productID: productID,
+        proName: prName,
+        proImg: pImg,
+        unitPrice: uPrice,
+        originalAuthor:bookauthor,
+        aboutBook:description,
+        weight:bookWeight
+      };
+  
+      await CustomerModel.findOneAndUpdate(
+        { _id: CustomerId },
+        { $push: { wishList: wishlist } },
+        {
+          new: true,
+          upsert: false,
+        }
+      );
+      res.status(200).send({ status: "Product Added to Wishlist" });
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  };
+
+//fetch wishlist from specific customer
+exports.getWishlist = async (req, res) => {
+    let cusId = req.user._id;
+    await CustomerModel.findById(cusId)
+      .then((customer) => {
+        res
+          .status(200)
+          .send({ status: "Wishlist fetched", wishlist: customer.wishList });
+      })
+      .catch((err) => {
+        res.status(500).send({
+          status: "Error in fetching customer (Internal Server Error)",
+          error: err.message,
+        });
+      });
+  };
+
+  //remove items from wishlist
+exports.removeItemsFromWishlist = async (req, res) => {
+    const itemId = req.body.id;
+    try {
+      const customer = req.user._id;
+      await CustomerModel.updateOne(
+        { _id: customer },
+        { $pull: { wishList: { _id: itemId } } }
+      );
+  
+      res.status(200).send({
+        status: "product removed from the list",
+      });
+    } catch (error) {
+      res.status(500).send({
+        status: "Internal Server Error in wishlist item delete",
+        error: error.message,
+      });
+    }
+  };
+
+  //add Review
+  exports.createReview = async(req,res) => {
+    const {
+        proID,
+        bName,
+        rate,
+        comments,
+    } = req.body;
+    const cusID = req.user._id;
+
+
+    try{
+        const review = await ReviewModel.create({
+            productId:proID,
+            customerId:cusID,
+            bookName:bName,
+            rating:rate,
+            comment:comments
+           
+        });
+        res.status(201).json(review);
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            desc:"Error in adding Review for the book",
+            error:error.message,
+        });
+    }
+};
+
+//edit Review
+exports.updateReview = async (req, res) => {
+    const {
+        reviewId,
+        productId,
+        bookName,
+        rating,
+        comment,
+    } = req.body;
+  
+    if (!mongoose.Types.ObjectId.isValid(reviewId))
+      return res.status(404).send(`No review with id: ${reviewId}`);
+  
+    
+  
+    const updatedReview = {
+      customerId: req.user._id,
+      productId,
+      bookName,
+      rating,
+      comment,
+      _id:reviewId ,
+    };
+  
+    try {
+      let upReview = await  ReviewModel.findByIdAndUpdate(
+        { _id: reviewId },
+        updatedReview,
+        {
+          new: true,
+          upsert: false,
+          omitUndefined:true
+        }
+      );
+      res.status(200).json({ status: "Review updated successfully", upReview });
+    } catch (error) {
+      res.status(500).json({ status: "Internal server error", error });
+    }
+  };
+
+
+  //delete review
+  exports.deleteReview = async (req, res) => {
+    const { reviewId } = req.body;
+  
+    if (!mongoose.Types.ObjectId.isValid(reviewId))
+      return res.status(404).send(`No Review with id: ${reviewId}`);
+  
+    try {
+      await ReviewModel.findByIdAndRemove(reviewId);
+      res.status(200).json({ status: "Review deleted" });
+    } catch (error) {
+      res.status(500).json({ status: "Internal server error", error });
+    }
+  };
+
+  //get Reviews
+  exports.getReviews = async (req, res) => {
+    await ReviewModel.find({ customerId: req.user._id })
+      .populate("productId")
+      .exec((error, reviews) => {
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        res.status(200).json({ reviews });
+      });
+  };
 
 // //invoice generation
 // // IMAGE PATH

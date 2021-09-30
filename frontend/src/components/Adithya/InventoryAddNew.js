@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
+import axios from "axios";
+
 import * as Yup from "yup";
 import { Formik } from "formik";
+
+import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import { Hidden } from "@material-ui/core";
+import PropagateLoader from "react-spinners/ScaleLoader";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 // Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import axios from "axios";
-import { Hidden } from "@material-ui/core";
-import PropagateLoader from "react-spinners/ScaleLoader";
 // Register the plugins
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -27,6 +34,7 @@ const validationSchema = Yup.object({
   originalAuthor: Yup.string().trim().required("Required"),
   aboutAuthor: Yup.string().trim().required("Required"),
   aboutBook: Yup.string().trim().required("Required"),
+  category: Yup.string().trim().required("Required"),
   ISBN: Yup.string().trim().required("Required"),
   license: Yup.bool().required("Required"),
   quantity: Yup.number()
@@ -89,6 +97,7 @@ const InventoryAddNew = () => {
             aboutAuthor: "",
             aboutBook: "",
             ISBN: "",
+            category: "",
             license: false,
             quantity: "",
             edition: "",
@@ -111,22 +120,28 @@ const InventoryAddNew = () => {
           validationSchema={validationSchema}
           onSubmit={async (values, { resetForm }) => {
             // values.encImg = file[0].getFileEncodeDataURL();
-
+            setLoading(true);
             console.log(values);
+            const config = {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+              },
+            };
             await axios
               .post(
-                "http://localhost:6500/matrix/api/inventoryManager/addbook",
-                values
+                "http://localhost:6500/matrix/api/inventoryManager/add-book",
+                values,
+                config
               )
               .then((res) => {
                 setLoading(false);
+                alert(res.data.desc);
                 resetForm();
                 setFile("");
-                alert("Data Saved Successfully");
               })
               .catch((err) => {
                 setLoading(false);
-                console.log(err);
+                alert(err.response.data.desc);
               });
           }}
         >
@@ -134,13 +149,11 @@ const InventoryAddNew = () => {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                setLoading(true);
+                setLoading(false);
                 if (file[0] !== undefined) {
                   values.encImg = file[0].getFileEncodeDataURL();
-                  // alert(JSON.stringify(values, null, 4));
                   handleSubmit();
                 } else {
-                  setLoading(false);
                   alert("Please Upload Cover Image");
                 }
               }}
@@ -306,6 +319,42 @@ const InventoryAddNew = () => {
                     {errors.edition && touched.edition ? (
                       <div className="text-ferrariRed font-black text-xs mt-1 md:text-sm">
                         {errors.edition}
+                      </div>
+                    ) : null}
+                  </div>
+                </Grid>
+                <Grid item xs={11}>
+                  <div>
+                    <Box>
+                      <FormControl fullWidth>
+                        <InputLabel id="category">Category</InputLabel>
+                        <Select
+                          labelId="category"
+                          id="category"
+                          value={values.category}
+                          label="Age"
+                          onChange={handleChange("category")}
+                        >
+                          <MenuItem value={"Novels"}>Novels</MenuItem>
+                          <MenuItem value={"Historical"}>Historical</MenuItem>
+                          <MenuItem value={"Literary"}>Literary</MenuItem>
+                          <MenuItem value={"Military & Western"}>
+                            Military &amp; Western
+                          </MenuItem>
+                          <MenuItem value={"Romance"}>Romance</MenuItem>
+                          <MenuItem value={"Spiritual"}>Spiritual</MenuItem>
+                          <MenuItem value={`Women's Fiction`}>
+                            Women's Fiction
+                          </MenuItem>
+                          <MenuItem value={"Sci-Fi & Fantasy"}>
+                            Sci-Fi &amp; Fantasy
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                    {errors.category && touched.category ? (
+                      <div className="text-ferrariRed font-black text-xs mt-1 md:text-sm">
+                        {errors.category}
                       </div>
                     ) : null}
                   </div>

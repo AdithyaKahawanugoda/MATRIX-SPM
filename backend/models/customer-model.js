@@ -74,7 +74,6 @@ const CustomerSchema = new mongoose.Schema({
       },
       weight: {
         type: Number,
-        required: true,
       },
     },
   ],
@@ -83,6 +82,24 @@ const CustomerSchema = new mongoose.Schema({
       productID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "products",
+      },
+      proName: {
+        type: String,
+      },
+      proImg: {
+        type: String,
+      },
+      unitPrice: {
+        type: Number,
+      },
+      originalAuthor: {
+        type: String,
+      },
+      aboutBook: {
+        type: String,
+      },
+      weight: {
+        type: Number,
       },
       createdAt: {
         type: Date,

@@ -3,16 +3,13 @@ import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
 
-const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
-  const [message, setmessage] = useState("");
+const AddToDoModal = ({ setModalVisible, modalVisible }) => {
+  const [newToDo, setnewToDo] = useState("");
 
-  const reply = async () => {
+  const DeleteToDo = async (toDo) => {
     let dataObject = {
-      messageId: messageID,
-      reply: message,
-      email: email,
+      toDoItem: newToDo,
     };
-
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -22,7 +19,7 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
     try {
       await axios
         .put(
-          "http://localhost:6500/matrix/api/admin/replyToCustomers",
+          "http://localhost:6500/matrix/api/admin/addToDos",
           dataObject,
           config
         )
@@ -56,12 +53,12 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            reply();
+            DeleteToDo();
           }}
         >
           <Grid container spacing={1}>
             <Grid item md={4}>
-              <div className="ml-10">Reply</div>
+              <div className="ml-10">New TODO</div>
             </Grid>
             <Grid item md={6}>
               <div>
@@ -69,11 +66,11 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
                   className="focus:outline-none w-full pb-2 md:pb-3 border-gray-400 border-2 focus:border-blue-900 text-base bg-white"
                   id="description"
                   type="text"
-                  value={message}
+                  value={newToDo}
                   rows={5}
                   cols={5}
                   onChange={(event) => {
-                    setmessage(event.target.value);
+                    setnewToDo(event.target.value);
                   }}
                 />
               </div>
@@ -89,7 +86,7 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
                   color: "white",
                 }}
               >
-                Send
+                Add
               </button>
             </Grid>
           </Grid>
@@ -99,4 +96,4 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
   );
 };
 
-export default ReplyFaqModal;
+export default AddToDoModal;

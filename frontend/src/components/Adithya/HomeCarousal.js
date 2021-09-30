@@ -1,30 +1,67 @@
-import React from "react";
-import { Carousel } from "3d-react-carousal";
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import { Image } from "cloudinary-react";
+import axios from "axios";
 
 const HomeCarousal = () => {
-  const slides = [
-    <img
-      src="https://i.ibb.co/CPj0sp3/788e1231394987-565223964b48b-1.jpg"
-      alt="1"
-    />,
-    <img src="https://i.ibb.co/GVWBjmX/Post-2-1.jpg" alt="2" />,
-    <img src="https://i.ibb.co/PDQdVmC/Nanda-new-tiles-1.jpg" alt="3" />,
-    <img src="https://i.ibb.co/0rJpLPQ/Twenty-chickens3-1.jpg" alt="4" />,
-    <img
-      src="https://i.ibb.co/HnGnJfC/0a2c5791114015-5e2914b05db02-1-1.jpg"
-      alt="5"
-    />,
-  ];
+  const [bookData, setBookData] = useState(null);
+  const newArrivals = [];
+
+  useEffect(() => {
+    const getAllBooks = async () => {
+      await axios
+        .get("http://localhost:6500/matrix/api/inventoryManager/get-books")
+        .then((res) => {
+          setBookData(res?.data?.allBooks);
+          // filterImages();
+        })
+        .catch((err) => {
+          alert(err?.response?.data?.desc);
+        });
+    };
+    getAllBooks();
+  }, []);
+
+  const settings = {
+    className: "center",
+    centerMode: true,
+    infinite: true,
+    centerPadding: "60px",
+    slidesToShow: 3,
+    speed: 500,
+    dots: true,
+  };
 
   return (
-    <>
-      <Carousel slides={slides} autoplay={false} arrows={false} />
-      <div className="text-center text-2xl my-8">
+    <div className="grid-flow-col col-span-2 pt-4">
+      <div className="mx-20">
+        {bookData && (
+          <Slider {...settings}>
+            {bookData.map((item, index) => {
+              if (item.bookImage?.imagePublicId && index < 6) {
+                return (
+                  <div key={index}>
+                    <Image
+                      className="rounded"
+                      cloudName="grid1234"
+                      publicId={item.bookImage.imagePublicId}
+                      onClick={() => {
+                        alert(item._id);
+                      }}
+                    />
+                  </div>
+                );
+              }
+            })}
+          </Slider>
+        )}
+      </div>
+      <div className="text-center text-2xl mt-8">
         <button className="border border-2 px-3 py-1 font-boldTallFont rounded bg-gamboge">
           Explore
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
