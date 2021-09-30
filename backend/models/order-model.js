@@ -20,7 +20,6 @@ const OrderSchema = new mongoose.Schema({
   },
   deliveryFee: {
     type: Number,
-    required: true,
 	  default: 200,
   },
   purchasedDate: {
