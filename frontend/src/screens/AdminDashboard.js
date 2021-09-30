@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import PropTypes from "prop-types";
@@ -78,6 +79,33 @@ function ResponsiveDrawer(props) {
   const [OpenBookRequest, setopenBookRequest] = useState(false);
   const [addedDiscountsOpen, setAddedDiscountsOpen] = useState(false);
 
+  const [img, setImg] = useState("");
+  const [username, setusername] = useState("");
+
+  const getAdmin = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getAdmin", config)
+        .then((res) => {
+          setImg(res.data.Admin.profilePicture);
+          setusername(res.data.Admin.username);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  useEffect(() => {
+    getAdmin();
+  }, []);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -87,13 +115,13 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <div className="mt-10 mx-16 mb-3">
         <Avatar
-          style={{ width: "100px", height: "100px", margin: "auto" }}
-          src="https://i.ibb.co/RcCBbZZ/imgonline-com-ua-resize-1w-Bbm-Or6qqh.jpg"
+          style={{ width: "120px", height: "120px", margin: "auto" }}
+          src={img.imageSecURL}
         />
       </div>
       <div className="mt-2 mx-5 mb-8">
         <Typography variant="h6" noWrap className="text-center">
-          Admin
+          {username}
         </Typography>
       </div>
       <List>

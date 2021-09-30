@@ -13,6 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 import UpdateDiscountModal from "./UpdateDiscountModal";
+import ReplayIcon from "@material-ui/icons/Replay";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -194,10 +195,16 @@ const AddedDiscounts = () => {
   };
 
   useEffect(() => {
-    const getNewsletterItems = async () => {
+    const getProducts = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
       try {
         await axios
-          .get("http://localhost:6500/matrix/api/admin/getProducts")
+          .get("http://localhost:6500/matrix/api/admin/getProducts", config)
+
           .then((res) => {
             let testLables = [];
             let testProducts = [];
@@ -231,7 +238,7 @@ const AddedDiscounts = () => {
         alert("error :" + err);
       }
     };
-    getNewsletterItems();
+    getProducts();
   }, []);
 
   return (
@@ -247,19 +254,18 @@ const AddedDiscounts = () => {
               onChange={(event) => {
                 setsearchTerm(event.value);
               }}
-              className="basic-multi-select"
+              className="basic-multi-select "
             />
           </div>
-          <div
-            className="w-max bg-gamboge float-left h-8 rounded-full p-3 mt-1 pt-1 ml-6"
+         
+
+          <ReplayIcon
+            style={{ float: "left" }}
+            className="m-3"
             onClick={() => {
               setsearchTerm("");
             }}
-          >
-            <h1 className="lg:text-xl md:text-sm sm:text-sm   font-bold mb-5   font-thinFont text-white">
-              VIEW ALL
-            </h1>
-          </div>
+          />
         </div>
 
         <div className={classes.root}>

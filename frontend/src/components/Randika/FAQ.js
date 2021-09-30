@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -13,90 +14,6 @@ import Paper from "@material-ui/core/Paper";
 import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
 import ReplyFaqModal from "./ReplyFaqModal";
-
-function createData(col1, col2, col3, col4) {
-  return { col1, col2, col3, col4 };
-}
-
-const rows = [
-  createData(
-    "U456",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus1@gmail.com"
-  ),
-  createData(
-    "U457",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus2@gmail.com"
-  ),
-  createData(
-    "U789",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus3@gmail.com"
-  ),
-  createData(
-    "U670",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-    "cus4@gmail.com"
-  ),
-  createData(
-    "U678",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus5@gmail.com"
-  ),
-  createData(
-    "U897",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus6@gmail.com"
-  ),
-  createData(
-    "U670",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus7@gmail.com"
-  ),
-  createData(
-    "U567",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus8@gmail.com"
-  ),
-  createData(
-    "U457",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus9@gmail.com"
-  ),
-  createData(
-    "U670",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus10@gmail.com"
-  ),
-  createData(
-    "U985",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus11@gmail.com"
-  ),
-  createData(
-    "U893",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus12@gmail.com"
-  ),
-  createData(
-    "U896",
-    "5JTeVaw Z4jDXC zuYpC OIYAV64hU fD4pM kklFJ/b/ Qu01lhc by3N5T4 tUGitnV ysi9qEx 7wRiGOc lNi6Gt e3LZev 56v57 9A5t 9rfK1 o+Pec. 5Z1TEAQ8i HPZhmdPP P3csV EUNSp test des",
-
-    "cus13@gmail.com"
-  ),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -119,11 +36,7 @@ function stableSort(array, comparator, searchTerm) {
     .filter((val) => {
       if (searchTerm === "") {
         return val;
-      } else if (
-        val.col1.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.col2.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.col3 === searchTerm
-      ) {
+      } else if (val.email.toLowerCase().includes(searchTerm.toLowerCase())) {
         return val;
       }
       return null;
@@ -142,11 +55,12 @@ const headCells = [
     id: "col1",
     numeric: false,
     disablePadding: true,
-    label: "Customer ID",
+    label: "Message",
   },
-  { id: "col2", numeric: true, disablePadding: false, label: "Message" },
+  { id: "col2", numeric: true, disablePadding: false, label: "Contact No" },
   { id: "col3", numeric: true, disablePadding: false, label: "Email" },
-  { id: "col4", numeric: true, disablePadding: false, label: "" },
+  { id: "col4", numeric: true, disablePadding: false, label: "Reply" },
+  { id: "col5", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -237,8 +151,31 @@ const FAQ = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchTerm, setsearchTerm] = useState("");
+  const [messageID, setmessageID] = useState("");
+  const [email, setemail] = useState("");
 
   const [replyModalOpen, setReplyModalOpen] = useState(false);
+
+  const [messages, setMessages] = useState([]);
+
+  const getCustomers = async () => {
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getCustomerMessages")
+        .then((res) => {
+          setMessages(res.data.messages);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  useEffect(() => {
+    getCustomers();
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -261,14 +198,11 @@ const FAQ = () => {
         Customer Messages
       </h1>
       <div className="w-full h-auto bg-white p-3 rounded-xl">
-        <div className="w-full mb-1 p-1 bg-blueSapphire bg-opacity-30 r rounded-lg  h-14">
-          <SearchIcon
-            style={{ float: "left", fontSize: 40, marginLeft: "10px" }}
-          />
+        <div className="w-max mb-1 p-1 bg-blueSapphire rounded-lg  h-14 bg-opacity-30">
           <div className="w-2/3 h-16" style={{ float: "left" }}>
             <input
               type="text"
-              className="w-full h-11 p-5 "
+              className="w-60 h-11 p-5 rounded-3xl m-2 mt-0"
               id="code"
               placeholder="Search Here"
               value={searchTerm}
@@ -278,13 +212,26 @@ const FAQ = () => {
               style={{ float: "left" }}
             ></input>
           </div>
-          <ReplayIcon
-            style={{ float: "left" }}
-            className="m-3"
-            onClick={() => {
-              setsearchTerm("");
-            }}
-          />
+
+          {searchTerm && (
+            // <div className="cursor-pointer w-max mt-1 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+            //   <p
+            //     className=" text-white font-bold text-center text-sm"
+            //     onClick={() => {
+            //       setsearchTerm("");
+            //     }}
+            //   >
+            //     Clear
+            //   </p>
+            // </div>
+            <ReplayIcon
+              style={{ float: "left" }}
+              className="m-3"
+              onClick={() => {
+                setsearchTerm("");
+              }}
+            />
+          )}
         </div>
 
         <div className={classes.root}>
@@ -300,22 +247,26 @@ const FAQ = () => {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                  rowCount={messages.length}
                 />
                 <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy), searchTerm)
+                  {stableSort(
+                    messages,
+                    getComparator(order, orderBy),
+                    searchTerm
+                  )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .filter((val) => {
+                      if (val.department !== "delivery") {
+                        return val;
+                      }
+                      return null;
+                    })
                     .filter((val) => {
                       if (searchTerm === "") {
                         return val;
                       } else if (
-                        val.col1
-                          .toLowerCase()
-                          .includes(searchTerm.toLowerCase()) ||
-                        val.col2
-                          .toLowerCase()
-                          .includes(searchTerm.toLowerCase()) ||
-                        val.col3
+                        val.email
                           .toLowerCase()
                           .includes(searchTerm.toLowerCase())
                       ) {
@@ -336,19 +287,38 @@ const FAQ = () => {
                             align="left"
                             style={{ paddingLeft: "20px" }}
                           >
-                            {row.col1}
+                            <h1 className="font-bold text-md">
+                              {row.description}
+                            </h1>
                           </TableCell>
                           <TableCell
                             align="left"
                             style={{ paddingLeft: "45px" }}
                           >
-                            {row.col2}
+                            <h1 className="font-bold text-md">{row.email}</h1>
                           </TableCell>
                           <TableCell
                             align="left"
                             style={{ paddingLeft: "35px" }}
                           >
-                            {row.col3}
+                            <h1 className="font-bold text-md">
+                              {row.mobileNumber}
+                            </h1>
+                          </TableCell>
+                          <TableCell
+                            align="left"
+                            style={{ paddingLeft: "35px" }}
+                          >
+                            {row.reply.length > 0 && (
+                              <h1 className="font-bold text-md">
+                                {row.reply[row.reply.length - 1].replynote}
+                              </h1>
+                            )}
+                            {row.reply.length <= 0 && (
+                              <h1 className="text-red-600 font-bold text-md">
+                                Not Replied
+                              </h1>
+                            )}
                           </TableCell>
 
                           <TableCell
@@ -367,9 +337,16 @@ const FAQ = () => {
                               }}
                               onClick={() => {
                                 setReplyModalOpen(true);
+                                setmessageID(row._id);
+                                setemail(row.email);
                               }}
                             >
-                              Reply
+                              {row.reply.length > 0 && (
+                                <h1 className="font-bold text-md">New Reply</h1>
+                              )}
+                              {row.reply.length <= 0 && (
+                                <h1 className="font-bold text-md">Reply </h1>
+                              )}
                             </button>
                           </TableCell>
                         </TableRow>
@@ -381,7 +358,7 @@ const FAQ = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
+              count={messages.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -395,6 +372,8 @@ const FAQ = () => {
         <ReplyFaqModal
           setModalVisible={setReplyModalOpen}
           modalVisible={replyModalOpen}
+          messageID={messageID}
+          email={email}
         />
       )}
     </div>
