@@ -17,6 +17,13 @@ const {
     getOrders,
     addOrder,
     createRequestBook,
+    addToWishList,
+    getWishlist,
+    removeItemsFromWishlist,
+    createReview,
+    updateReview,
+    deleteReview,
+    getReviews,
     // getInvoice
 } = require("../controllers/customer-controller");
 
@@ -32,6 +39,13 @@ router.route("/updatePP").put(protectedCustomer,updateProfilePicture);
 router.route("/getOrders").get(protectedCustomer,getOrders);
 router.route("/addOrder").post(protectedCustomer,addOrder);
 router.route("/requestBook").post(createRequestBook);
+router.route("/addtoWishlist").put(protectedCustomer,addToWishList);
+router.route("/getWishlist").get(protectedCustomer,getWishlist);
+router.route("/removeWishlistItem").put(protectedCustomer,removeItemsFromWishlist);
+router.route("/addReview").post(protectedCustomer,createReview);
+router.route("/updateReview").put(protectedCustomer,updateReview);
+router.route("/deleteReview").delete(protectedCustomer,deleteReview);
+router.route("/getReviews").get(protectedCustomer, getReviews);
 // router.route("/getInvoice").get(protectedCustomer,getInvoice);
 
 module.exports = router;
