@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const DeleteDocsSchema = new mongoose.Schema({
   docID: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
   type: { type: String },

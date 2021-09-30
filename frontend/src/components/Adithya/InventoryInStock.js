@@ -265,14 +265,8 @@ const InventoryInStock = () => {
                   }}
                 ></input>
               </div>
-              {/* 
-              <div className=" flex-initial px-0 py-2 m-2">
-                <button className="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full">
-                  Search
-                </button>
-              </div> */}
 
-              <div className="text-black  px-0 py-2 m-4">
+              <div className="text-black  px-0 py-2 m-2">
                 <Icon
                   className="text-gray-500  hover:text-halloweenOrange"
                   onClick={() => {

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Modal } from "react-responsive-modal";
 import { Image } from "cloudinary-react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+import DeleteForever from "@material-ui/icons/DeleteForever";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
+  const history = useHistory();
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [confirmationModalOpen, setConfirmationModelOpen] = useState(false);
@@ -45,7 +49,6 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
             `http://localhost:6500/matrix/api/inventoryManager/get-book/${ISBN}`
           )
           .then((res) => {
-            console.log(res.data.book);
             setBookData((prevState) => {
               return {
                 publishingTitle: res?.data?.book?.publishingTitle,
@@ -65,15 +68,15 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
                 typeSetter: res?.data?.book?.typeSetter,
                 weight: res?.data?.book?.weight,
                 marketPrice: res?.data?.book?.marketPrice,
-                imagePublicId: res?.data?.book?.bookImage.imagePublicId,
-                imageSecURL: res?.data?.book?.bookImage.imageSecURL,
-                coverCost: res?.data?.book?.charges.coverCost,
-                licenseCost: res?.data?.book?.charges.licenseCost,
-                writerPayment: res?.data?.book?.charges.writerPayment,
+                imagePublicId: res?.data?.book?.bookImage?.imagePublicId,
+                imageSecURL: res?.data?.book?.bookImage?.imageSecURL,
+                coverCost: res?.data?.book?.charges?.coverCost,
+                licenseCost: res?.data?.book?.charges?.licenseCost,
+                writerPayment: res?.data?.book?.charges?.writerPayment,
                 proofReadingPayment:
-                  res?.data?.book?.charges.proofReadingPayment,
-                typeSetterPayment: res?.data?.book?.charges.typeSetterPayment,
-                printCost: res?.data?.book?.charges.printCost,
+                  res?.data?.book?.charges?.proofReadingPayment,
+                typeSetterPayment: res?.data?.book?.charges?.typeSetterPayment,
+                printCost: res?.data?.book?.charges?.printCost,
               };
             });
           })
@@ -91,14 +94,17 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     };
+
     await axios
       .delete(
-        "http://localhost:6500/matrix/api/inventoryManager/deleteBook",
-        bookData.ISBN,
+        `http://localhost:6500/matrix/api/inventoryManager/delete-book/${bookData.ISBN}`,
         config
       )
       .then((res) => {
         alert(res.data?.desc);
+        setConfirmationModelOpen(false);
+        setModalVisible(false);
+        history.go(0);
       })
       .catch((err) => {
         alert(err?.response?.data?.desc);
@@ -154,12 +160,12 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
                 textAlign: "center",
               }}
             >
-              {bookData?.publishingTitle.length > 1 &&
-                `${bookData.publishingTitle}`}
+              {bookData?.publishingTitle?.length > 1 &&
+                `${bookData?.publishingTitle}`}
             </Grid>
             <Grid item xs={12}>
               <div className="mt-10 m-auto mb-3 max-w-lg flex justify-center">
-                {bookData?.imagePublicId.length > 1 ? (
+                {bookData?.imagePublicId?.length > 1 ? (
                   <Image
                     className=" w-2/4"
                     cloudName="grid1234"
@@ -513,18 +519,48 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
         open={confirmationModalOpen}
         onClose={() => setConfirmationModelOpen(false)}
         center
+        styles={{
+          modal: {
+            borderRadius: "10px",
+            maxWidth: "35vw",
+            marginTop: "10vh",
+            height: "23vh",
+          },
+        }}
       >
-        Do you want to remove this book?
-        <button
-          type="submit"
-          className="focus:outline-none bg-ferrariRed ml-8 text-white font-semibold text-lg rounded py-2 px-6 mt-4"
-          style={{
-            boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-          }}
-          // onClick={deleteBookHandler}
-        >
-          CONFIRM
-        </button>
+        <div className="py-4 mx-8">
+          <div className="my-8 font-semibold">
+            Are you sure you want to permanently remove this item from system?
+          </div>
+          <div className="flex justify-between">
+            <button
+              type="submit"
+              className="px-8 focus:outline-none bg-ferrariRed text-white font-semibold text-lg rounded py-2 "
+              style={{
+                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+              }}
+              onClick={deleteBookHandler}
+            >
+              <div className="flex">
+                <DeleteForever />
+                <div className="mx-2">CONFIRM</div>
+              </div>
+            </button>
+            <button
+              type="submit"
+              className="px-8 focus:outline-none bg-gray-400 text-white font-semibold text-lg rounded py-2 "
+              style={{
+                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+              }}
+              onClick={() => setConfirmationModelOpen(false)}
+            >
+              <div className="flex">
+                <CancelIcon />
+                <div className="mx-2">CANCEL</div>
+              </div>
+            </button>
+          </div>
+        </div>
       </Modal>
     </>
   );

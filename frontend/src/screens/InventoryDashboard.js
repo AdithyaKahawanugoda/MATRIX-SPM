@@ -17,11 +17,9 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 
 import InventoryAddNew from "../components/Adithya/InventoryAddNew";
-import InventoryEdit from "../components/Adithya/InventoryEdit";
 import InventoryInStock from "../components/Adithya/InventoryInStock";
 import InventoryManagerProfile from "../components/Adithya/InventoryManagerProfile";
 import Wholesales from "../components/Adithya/Wholesales";
-import WholesaleEdit from "../components/Adithya/WholesaleEdit";
 
 const drawerWidth = 300;
 
@@ -67,9 +65,7 @@ const InventoryDashboard = (props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(true);
   const [inventoryAddNewOpen, setInventoryAddNewOpen] = useState(false);
-  const [inventoryEditOpen, setInventoryEditOpen] = useState(false);
   const [wholesalesOpe, setWholesalesOpen] = useState(false);
-  const [wholesalesEditOpen, setWholesalesEditOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
   const [profileName, setProfileName] = useState("");
@@ -142,9 +138,9 @@ const InventoryDashboard = (props) => {
           button
           onClick={() => {
             setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
+
             setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
+
             setProfileOpen(false);
             setInventoryOpen(true);
           }}
@@ -155,37 +151,21 @@ const InventoryDashboard = (props) => {
         <ListItem
           button
           onClick={() => {
-            setInventoryEditOpen(false);
             setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
+
             setProfileOpen(false);
             setInventoryOpen(false);
             setInventoryAddNewOpen(true);
           }}
         >
-          <ListItemText primary={"Add New"} />
+          <ListItemText primary={"Add Books"} />
         </ListItem>
         <Divider />
         <ListItem
           button
           onClick={() => {
             setInventoryAddNewOpen(false);
-            setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
-            setProfileOpen(false);
-            setInventoryOpen(false);
-            setInventoryEditOpen(true);
-          }}
-        >
-          <ListItemText primary={"Inventory Edit / Delete"} />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
-            setWholesalesEditOpen(false);
+
             setProfileOpen(false);
             setInventoryOpen(false);
             setWholesalesOpen(true);
@@ -198,23 +178,9 @@ const InventoryDashboard = (props) => {
           button
           onClick={() => {
             setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
+
             setWholesalesOpen(false);
-            setProfileOpen(false);
-            setInventoryOpen(false);
-            setWholesalesEditOpen(true);
-          }}
-        >
-          <ListItemText primary={"Wholesales Edit / Delete"} />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
-            setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
+
             setInventoryOpen(false);
             setProfileOpen(true);
           }}
@@ -295,9 +261,7 @@ const InventoryDashboard = (props) => {
         <div className={classes.toolbar} />
         {inventoryOpen && <InventoryInStock />}
         {inventoryAddNewOpen && <InventoryAddNew />}
-        {inventoryEditOpen && <InventoryEdit />}
         {wholesalesOpe && <Wholesales />}
-        {wholesalesEditOpen && <WholesaleEdit />}
         {profileOpen && <InventoryManagerProfile />}
       </main>
     </div>

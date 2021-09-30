@@ -1,5 +1,6 @@
 const InventoryManagerModel = require("../models/inventoryManger-model");
 const DeletedProfileModel = require("../models/deletedProfile-model");
+const DeletedInventoryDocsModel = require("../models/deletedInventoryDocs-model");
 const ProductModel = require("../models/product-model");
 const InvoiceModel = require("../models/invoice-model");
 const { cloudinary } = require("../utils/cloudinary");
@@ -306,10 +307,10 @@ exports.updateCoverImageByISBN = async (req, res) => {
 
 // delete specific book
 exports.deleteBookByISBN = async (req, res) => {
-  const { ISBN } = req.body;
+  const ISBN = req.params.isbn;
   try {
     await ProductModel.deleteOne({ ISBN });
-    const logResponse = logDeletes(ISBN, "BOOK", "DELETE NOTE");
+    const logResponse = await logDeletes(ISBN, "BOOK", "DELETE NOTE", res);
     res.status(202).json({ desc: "Book deleted successfully", logResponse });
   } catch (error) {
     res.status(500).json({
@@ -368,9 +369,9 @@ exports.getAllInvoices = async (req, res) => {
 
 // get specific invoice
 exports.getInvoiceByID = async (req, res) => {
-  const { invoiceId } = req.body;
+  const invoiceId = req.params.invoiceId;
   try {
-    const invoice = await InvoiceModel.findOne({ invoiceId });
+    const invoice = await InvoiceModel.findOne({ _id: invoiceId });
     res.status(200).send({
       invoice,
     });
@@ -384,7 +385,8 @@ exports.getInvoiceByID = async (req, res) => {
 
 // update specific invoice
 exports.updateInvoiceByID = async (req, res) => {
-  const { invoiceId, retailShop, totalAmount, notes, items } = req.body;
+  let { retailShop, invoiceId, notes, totalAmount, status, items } = req.body;
+
   if (!retailShop) {
     retailShop = undefined;
   }
@@ -397,16 +399,18 @@ exports.updateInvoiceByID = async (req, res) => {
   if (!items) {
     items = undefined;
   }
+  if (!status) {
+    status = undefined;
+  }
   try {
-    const updatedInvoice = await InvoiceModel.findOneAndUpdate(
+    const updatedInvoice = await InvoiceModel.updateOne(
       { invoiceId },
       {
         $set: {
-          invoiceId,
           retailShop,
-          payment: { totalAmount },
+          invoiceId,
+          payment: { totalAmount, status },
           notes,
-          items,
         },
       },
       {
@@ -415,7 +419,7 @@ exports.updateInvoiceByID = async (req, res) => {
         omitUndefined: true,
       }
     );
-
+    console.log(updatedInvoice);
     res.status(200).send({
       desc: "Invoice data updated successfully",
       updatedInvoice,
@@ -430,10 +434,10 @@ exports.updateInvoiceByID = async (req, res) => {
 
 // delete specific invoice
 exports.deleteInvoiceByID = async (req, res) => {
-  const { invoiceId } = req.body;
+  const invoiceId = req.params.invoiceId;
   try {
     await InvoiceModel.deleteOne({ invoiceId });
-    await logDeletes(invoiceId, "invoice", notes, "InvoiceModel");
+    await logDeletes(invoiceId, "INVOICE", "DELETE NOTE", res);
     res.status(202).json({ desc: "Invoice deleted successfully" });
   } catch (error) {
     res.status(500).json({
@@ -631,12 +635,12 @@ const deleteFiles = async (filePID) => {
 };
 
 // log deleted invoices and books
-const logDeletes = async (docID, type, note) => {
+const logDeletes = async (docID, type, note, res) => {
   try {
     const logResponse = await DeletedInventoryDocsModel.create({
       docID,
-      note,
       type,
+      note,
     });
     return logResponse;
   } catch (error) {
