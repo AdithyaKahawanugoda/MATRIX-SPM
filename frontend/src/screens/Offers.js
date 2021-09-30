@@ -115,12 +115,14 @@ const AllProducts = () => {
                   window.location = `/book/${book._id}`;
                 }}
               >
-                <Image
-                  className="w-full h-full object-contain "
-                  cloudName="grid1234"
-                  publicId={book.bookImage.imagePublicId}
-                  style={{ width: "100%", height: "100%" }}
-                />
+                {book.bookImage && (
+                  <Image
+                    className="w-full h-full object-contain "
+                    cloudName="grid1234"
+                    publicId={book.bookImage.imagePublicId}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
               </div>
               <div className="w-full p-4">
                 <div>
@@ -198,6 +200,7 @@ const AllProducts = () => {
   const changePage = ({ selected }) => {
     if (filterd) {
       setPageNumber(0);
+      filterd = false;
     } else {
       setPageNumber(selected);
     }
@@ -224,6 +227,8 @@ const AllProducts = () => {
             <Select
               options={options}
               onChange={(event) => {
+                filterd = true;
+                changePage(filterd);
                 setsearchTerm(event.value);
               }}
               className="basic-multi-select"
@@ -242,6 +247,9 @@ const AllProducts = () => {
                 ALL OFFERS
               </p>
             </div>
+            
+            
+            
             {options.map((offers, index) => {
               return (
                 <div>
@@ -253,6 +261,8 @@ const AllProducts = () => {
                         <p
                           className="text-white font-bold text-center text-sm"
                           onClick={() => {
+                            filterd = true;
+                            changePage(filterd);
                             setsearchTerm(offers.value);
                           }}
                         >
@@ -268,6 +278,8 @@ const AllProducts = () => {
                         <p
                           className="text-white font-bold text-center text-sm"
                           onClick={() => {
+                            filterd = true;
+                            changePage(filterd);
                             setsearchTerm(offers.value);
                           }}
                         >
@@ -280,6 +292,8 @@ const AllProducts = () => {
                       <p
                         className="text-white font-bold text-center text-sm"
                         onClick={() => {
+                          filterd = true;
+                          changePage(filterd);
                           setsearchTerm(offers.value);
                         }}
                       >
@@ -291,6 +305,8 @@ const AllProducts = () => {
               );
             })}
           </div>
+       
+       
         </Hidden>
 
         <div className="mb-4 w-full h-max ">{displayBooks}</div>
