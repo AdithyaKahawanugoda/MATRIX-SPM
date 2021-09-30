@@ -57,7 +57,7 @@ const AllProducts = () => {
             for (let i = 0; i < res.data.Products.length; i++) {
               if (res.data.Products[i].category) {
                 testProducts.push(res.data.Products[i]);
-                testLables.push(res.data.Products[i].category);
+                testLables.push(res.data.Products[i].category.toLowerCase());
               }
             }
 
@@ -116,12 +116,14 @@ const AllProducts = () => {
                   window.location = `/book/${book._id}`;
                 }}
               >
-                <Image
-                  className="w-full h-full object-contain "
-                  cloudName="grid1234"
-                  publicId={book.bookImage.imagePublicId}
-                  style={{ width: "100%", height: "100%" }}
-                />
+                {book.bookImage && (
+                  <Image
+                    className="w-full h-full object-contain "
+                    cloudName="grid1234"
+                    publicId={book.bookImage.imagePublicId}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
               </div>
               <div className="w-full p-4">
                 <div>
@@ -222,6 +224,8 @@ const AllProducts = () => {
             <Select
               options={options}
               onChange={(event) => {
+                filterd = true;
+                changePage(filterd);
                 setsearchTerm(event.value);
               }}
               className="basic-multi-select"
@@ -240,6 +244,8 @@ const AllProducts = () => {
                       <p
                         className="text-white font-bold text-center text-sm"
                         onClick={() => {
+                          filterd = true;
+                          changePage(filterd);
                           setsearchTerm(offers.value);
                         }}
                       >
@@ -254,6 +260,8 @@ const AllProducts = () => {
                       <p
                         className="text-white font-bold text-center text-sm"
                         onClick={() => {
+                          filterd = true;
+                          changePage(filterd);
                           setsearchTerm(offers.value);
                         }}
                       >
@@ -267,7 +275,17 @@ const AllProducts = () => {
           </div>
         </Hidden>
 
-        <div className="mb-4 w-full h-max ">{displayBooks}</div>
+        {filterBooks.length > 0 && (
+          <div className="mb-4 w-full h-max ">{displayBooks}</div>
+        )}
+        {filterBooks.length <= 0 && (
+          <div>
+            {" "}
+            <p className="font-fatKidFont text-4xl mb-3 text-center">
+              No Item Awailable
+            </p>
+          </div>
+        )}
 
         <div className="w-max">
           <ReactPaginate
@@ -290,4 +308,3 @@ const AllProducts = () => {
 };
 
 export default AllProducts;
-
