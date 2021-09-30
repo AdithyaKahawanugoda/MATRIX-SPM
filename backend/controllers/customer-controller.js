@@ -321,8 +321,6 @@ const updateStock = async (inStockQuantity, id) => {
   console.log(updateQty);
 };
 
-
-
 //Request Translation Book
 exports.createRequestBook = async(req,res) => {
     const {
