@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   appBar: {
+    color:"black",
     zIndex: theme.zIndex.drawer + 1,
   },
   drawer: {

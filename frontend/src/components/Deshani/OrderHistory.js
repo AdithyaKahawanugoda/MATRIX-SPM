@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from "prop-types";
 import Table from '@material-ui/core/Table';
@@ -16,6 +16,8 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import IconButton from '@material-ui/core/IconButton';
 import AddReviewModal from "./AddReviewModal";
 import Button from "@material-ui/core/Button";
+import axios from "axios";
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -33,8 +35,20 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
+function stableSort(array, comparator,searchTerm) {
+  const stabilizedThis = array
+  .filter((val) => {
+    if(searchTerm === ""){
+      return val;
+    }else if(
+      val.orderHistory.deliveryAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      val.orderHistory.deliveryStatus.toLowerCase().includes(searchTerm.toLowerCase())
+    ){
+      return val;
+    }
+    return null;
+  })
+  .map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -51,7 +65,7 @@ const headCells = [
     disablePadding: true,
     label: "Order ID",
   },
-  { id: "col2", numeric: false, disablePadding: false, label: "Placed On" },
+  { id: "col2", numeric: false, disablePadding: false, label: "Delivery Address" },
   { id: "col3", numeric: true, disablePadding: false, label: "Total" },
   { id: "col4", numeric: false, disablePadding: false, label: "Delivery Status" },
   { id: "col5", numeric: true, disablePadding: false, label: "Review" },
@@ -94,9 +108,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  //numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  //onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -159,6 +173,44 @@ const OrderHistory = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [searchTerm, setsearchTerm] = useState("");
     const [reviewModalOpen,setReviewModalOpen] = useState(false);
+
+    const [orderHistory,setOrderHistory] = useState([]);
+    const [orderData,setOrderData] = useState([]);
+    const [productId,setProductId] = useState("");
+    
+
+   
+
+    useEffect(()=>{
+      const getOrderHistory = async () =>{
+ 
+          const config = {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          };
+          await axios
+            .get("http://localhost:6500/matrix/api/customer/getOrders",config)
+            .then((res)=>{
+              setOrderHistory(res.data.orders);
+              console.log("orders"+res.data.orders);
+              
+              for(let i=0;i<res.data.orders.length;i++){
+                for(let j=0;j<res.data.orders[i].orderData.length;j++){
+                  setProductId(res.data.orders[i].orderData[j].productID);
+                  console.log(res.data.orders[i].orderData[j].productID);
+                }
+              }
+            })
+            .catch((err)=>{
+              alert(err.message);
+            });
+      }
+      getOrderHistory();
+    },[]);
+
+
+
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === "asc";
       setOrder(isAsc ? "desc" : "asc");
@@ -189,7 +241,7 @@ const OrderHistory = () => {
         className="w-3/5 h-11 p-5 rounded-md"
         id="code"
         placeholder="Search Here"
-        value={searchTerm}
+        
         onChange={(event) => {
           setsearchTerm(event.target.value);
         }}
@@ -199,7 +251,7 @@ const OrderHistory = () => {
       <IconButton
         variant="contained"
         color="primary"
-        value={searchTerm}
+       
         onClick={() => {
           setsearchTerm("");
         }}
@@ -219,28 +271,20 @@ const OrderHistory = () => {
             >
               <EnhancedTableHead
                 classes={classes}
-                numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={orderHistory.length}
               />
               <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
+                {stableSort(orderHistory, getComparator(order, orderBy),searchTerm)
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .filter((val) => {
                     if (searchTerm === "") {
                       return val;
                     } else if (
-                      val.col1
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                      val.col2
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                      val.col4
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
+                      val.orderHistory.deliveryAddress.includes(searchTerm.toLowerCase()) ||
+                      val.orderHistory.deliveryStatus.includes(searchTerm.toLowerCase())
                      
                     ) {
                       return val;
@@ -251,19 +295,20 @@ const OrderHistory = () => {
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
-                      <TableRow tabIndex={1} key={row.col1}>
+                      <TableRow tabIndex={1} key={index}>
                         <TableCell
                           component="th"
                           id={labelId}
                           scope="row"
                           padding="none"
                           style={{ padding: "1rem" }}
+                        
                         >
-                          {row.col1}
+                          {row._id}
                         </TableCell>
-                        <TableCell align="center" style={{ marginLeft:"4rem" }}>{row.col2}</TableCell>
-                        <TableCell align="center">{row.col3}</TableCell>
-                        <TableCell align="center">{row.col4}</TableCell>
+                        <TableCell align="center" style={{ marginLeft:"4rem" }}>{row.deliveryAddress}</TableCell>
+                        <TableCell align="center">{row.billAmount}</TableCell>
+                        <TableCell align="center">{row.deliveryStatus}</TableCell>
                         <TableCell align="center">
                         {" "}
                           <Button
@@ -271,6 +316,7 @@ const OrderHistory = () => {
                             color="secondary"
                             onClick={() => {
                               setReviewModalOpen(true);
+                              
                             }}
                           >
                             Add Review
@@ -286,7 +332,7 @@ const OrderHistory = () => {
           <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={orderHistory.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -299,6 +345,7 @@ const OrderHistory = () => {
           <AddReviewModal
           modalVisible={reviewModalOpen}
           setModalVisible={setReviewModalOpen}
+          productID={productId}
           />
         )}
         </div>
