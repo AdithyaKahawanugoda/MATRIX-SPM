@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -10,28 +12,9 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import SearchIcon from "@material-ui/icons/Search";
 import ReplayIcon from "@material-ui/icons/Replay";
-
-function createData(col1, col2, col3) {
-  return { col1, col2, col3 };
-}
-
-const rows = [
-  createData("B4567", 37, "67430"),
-  createData("B4578", 250, "51490"),
-  createData("B7890", 160, "24600"),
-  createData("B6709", 159, "60240"),
-  createData("B6789", 16, "4939"),
-  createData("B8976", 32, "8765"),
-  createData("B6704", 90, "3743"),
-  createData("B5678", 50, "9400"),
-  createData("B4578", 260, "6570"),
-  createData("B6704", 225, "9800"),
-  createData("B9856", 586, "8120"),
-  createData("B8932", 190, "9370"),
-  createData("B8963", 180, "6340"),
-];
+import generatePDF from "./AdminSalesReports";
+import SalesModal from "./SalesModal";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -55,9 +38,8 @@ function stableSort(array, comparator, searchTerm) {
       if (searchTerm === "") {
         return val;
       } else if (
-        val.col1.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        val.col2 === searchTerm ||
-        val.col3 === searchTerm
+        val.book.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        val.bookName.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
         return val;
       }
@@ -73,9 +55,13 @@ function stableSort(array, comparator, searchTerm) {
 }
 
 const headCells = [
-  { id: "col1", numeric: true, disablePadding: false, label: "Book ID" },
-  { id: "col2", numeric: true, disablePadding: false, label: "Total Sales" },
-  { id: "col3", numeric: true, disablePadding: false, label: "Total Revenue" },
+  { id: "col1", numeric: true, disablePadding: false, label: "Index" },
+  { id: "col2", numeric: true, disablePadding: false, label: "Book Id" },
+
+  { id: "col3", numeric: true, disablePadding: false, label: "Book Title" },
+  { id: "col4", numeric: true, disablePadding: false, label: "Author" },
+  { id: "col5", numeric: true, disablePadding: false, label: "Sales" },
+  { id: "col6", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -166,6 +152,135 @@ const AllSales = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchTerm, setsearchTerm] = useState("");
+  const [productSales, setProductSales] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [regularOrders, setRegularOrders] = useState([]);
+  const [bulkOrders, setBulkOrders] = useState([]);
+  const [currentBook, setCurrentBook] = useState("");
+
+  const [salesModalOpen, setSalesModalOpen] = useState(false);
+  //------------------------------------------------------------------------------------------------------------
+  const getProducts = async () => {
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getProducts")
+
+        .then((res) => {
+          setProducts(res.data.Products);
+          let productIds = [];
+          for (let i = 0; i < res.data.Products.length; i++) {
+            let dataobject = {
+              book: res.data.Products[i]._id,
+              bookName: res.data.Products[i].publishingTitle,
+              author: res.data.Products[i].translator,
+            };
+            productIds.push(dataobject);
+          }
+          getRegularOrders(productIds);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  const getRegularOrders = async (book) => {
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getRegularOrders")
+
+        .then((res) => {
+          setRegularOrders(res.data.orders);
+
+          for (let j = 0; j < book.length; j++) {
+            let count = 0;
+            for (let i = 0; i < res.data.orders.length; i++) {
+              for (let x = 0; x < res.data.orders[i].orderData.length; x++) {
+                if (
+                  book[j].book === res.data.orders[i].orderData[x].productID._id
+                ) {
+                  count += res.data.orders[i].orderData[x].quantity;
+                }
+              }
+            }
+            const dataobject = {
+              book: book[j].book,
+              bookName: book[j].bookName,
+              author: book[j].author,
+              count: count,
+            };
+
+            productSales.push(dataobject);
+          }
+          console.log(productSales);
+          getBulkOrders();
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  const getBulkOrders = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getBulkOrders", config)
+
+        .then((res) => {
+          for (let x = 0; x < productSales.length; x++) {
+            let newCount = productSales[x].count;
+            for (let i = 0; i < res.data.bulkorders.length; i++) {
+              for (let j = 0; j < res.data.bulkorders[i].items.length; j++) {
+                if (res.data.bulkorders[i].items[j].productID) {
+                  if (
+                    productSales[x].book ===
+                    res.data.bulkorders[i].items[j].productID._id
+                  ) {
+                    newCount += res.data.bulkorders[i].items[j].quantity;
+                  }
+                }
+              }
+            }
+            productSales[x].count = newCount;
+          }
+
+          console.log(productSales);
+          setBulkOrders(res.data.bulkorders);
+          getTopSellingItems();
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  const getTopSellingItems = () => {
+    for (let i = 0; i < productSales.length; i++) {
+      for (let j = i + 1; j < productSales.length; j++) {
+        let temp = 0;
+        if (productSales[i].count < productSales[j].count) {
+          temp = productSales[i];
+          productSales[i] = productSales[j];
+          productSales[j] = temp;
+        }
+      }
+    }
+  };
+  //-------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -187,15 +302,27 @@ const AllSales = () => {
       <h1 className="text-4xl text-center text-prussianBlue font-bold mb-5">
         All Sales
       </h1>
+
+      <div className="w-11/12 h-10  m-auto mb-2">
+        <button
+          type="submit"
+          className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-48 h-10 sm:w-80 sm:h-12 bg-gamboge  float-right"
+          style={{
+            boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+            color: "white",
+          }}
+          onClick={() => generatePDF(productSales)}
+        >
+          Generate Report
+        </button>
+      </div>
+
       <div className="w-full h-auto bg-white p-3 rounded-xl">
-        <div className="w-full mb-1 p-1 bg-blueSapphire rounded-lg  h-14 bg-opacity-30">
-          <SearchIcon
-            style={{ float: "left", fontSize: 40, marginLeft: "10px" }}
-          />
+        <div className="w-max mb-1 p-1 bg-blueSapphire rounded-lg  h-14 bg-opacity-30">
           <div className="w-2/3 h-16" style={{ float: "left" }}>
             <input
               type="text"
-              className="w-full h-11 p-5 "
+              className="w-60 h-11 p-5 rounded-3xl m-2 mt-0"
               id="code"
               placeholder="Search Here"
               value={searchTerm}
@@ -205,70 +332,137 @@ const AllSales = () => {
               style={{ float: "left" }}
             ></input>
           </div>
-          <ReplayIcon
-            style={{ float: "left" }}
-            className="m-3"
-            onClick={() => {
-              setsearchTerm("");
-            }}
-          />
+
+          {searchTerm && (
+            // <div className="cursor-pointer w-max mt-1 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+            //   <p
+            //     className=" text-white font-bold text-center text-sm"
+            //     onClick={() => {
+            //       setsearchTerm("");
+            //     }}
+            //   >
+            //     Clear
+            //   </p>
+            // </div>
+            <ReplayIcon
+              style={{ float: "left" }}
+              className="m-3"
+              onClick={() => {
+                setsearchTerm("");
+              }}
+            />
+          )}
         </div>
 
-        <div className={classes.root}>
-          <Paper className={classes.paper}>
-            <TableContainer>
-              <Table
-                className={classes.table}
-                aria-labelledby="tableTitle"
-                aria-label="enhanced table"
-              >
-                <EnhancedTableHead
-                  classes={classes}
-                  order={order}
-                  orderBy={orderBy}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
-                <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy), searchTerm)
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter((val) => {
-                      if (searchTerm === "") {
-                        return val;
-                      } else if (
-                        val.col1
-                          .toLowerCase()
-                          .includes(searchTerm.toLowerCase()) ||
-                        val.col2 === searchTerm ||
-                        val.col3 === searchTerm
-                      ) {
-                        return val;
-                      }
-                      return null;
-                    })
-                    .map((row, index) => {
-                      return (
-                        <TableRow hover tabIndex={-1} key={index}>
-                          <TableCell align="center">{row.col1}</TableCell>
-                          <TableCell align="center">{row.col2}</TableCell>
-                          <TableCell align="center">Rs.{row.col3}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </div>
+        {bulkOrders && (
+          <div className={classes.root}>
+            <Paper className={classes.paper}>
+              <TableContainer>
+                <Table
+                  className={classes.table}
+                  aria-labelledby="tableTitle"
+                  aria-label="enhanced table"
+                >
+                  <EnhancedTableHead
+                    classes={classes}
+                    order={order}
+                    orderBy={orderBy}
+                    onRequestSort={handleRequestSort}
+                    rowCount={productSales.length}
+                  />
+                  <TableBody>
+                    {stableSort(
+                      productSales,
+                      getComparator(order, orderBy),
+                      searchTerm
+                    )
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .filter((val) => {
+                        if (searchTerm === "") {
+                          return val;
+                        } else if (
+                          val.book.includes(searchTerm.toLowerCase()) ||
+                          val.bookName
+                            .toLowerCase()
+                            .includes(searchTerm.toLowerCase())
+                        ) {
+                          return val;
+                        }
+                        return null;
+                      })
+                      .map((row, index) => {
+                        return (
+                          <TableRow hover tabIndex={-1} key={index}>
+                            <TableCell align="left">
+                              <h1 className="font-bold text-md">{index + 1}</h1>
+                            </TableCell>
+                            <TableCell align="left">
+                              <h1 className="font-bold text-md">{row.book}</h1>
+                            </TableCell>
+                            <TableCell align="left">
+                              <h1 className="font-bold text-md">
+                                {row.bookName}
+                              </h1>
+                            </TableCell>
+                            <TableCell align="left">
+                              <h1 className="font-bold text-md">
+                                {row.author}
+                              </h1>
+                            </TableCell>
+                            <TableCell align="center">
+                              <h1 className="font-bold text-md">{row.count}</h1>
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{ paddingLeft: "20px" }}
+                            >
+                              {" "}
+                              <button
+                                type="submit"
+                                className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12"
+                                style={{
+                                  boxShadow:
+                                    "0px 10px 15px rgba(3, 17, 86, 0.25)",
+                                  float: "right",
+                                  color: "white",
+                                }}
+                                onClick={() => {
+                                  setSalesModalOpen(true);
+                                  setCurrentBook(row._id);
+                                }}
+                              >
+                                View Orders
+                              </button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={productSales.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </div>
+        )}
+
+        {salesModalOpen && (
+          <SalesModal
+            setModalVisible={setSalesModalOpen}
+            modalVisible={salesModalOpen}
+            currentOrder={currentBook}
+          />
+        )}
       </div>
     </div>
   );

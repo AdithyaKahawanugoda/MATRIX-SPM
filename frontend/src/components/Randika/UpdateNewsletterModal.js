@@ -4,6 +4,10 @@ import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
 import { Image } from "cloudinary-react";
 import Button from "@material-ui/core/Button";
+import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Alert from "@material-ui/lab/Alert";
+import Icon from "@material-ui/core/Icon";
 
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -32,7 +36,7 @@ const UpdateNewsletterModal = ({
   const [newTitle, setNewTitle] = useState(newsTitle);
   const [newDescription, setNewDescription] = useState(newsDescription);
   const [newTag, setNewTag] = useState(newsTag);
-
+  const [isAdded, setIsAdded] = useState(false);
   const [file, setFile] = useState([]);
 
   const deleteNewsItem = async () => {
@@ -43,8 +47,11 @@ const UpdateNewsletterModal = ({
           `http://localhost:6500/matrix/api/admin/deleteNewsletter/${nid}`
         )
         .then((res) => {
-          alert("Item deleted");
-          window.location.reload(false);
+          setIsAdded(true);
+          setTimeout(() => {
+            setModalVisible(false);
+            window.location.reload(false);
+          }, 3000);
         });
     } catch (err) {
       alert("error" + err);
@@ -225,43 +232,46 @@ const UpdateNewsletterModal = ({
       )}
 
       {deleteNews && (
-        <div className="w-96 m-auto mt-7 h-40">
-        
-          <h1 className="text-lg text-center text-red-700 font-bold mb-2">
-            Do you need to permanently delete this news?
-          </h1>
-          <button
-          type="submit"
-          className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12 bg-gamboge"
-          style={{
-            boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-            float: "right",
-            color: "white",
-          }}
-          onClick={() => {
-          
-            setModalVisible(false);
+        <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
+          <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
+            Delete News Item
+          </h6>
+          <hr></hr>
+          <div className="text-center text-ferrariRed m-5 ">
+            <Icon>
+              <HighlightOffOutlinedIcon style={{ fontSize: 60 }} />
+            </Icon>
+          </div>
 
-          }}
-        >
-          CANCEL
-        </button>
-        <button
-          type="submit"
-          className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12 bg-gamboge"
-          style={{
-            boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-            float: "right",
-            color: "white",
-          }}
-          onClick={() => {
-            deleteNewsItem()
-            setModalVisible(false);
-
-          }}
-        >
-          DELETE
-        </button>
+          <h6 className="text-center text-lg">
+            Do you want to delete these item? This process cannot be undone.
+          </h6>
+          {isAdded && <Alert severity="success">Item Deleted!</Alert>}
+          <div className="text-center mt-8 grid grid-cols-2 gap-3">
+            <div className="text-right">
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<DeleteIcon />}
+                onClick={() => {
+                  deleteNewsItem();
+                }}
+              >
+                Agree
+              </Button>
+            </div>
+            <div className="text-left">
+              <Button
+                autoFocus
+                variant="contained"
+                onClick={() => {
+                  setModalVisible(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </Modal>
