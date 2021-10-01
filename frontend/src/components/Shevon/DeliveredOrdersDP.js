@@ -10,209 +10,94 @@ import TableRow from "@material-ui/core/TableRow";
 import Grid from "@material-ui/core/Grid";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Icon from "@material-ui/core/Icon";
-
+import axios from "axios";
+import moment from "moment";
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
   { id: "code", label: "OrderID", minWidth: 30 },
-  { id: "name", label: "CustomerName", minWidth: 50 },
-  { id: "address", label: "Address", minWidth: 160 },
-  { id: "weight", label: "Weight", minWidth: 30 },
-  { id: "orderType", label: "OrderType", minWidth: 100 },
-  { id: "paymentType", label: "PaymentType", minWidth: 80 },
-  { id: "deliveryStatus", label: "DeliveryStatus", minWidth: 80 },
+  { id: "buyerId", label: "buyerId", minWidth: 50 },
+  { id: "address", label: "Address", minWidth: 20 },
+  { id: "price", label: "price", minWidth: 30 },
+  { id: "purchasedDate", label: "purchasedDate", minWidth: 100 },
+  { id: "deliveryType", label: "DeliveryStatus", minWidth: 100 },
 ];
-
 function createData(
   no,
   code,
-  name,
+  buyerId,
   address,
-  weight,
-  orderType,
-  paymentType,
-  deliveryStatus
+  price,
+  purchasedDate,
+  deliveryType
 ) {
   return {
     no,
     code,
-    name,
+    buyerId,
     address,
-    weight,
-    orderType,
-    paymentType,
-    deliveryStatus,
+    price,
+    purchasedDate,
+    deliveryType,
   };
 }
-
-const rows = [
-  createData(
-    1,
-    "000001",
-    "Tony Russell",
-    "Mr. Tony Russell, Coalecroft  909, Ontario - 7480, Hungary",
-    0.5 + "kg",
-    "Retail",
-    "Paid",
-    "Delivered"
-  ),
-  createData(
-    2,
-    "000002",
-    "Doug Wilton",
-    "Mr. Doug Wilton, Longleigh   1845, Glendale - 5576, Panama",
-    0.3 + "kg",
-    "Retail",
-    "Paid",
-    "Delivered"
-  ),
-  createData(
-    3,
-    "000003",
-    "Roger Cobb",
-    "Mr. Roger Cobb, Sundown 7120, Tokyo - 2368, Mali",
-    0.9 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "Delivered"
-  ),
-  createData(
-    4,
-    "000004",
-    "Bryon Radley",
-    "Mr. Bryon Radley, Bales  9695, Houston - 6560, Serbia",
-    70 + "kg",
-    "Bulk",
-    "Invoice",
-    "Delivered"
-  ),
-  createData(
-    5,
-    "000005",
-    "Fred Carter",
-    "Mr. Fred Carter, Bloomsbury  8925, Otawa - 4818, Panama",
-    0.2 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "Delivered"
-  ),
-  createData(
-    6,
-    "000006",
-    "Martin Talbot",
-    "Mr. Martin Talbot, Aberavon  426, Oakland - 2273, Ireland",
-    0.6 + "kg",
-    "Retail",
-    "Paid",
-    "Delivered"
-  ),
-  createData(
-    7,
-    "000007",
-    "John Clifton",
-    "Mr. John Clifton, Lexington 93, Glendale - 6215, Vatican City",
-    0.8 + "kg",
-    "Retail",
-    "Paid",
-    "Delivered"
-  ),
-  createData(
-    8,
-    "000008",
-    "Nate Hobson",
-    "Mr. Nate Hobson, Blendon    9754, Henderson - 0324, Central African Republic",
-    5 + "kg",
-    "Bulk",
-    "Invoice",
-    "Delivered"
-  ),
-  createData(
-    9,
-    "000009",
-    "Madelyn Woods",
-    "Mrs. Madelyn Woods, Fairfield  2525, Lyon - 6460, Korea, North",
-    45 + "kg",
-    "Bulk",
-    "Invoice",
-    "Delivered"
-  ),
-  createData(
-    10,
-    "000010",
-    "Cara Reynolds",
-    "Mrs. Cara Reynolds, Lincoln 3001, Venice - 8061, Kyrgyzstan",
-    0.3 + "kg",
-    "Retail",
-    "Paid",
-    "Delivered"
-  ),
-  createData(
-    11,
-    "000011",
-    "Nick Walton",
-    "Mr. Nick Walton, Unwin  6947, St. Louis - 6607, Togo",
-    0.8 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "Delivered"
-  ),
-  createData(
-    12,
-    "000012",
-    "Gwenyth Buckley",
-    "Mrs. Gwenyth Buckley, Blanchard  2566, Pittsburgh - 2071, Fiji",
-    10 + "kg",
-    "Bulk",
-    "Invoice",
-    "Delivered"
-  ),
-  createData(
-    13,
-    "000013",
-    "Johnathan Isaac",
-    "Mr. Johnathan Isaac, Thoresby   5619, Santa Ana - 0765, Nigeria",
-    0.5 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "Delivered"
-  ),
-  createData(
-    14,
-    "000014",
-    "Doris Knight",
-    "Ms. Doris Knight, Eldon  2417, Henderson - 7173, Malawi",
-    0.1 + "kg",
-    "Retail",
-    "Paid",
-    "Delivered"
-  ),
-  createData(
-    15,
-    "000015",
-    "Eileen Truscott",
-    "Mrs. Eileen Truscott, Vine  8883, Paris - 0678, Namibia",
-    0.7 + "kg",
-    "Retail",
-    "CashOnDelivery",
-    "Delivered"
-  ),
-];
 
 const DeliveredOrdersDP = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const [fetchedRows, setFetchedRows] = useState([]);
 
   useEffect(() => {
-    setSelectedRows(rows);
+    const getProfile = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
+      await axios
+        .get(
+          "http://localhost:6500/matrix/api/deliveryPerson/get-profile",
+          config
+        )
+        .then((res) => {
+          alert(res?.data?.profile);
+          console.log(res.data.profile.deliveryHistory);
+          const data = res.data.profile.deliveryHistory
+            .filter((data) => data.deliveryStatus === "Delivered")
+            .map((order, index) =>
+              createData(
+                index + 1,
+                order.orderID,
+                order.buyerID,
+                order.deliveryAddress,
+                order.billAmount,
+                moment(order.updatedTime).format("lll"),
+
+                order.deliveryStatus
+              )
+            );
+          setFetchedRows(data);
+          setSelectedRows(data);
+          console.log(res?.data?.profile);
+        })
+        .catch((err) => {
+          alert(err?.response?.data?.desc);
+        });
+    };
+    if (localStorage.getItem("userRole") === "deliveryPerson") {
+      getProfile();
+    }
   }, []);
 
   const search = () => {
-    setSelectedRows(rows.filter((row) => !row.code.indexOf(searchKey.trim())));
+    setSelectedRows(
+      fetchedRows.filter((row) => !row.code.indexOf(searchKey.trim()))
+    );
   };
 
   const refresh = () => {
-    setSelectedRows(rows);
+    setSelectedRows(fetchedRows);
     setSearchKey("");
   };
 
@@ -322,7 +207,7 @@ const DeliveredOrdersDP = () => {
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
-              count={rows.length}
+              count={setSelectedRows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
