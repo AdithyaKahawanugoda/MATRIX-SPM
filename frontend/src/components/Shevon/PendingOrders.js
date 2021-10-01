@@ -52,6 +52,7 @@ const PendingOrders = () => {
   const [fetchedRows, setFetchedRows] = useState([]);
   const [searchKey, setSearchKey] = useState("");
   const [editstatus, seteditstatus] = useState(false);
+  const [orderID, setorderID] = useState();
 
   useEffect(() => {
     (async () => {
@@ -186,6 +187,7 @@ const PendingOrders = () => {
                                     className="ml-2 hover:text-gamboge"
                                     onClick={() => {
                                       seteditstatus(true);
+                                      setorderID(row.code);
                                     }}
                                   >
                                     <EditIcon />
@@ -216,6 +218,12 @@ const PendingOrders = () => {
         <EditDeliveryStatus
           modalVisible={editstatus}
           setModalVisible={seteditstatus}
+          orderID={orderID}
+          selectedRow={
+            selectedRows[selectedRows.findIndex((row) => row.code === orderID)]
+          }
+          setSelectedRows={setSelectedRows}
+          setFetchedRows={setFetchedRows}
         />
       )}
     </div>

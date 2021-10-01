@@ -52,6 +52,25 @@ const DeliveryPersonSchema = new mongoose.Schema({
         required: true,
         ref: "order",
       },
+      buyerID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "customer",
+      },
+      deliveryAddress: {
+        type: String,
+        required: true,
+      },
+      billAmount: {
+        type: Number,
+        required: true,
+      },
+
+      deliveryStatus: {
+        type: String,
+        default: "inTransit",
+      },
+
       placedAt: {
         type: Date,
         default: Date.now,

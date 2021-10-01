@@ -8,13 +8,23 @@ import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   dpID: Yup.string().trim().uppercase().required("delivery person is required"),
 });
 
-const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
+const EditDeliveryStatus = ({
+  setModalVisible,
+  modalVisible,
+  orderID,
+  setFetchedRows,
+  setSelectedRows,
+  selectedRow,
+}) => {
   const [setDp, setsetDp] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
+
   useEffect(() => {
     const getAllDp = async () => {
       await axios
@@ -29,6 +39,53 @@ const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
     };
     getAllDp();
   }, []);
+
+  const updateOrderStatus = async (values) => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/assigndp",
+        {
+          orderID: orderID,
+          dpID: values.dpID,
+          deliveryStatus: values.deliveryStatus,
+        }
+      );
+      const filterFunc = (rows) => rows.filter((row) => row.code !== orderID);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+      setIsAdded(true);
+      setFetchedRows(filterFunc);
+      setSelectedRows(filterFunc);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateDpHistory = async (values) => {
+    console.log(selectedRow);
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/addorder",
+        {
+          orderID: orderID,
+          dpID: values.dpID,
+          buyerID: selectedRow.buyerId,
+          deliveryAddress: selectedRow.address,
+          billAmount: selectedRow.price,
+        }
+      );
+      const filterFunc = (rows) => rows.filter((row) => row.code !== orderID);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+      setIsAdded(true);
+      setFetchedRows(filterFunc);
+      setSelectedRows(filterFunc);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Modal
@@ -56,10 +113,13 @@ const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
         <Formik
           initialValues={{
             dpID: "",
+            deliveryStatus: "inTransit",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            updateOrderStatus(values);
+            updateDpHistory(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -106,6 +166,7 @@ const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
               </div>
+              {isAdded && <Alert severity="success">Successfully added</Alert>}
 
               <div className="text-center mb-0 mt-6">
                 <button

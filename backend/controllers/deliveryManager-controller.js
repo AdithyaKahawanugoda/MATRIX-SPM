@@ -607,11 +607,11 @@ exports.getAllOrders = async (req, res) => {
 };
 //update delivery status
 exports.assignDp = async (req, res) => {
-  let { DPID, dpID, deliveryStatus } = req.body;
+  let { orderID, dpID, deliveryStatus } = req.body;
 
   try {
     const DocData = await Order.findOneAndUpdate(
-      { _id: DPID },
+      { _id: orderID },
       {
         $set: {
           deiveryPersonID: dpID,
@@ -626,6 +626,45 @@ exports.assignDp = async (req, res) => {
     res.status(500).json({
       success: false,
       desc: "Error in assignDp controller-" + error,
+    });
+  }
+};
+
+//dp add order details
+exports.orderAdded = async (req, res) => {
+  const {
+    dpID,
+    orderID,
+    buyerID,
+    deliveryAddress,
+    deliveryStatus,
+    billAmount,
+  } = req.body;
+
+  try {
+    const data = {
+      orderID,
+      buyerID,
+      deliveryAddress,
+      deliveryStatus,
+      billAmount,
+    };
+    const DocData = await DeliveryPerson.findOneAndUpdate(
+      { _id: dpID },
+      { $push: { deliveryHistory: data } },
+      {
+        new: true,
+      }
+    );
+
+    res.status(201).json({
+      DocData,
+      desc: "New order  added",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+      desc: "Error occurred in orderAdded",
     });
   }
 };

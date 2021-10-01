@@ -18,6 +18,7 @@ import EditDPersonModal from "./modals/EditDPersonModal";
 import Icon from "@material-ui/core/Icon";
 import axios from "axios";
 import DeleteDpersonModal from "./modals/DeleteDpersonModal";
+import DpOrderModal from "./modals/DpOrderModal";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
@@ -54,6 +55,8 @@ const DeliveryPersonManagement = () => {
   const [DPID, setDPID] = useState();
   const [dpname, setdpname] = useState();
   const [getalldata, setgetalldata] = useState([]);
+  const [DporderOpen, setDporderOpen] = useState(false);
+  const [Orderdata, setOrderdata] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -208,7 +211,10 @@ const DeliveryPersonManagement = () => {
                                     onClick={() => {
                                       setAddDPersonOpen(false);
                                       setdeleteOpen(false);
-                                      setEditDPersonOpen(true);
+                                      setEditDPersonOpen(false);
+                                      setDporderOpen(true);
+                                      setgetalldata(row);
+                                      setOrderdata(row.deliveryHistory);
                                     }}
                                   >
                                     <WorkIcon />
@@ -272,6 +278,16 @@ const DeliveryPersonManagement = () => {
           setSelectedRows={setSelectedRows}
         />
       )}
+
+      {DporderOpen && (
+        <DpOrderModal
+          modalVisible={DporderOpen}
+          setModalVisible={setDporderOpen}
+          getalldata={{ ...getalldata }}
+          Orderdata={Orderdata}
+        />
+      )}
+
       {editDPersonOpen && (
         <EditDPersonModal
           modalVisible={editDPersonOpen}

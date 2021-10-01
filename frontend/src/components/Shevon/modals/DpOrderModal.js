@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Modal } from "react-responsive-modal";
+import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,70 +9,69 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import Grid from "@material-ui/core/Grid";
-import ReplyIcon from "@material-ui/icons/Reply";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import ReplyInquiriesModal from "./modals/ReplyInquiriesModal";
 import Icon from "@material-ui/core/Icon";
-import ReplyedModal from "./modals/ReplyedModal";
-import axios from "axios";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
+import moment from "moment";
 
 const columns = [
   { id: "no", label: "No", minWidth: 15 },
-  { id: "code", label: "ID", minWidth: 30 },
-  { id: "customerEmail", label: "CustomerEmail", minWidth: 50 },
-  { id: "mobileNo", label: "Mobile Number", minWidth: 60 },
-  { id: "message", label: "Message", minWidth: 390 },
-  { id: "action1", label: "Action1", minWidth: 80 },
-  { id: "action2", label: "Action2", minWidth: 80 },
+  { id: "code", label: "OrderID", minWidth: 30 },
+  { id: "buyerId", label: "buyerId", minWidth: 50 },
+  { id: "address", label: "Address", minWidth: 20 },
+  { id: "price", label: "price", minWidth: 30 },
+  { id: "UpdateDate", label: "UpdateDate", minWidth: 100 },
+  { id: "deliveryType", label: "DeliveryStatus", minWidth: 100 },
 ];
 
-function createData(no, code, customerEmail, mobileNo, message, cDate, reply) {
+//initail commit
+function createData(
+  no,
+  code,
+  buyerId,
+  address,
+  price,
+  UpdateDate,
+  deliveryType
+) {
   return {
     no,
     code,
-    customerEmail,
-    mobileNo,
-    message,
-    reply,
-    cDate,
+    buyerId,
+    address,
+    price,
+    UpdateDate,
+    deliveryType,
   };
 }
 
-const InquiriesManagement = () => {
-  const [replyInquiriesOpen, setReplyInquiriesOpen] = useState(false);
-  const [replyedOpen, setReplyedOpen] = useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const DpOrderModal = ({
+  setModalVisible,
+  modalVisible,
+  getalldata,
+  Orderdata,
+}) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
   const [fetchedRows, setFetchedRows] = useState([]);
   const [searchKey, setSearchKey] = useState("");
-  const [rowid, setrowid] = useState();
-  const [getemail, setgetemail] = useState();
-  const [reply, setreply] = useState([]);
-  const [getinqiur, setgetinqiur] = useState([]);
+
+  console.log(Orderdata);
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:6500/matrix/api/deliveryManager/getallinquiries"
+        const data = Orderdata.map((order, index) =>
+          createData(
+            index + 1,
+            order.orderID,
+            order.buyerID,
+            order.deliveryAddress,
+            order.billAmount,
+            moment(order.updatedTime).format("lll"),
+            order.deliveryStatus
+          )
         );
-        const data = response.data.data
-          .filter((data) => data.department === "delivery")
-          .map((inquiry, index) =>
-            createData(
-              index + 1,
-              inquiry._id,
-              inquiry.email,
-              inquiry.mobileNumber,
-              inquiry.description,
-              inquiry.createdAt,
-              inquiry.reply
-            )
-          );
-        console.log(data);
         setFetchedRows(data);
         setSelectedRows(data);
       } catch (error) {
@@ -78,7 +79,6 @@ const InquiriesManagement = () => {
       }
     })();
   }, []);
-
   const search = () => {
     setSelectedRows(
       fetchedRows.filter((row) => !row.code.indexOf(searchKey.trim()))
@@ -100,17 +100,28 @@ const InquiriesManagement = () => {
   };
 
   return (
-    <div>
-      <Grid item xs={12}>
-        <div className=" rounded-xl px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-          <header className="font-contentFont text-4xl mb-0 font-bold text-prussianBlue ">
-            CUSTOMER INQUIRIES MANAGEMENT
-          </header>
-        </div>
-      </Grid>
-
+    <Modal
+      open={modalVisible}
+      onClose={() => {
+        setModalVisible(false);
+      }}
+      center
+      styles={{
+        modal: {
+          border: "1px solid  gray",
+          borderRadius: "8px",
+          maxWidth: "1500px",
+          width: "60%",
+        },
+      }}
+      focusTrapped={true}
+    >
       <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-        <div className="rounded-xl   mt-0 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
+        <header className="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
+          {getalldata.name} order delivery details
+        </header>
+
+        <div className="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
           <div className="rounded-lg flex bg-gray-100">
             <div className="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
               Search Order ID:
@@ -145,8 +156,8 @@ const InquiriesManagement = () => {
             </div>
           </div>
 
-          <Paper className="mt-0">
-            <TableContainer style={{ maxHeight: "440px" }}>
+          <Paper className="mt-2">
+            <TableContainer style={{ maxHeight: "220px" }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
@@ -184,32 +195,6 @@ const InquiriesManagement = () => {
                                 {column.format && typeof value === "number"
                                   ? column.format(value)
                                   : value}
-                                {column.id === "action1" && (
-                                  <Icon
-                                    className="ml-2 hover:text-gamboge"
-                                    onClick={() => {
-                                      setReplyInquiriesOpen(false);
-                                      setReplyedOpen(true);
-                                      setgetinqiur(row);
-                                      setreply(row.reply);
-                                    }}
-                                  >
-                                    <AttachFileIcon />
-                                  </Icon>
-                                )}
-                                {column.id === "action2" && (
-                                  <Icon
-                                    className="ml-2 hover:text-gamboge"
-                                    onClick={() => {
-                                      setReplyedOpen(false);
-                                      setReplyInquiriesOpen(true);
-                                      setrowid(row.code);
-                                      setgetemail(row.customerEmail);
-                                    }}
-                                  >
-                                    <ReplyIcon />
-                                  </Icon>
-                                )}
                               </TableCell>
                             );
                           })}
@@ -231,24 +216,8 @@ const InquiriesManagement = () => {
           </Paper>
         </div>
       </div>
-      {replyInquiriesOpen && (
-        <ReplyInquiriesModal
-          modalVisible={replyInquiriesOpen}
-          setModalVisible={setReplyInquiriesOpen}
-          rowid={rowid}
-          getemail={getemail}
-        />
-      )}
-      {replyedOpen && (
-        <ReplyedModal
-          modalVisible={replyedOpen}
-          setModalVisible={setReplyedOpen}
-          useReply={reply}
-          getinqiur={{ ...getinqiur }}
-        />
-      )}
-    </div>
+    </Modal>
   );
 };
 
-export default InquiriesManagement;
+export default DpOrderModal;

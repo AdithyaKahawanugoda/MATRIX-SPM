@@ -23,6 +23,7 @@ const {
   editDeliveryPerson,
   getAllOrders,
   assignDp,
+  orderAdded,
 } = require("../controllers/deliveryManager-controller");
 
 //delivery cost
@@ -52,4 +53,5 @@ router.route("/removedp").delete(deleteDeliveryPerson);
 //order management
 router.route("/getallorders").get(getAllOrders);
 router.route("/assigndp").put(assignDp);
+router.route("/addorder").put(orderAdded);
 module.exports = router;
