@@ -605,3 +605,27 @@ exports.getAllOrders = async (req, res) => {
     });
   }
 };
+//update delivery status
+exports.assignDp = async (req, res) => {
+  let { DPID, dpID, deliveryStatus } = req.body;
+
+  try {
+    const DocData = await Order.findOneAndUpdate(
+      { _id: DPID },
+      {
+        $set: {
+          deiveryPersonID: dpID,
+          deliveryStatus: deliveryStatus,
+        },
+      }
+    );
+    res
+      .status(200)
+      .json({ success: true, desc: "order status Updated", DocData });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in assignDp controller-" + error,
+    });
+  }
+};
