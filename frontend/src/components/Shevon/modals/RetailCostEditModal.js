@@ -1,13 +1,56 @@
-import React from "react";
+import Alert from "@material-ui/lab/Alert";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   cost: Yup.number().required("Cost is required"),
 });
 
-const RetailCostEdit = ({ setModalVisible, modalVisible }) => {
+const RetailCostEdit = ({
+  setModalVisible,
+  modalVisible,
+  selectedRetailCost,
+  setRetailCost,
+}) => {
+  const [isAdded, setIsAdded] = useState(false);
+
+  const updateRetailCost = async (values) => {
+    console.log(values);
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editretail",
+
+        {
+          retailID: selectedRetailCost._id,
+          ...values,
+        }
+      );
+
+      setRetailCost((retailCost) => {
+        const arr = [...retailCost];
+        const index = retailCost.findIndex(
+          (retailCost) => retailCost._id === selectedRetailCost._id
+        );
+        arr[index] = {
+          provincename: selectedRetailCost.provincename,
+          cost: values.cost,
+        };
+        return arr;
+      });
+
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -27,16 +70,14 @@ const RetailCostEdit = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
         <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
-          Update Western Province Cost
+          Update {selectedRetailCost.provincename} Cost
         </h6>
         <hr></hr>
 
         <Formik
-          initialValues={{ cost: "" }}
+          initialValues={{ cost: selectedRetailCost.cost }}
           validationSchema={validationSchema}
-          onSubmit={async (values) => {
-            console.log(values);
-          }}
+          onSubmit={updateRetailCost}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
@@ -52,10 +93,7 @@ const RetailCostEdit = ({ setModalVisible, modalVisible }) => {
                       Cost(Rs) :
                     </label>
                   </div>
-                  <div
-                    className="flex-initial  "
-                    style={{ marginLeft: "20px" }}
-                  >
+                  <div className="flex-initial" style={{ marginLeft: "20px" }}>
                     <input
                       className={`focus:outline-none w-56 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
                         errors.cost && touched.cost
@@ -76,6 +114,10 @@ const RetailCostEdit = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
               </div>
+
+              {isAdded && (
+                <Alert severity="success">This is a success message!</Alert>
+              )}
 
               <div className="text-center mb-4 mt-10">
                 <button

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -14,6 +15,24 @@ const validationSchema = Yup.object({
 });
 
 const ContactUs = () => {
+  const addinquir = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:6500/matrix/api/deliveryManager/addinquir",
+        {
+          email: values.email,
+          mobileNumber: values.mobileNum,
+          department: values.department,
+          description: values.message,
+        }
+      );
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="grid grid-cols-2 mt-4 mx-16 rounded-xl  border-0  shadow-md bg-blueSapphire bg-opacity-10">
@@ -34,6 +53,7 @@ const ContactUs = () => {
               validationSchema={validationSchema}
               onSubmit={async (values) => {
                 console.log(values);
+                addinquir(values);
               }}
             >
               {({ handleChange, handleSubmit, values, errors, touched }) => (

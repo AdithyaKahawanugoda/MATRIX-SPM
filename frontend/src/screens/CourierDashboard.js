@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import PropTypes from "prop-types";
@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import DeliveryPersonProfile from "../components/Shevon/DeliveryPersonProfile";
 import CourierOrdersDP from "../components/Shevon/CourierOrdersDP";
 import DeliveredOrdersDP from "../components/Shevon/DeliveredOrdersDP";
+import axios from "axios";
 
 const drawerWidth = 250;
 
@@ -60,6 +61,33 @@ function ResponsiveDrawer(props) {
   const [profileManagementDPOpen, setProfileManagementDPOpen] = useState(false);
   const [courierOrdersDPOpen, setCourierOrdersDPOpen] = useState(true);
   const [deliveredOrdersDPOpen, setDeliveredOrdersDPOpen] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
+      await axios
+        .get(
+          "http://localhost:6500/matrix/api/deliveryPerson/get-profile",
+          config
+        )
+        .then((res) => {
+          setProfileData(res?.data?.profile);
+
+          console.log(res?.data?.profile);
+        })
+        .catch((err) => {
+          alert(err?.response?.data?.desc);
+        });
+    };
+    if (localStorage.getItem("userRole") === "deliveryPerson") {
+      getProfile();
+    }
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -76,7 +104,7 @@ function ResponsiveDrawer(props) {
         ></img>
       </div>
       <div className="mt-2 mx-5 mb-8">
-        <h6 className="font-extrabold text-xl ml-2">Mr. Rajindu Cooray</h6>
+        <h6 className="font-extrabold text-xl ml-2">Mr.Rajindu Cooray</h6>
       </div>
       <List>
         <ListItem button>

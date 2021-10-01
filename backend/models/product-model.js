@@ -46,6 +46,10 @@ const ProductSchema = new mongoose.Schema({
       },
     },
   ],
+  category: {
+    type: String,
+    required: true,
+  },
   inStockQuantity: {
     type: Number,
     required: true,
@@ -126,7 +130,7 @@ const ProductSchema = new mongoose.Schema({
   ],
   addDate: {
     type: Date,
-    default: Date.now,
+    default: Date(),
   },
 });
 

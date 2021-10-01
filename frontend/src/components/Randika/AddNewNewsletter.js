@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import Divider from '@material-ui/core/Divider';
+import Divider from "@material-ui/core/Divider";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -32,14 +32,22 @@ const AddNewNewsletter = () => {
       fileEnc: img,
     };
 
-    console.log(dataObject);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+
     try {
       await axios
         .post(
           "http://localhost:6500/matrix/api/admin/createNewsletter",
-          dataObject
+          dataObject,
+          config
         )
+
         .then(() => {
+          alert("New Item Added");
           window.location.reload(false);
         });
     } catch (err) {
@@ -61,11 +69,11 @@ const AddNewNewsletter = () => {
             CreateNewsItem();
           }}
         >
-          <Grid container spacing={3} >
+          <Grid container spacing={3}>
             <Grid item md={4}>
               <div>
                 <h1 className="text-xl text-left text-black font-bold mb-5 ml-24">
-                  Title : 
+                  Title :
                 </h1>
               </div>
             </Grid>
@@ -84,7 +92,7 @@ const AddNewNewsletter = () => {
             </Grid>
             <Grid item md={4}>
               <div>
-              <h1 className="text-xl text-left text-black font-bold mb-5 ml-24">
+                <h1 className="text-xl text-left text-black font-bold mb-5 ml-24">
                   Description :
                 </h1>
               </div>
@@ -128,15 +136,15 @@ const AddNewNewsletter = () => {
             <Grid item md={4}>
               <div>
                 <h1 className="text-xl text-left text-black font-bold mb-5 ml-24">
-                  Cover image : 
+                  Cover image :
                 </h1>
               </div>
             </Grid>
             <Grid item md={6}>
               <div>
                 {" "}
-                <div className="w-48 h-38 p-1 m-auto">
-                  <div className="border border-lightSilver rounded-2xl border-8 m-1">
+                <div className="w-full h-38 p-1 m-auto">
+                  <div className=" border-lightSilver rounded-2xl border-8 m-1">
                     <FilePond
                       files={file}
                       onupdatefiles={setFile}
@@ -158,21 +166,20 @@ const AddNewNewsletter = () => {
                 </div>
               </div>
             </Grid>
-            <Grid item md={12} >
-              <div className="w-max m-auto" >
-              <button
-                type="submit"
-                className="object-center focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10"
-                style={{
-                  boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-                  float: "right",
-                  color: "white",
-                }}
-              >
-                ADD
-              </button>
+            <Grid item md={12}>
+              <div className="w-max m-auto">
+                <button
+                  type="submit"
+                  className="object-center focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10"
+                  style={{
+                    boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+                    float: "right",
+                    color: "white",
+                  }}
+                >
+                  ADD
+                </button>
               </div>
-             
             </Grid>
           </Grid>
         </form>

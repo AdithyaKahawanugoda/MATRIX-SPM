@@ -11,7 +11,7 @@ const InvoiceSchema = new mongoose.Schema({
   },
   placedAt: {
     type: Date,
-    default: Date.now,
+    default: Date(),
   },
   payment: {
     totalAmount: {
@@ -31,7 +31,7 @@ const InvoiceSchema = new mongoose.Schema({
       productID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "products",
+        ref: "product",
       },
       quantity: {
         type: Number,

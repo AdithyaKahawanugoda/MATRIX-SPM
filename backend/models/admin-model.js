@@ -46,11 +46,11 @@ const AdminSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        required: [true, "Please provide a status"],
+        default: "pending",
       },
       dateToDo: {
         type: Date,
-        required: [true, "Please provide a date"],
+        default: Date(),
       },
     },
   ],

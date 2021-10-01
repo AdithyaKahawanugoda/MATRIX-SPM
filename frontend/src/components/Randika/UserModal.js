@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import moment from "moment";
 import { Modal } from "react-responsive-modal";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,22 +13,10 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import ReplayIcon from "@material-ui/icons/Replay";
 
 import TextField from "@material-ui/core/TextField";
-
-function createData(col1, col2, col3, col4, col5) {
-  return { col1, col2, col3, col4, col5 };
-}
-
-const rows = [
-  createData("O4567", "B101", 1, 6743, "2021-05-25"),
-  createData("O4578", "B101,B102,B111", 3, 5149, "2021-05-24"),
-  createData("O7890", "B105,B108,B109,B120", 5, 2460, "2021-05-24"),
-  createData("O6709", "B151,B111,B181", 4, 6024, "2021-05-24"),
-  createData("O6789", "B141,B101,B111,B181", 4, 4939, "2021-05-25"),
-  createData("O8976", "B191,B171,B111,B101", 4, 8765, "2021-05-24"),
-];
+import RevenueModal from "./RevenueModal";
+import generatePDF from "./AdminRevenueReports";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -49,7 +39,11 @@ function stableSort(array, comparator, searchDate) {
     .filter((val) => {
       if (searchDate === "") {
         return val;
-      } else if (val.col5.toLowerCase().includes(searchDate.toLowerCase())) {
+      } else if (
+        moment(val.purchasedDate)
+          .format("YYYY-MM-DD")
+          .includes(searchDate.toLowerCase())
+      ) {
         return val;
       }
       return null;
@@ -70,10 +64,11 @@ const headCells = [
     disablePadding: true,
     label: "Order ID",
   },
-  { id: "col2", numeric: true, disablePadding: false, label: "Book IDs" },
-  { id: "col3", numeric: true, disablePadding: false, label: "QTY" },
+
+  { id: "col3", numeric: true, disablePadding: false, label: "Items" },
   { id: "col4", numeric: true, disablePadding: false, label: "Net Tot" },
   { id: "col5", numeric: true, disablePadding: false, label: "Date" },
+  { id: "col6", numeric: true, disablePadding: false, label: "" },
 ];
 
 function EnhancedTableHead(props) {
@@ -83,11 +78,11 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead className=" bg-gray-500">
+    <TableHead className=" bg-blueSapphire">
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
-            key={headCell.id}
+            key={index}
             align={"center"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -147,7 +142,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flexWrap: "wrap",
-    backgroundColor: "#D3DCDE",
     width: 200,
   },
   textField: {
@@ -157,14 +151,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RegularOrders = ({ setModalVisible, modalVisible }) => {
+const RegularOrders = ({ setModalVisible, modalVisible, cusID }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
   const [searchDate, setsearchDate] = useState("");
+  const [regularOrders, setregularOrders] = useState([]);
+  const [currentOrder, setCurrentOrder] = useState("");
+
+  const [revenueModalOpen, setRevenueModalOpen] = useState(false);
+
+  const getRegularOrders = async () => {
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getRegularOrders")
+        .then((res) => {
+          setregularOrders(res.data.orders);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
+  useEffect(() => {
+    getRegularOrders();
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -191,126 +208,216 @@ const RegularOrders = ({ setModalVisible, modalVisible }) => {
       styles={{
         modal: {
           borderRadius: "10px",
-          maxWidth: "800px",
+          maxWidth: "900px",
           width: "100%",
         },
       }}
       focusTrapped={true}
     >
-      <div className="w-full h-auto bg-white p-3 rounded-xl">
-        <div className="w-full h-16 mb-1 p-1 bg-lightSilver rounded-lg">
-          <div className="w-max h-16" style={{ float: "left" }}>
-            <form className={classes.container} noValidate>
-              <TextField
-                id="date"
-                label="Choose Date"
-                type="date"
-                defaultValue="2021-05-23"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(event) => {
-                  setsearchDate(event.target.value);
-                }}
-              />
-            </form>
-          </div>
-          <ReplayIcon
-            style={{ float: "left" }}
-            className="m-4"
-            onClick={() => {
-              setsearchDate("");
+      <div className="w-11/12 h-auto p-4 mt-2 m-auto pt-5 rounded-xl bg-blueSapphire bg-opacity-30">
+        <h1 className="font-bold text-lg font-boldTallFont">Placed Orders</h1>
+        <div className="w-11/12 h-10  m-auto mb-2">
+          <button
+            type="submit"
+            className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-48 h-10 sm:w-80 sm:h-12 bg-gamboge  float-right"
+            style={{
+              boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
+              color: "white",
             }}
-          />
-        </div>
+            onClick={() => {
+              if (!searchDate) {
+                generatePDF(regularOrders, "regular");
+              }
+              if (searchDate) {
+                let filteredRegularOrders = [];
+                regularOrders
+                  .filter((val) => {
+                    if (searchDate === "") {
+                      return val;
+                    } else if (
+                      moment(val.purchasedDate)
+                        .format("YYYY-MM-DD")
+                        .includes(searchDate.toLowerCase())
+                    ) {
+                      return val;
+                    }
+                    return null;
+                  })
+                  .map((regOrders) => {
+                    return filteredRegularOrders.push(regOrders);
+                  });
 
-        <div className={classes.root}>
-          <Paper className={classes.paper}>
-            <TableContainer>
-              <Table
-                className={classes.table}
-                aria-labelledby="tableTitle"
-                aria-label="enhanced table"
-              >
-                <EnhancedTableHead
-                  classes={classes}
-                  order={order}
-                  orderBy={orderBy}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                generatePDF(filteredRegularOrders, "regular");
+              }
+            }}
+          >
+            Generate Report
+          </button>
+        </div>
+        <div className="w-full h-auto bg-white p-3 rounded-xl">
+          <div className="w-full h-16 mb-1 p-1 bg-blueSapphire bg-opacity-30 rounded-lg">
+            <div className="w-max h-16" style={{ float: "left" }}>
+              <form className={classes.container} noValidate>
+                <TextField
+                  id="date"
+                  label="Choose Date"
+                  type="date"
+                  defaultValue="2021-05-23"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={(event) => {
+                    setsearchDate(event.target.value);
+                  }}
                 />
-                <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy), searchDate)
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .filter((val) => {
-                      if (searchDate === "") {
-                        return val;
-                      } else if (
-                        val.col5
-                          .toLowerCase()
-                          .includes(searchDate.toLowerCase())
-                      ) {
-                        return val;
-                      }
-                      return null;
-                    })
-                    .map((row, index) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
+              </form>
+            </div>
 
-                      return (
-                        <TableRow hover tabIndex={-1} key={row.name}>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            align="left"
-                            style={{ paddingLeft: "20px" }}
-                          >
-                            {row.col1}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            style={{ paddingLeft: "45px" }}
-                          >
-                            {row.col2}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            style={{ paddingLeft: "35px" }}
-                          >
-                            {row.col3}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            style={{ paddingLeft: "28px" }}
-                          >
-                            Rs.{row.col4}
-                          </TableCell>
-                          <TableCell
-                            align="left"
-                            style={{ paddingLeft: "28px" }}
-                          >
-                            {row.col5}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
+            {searchDate && (
+              <div className="cursor-pointer w-max mt-3 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
+                <p
+                  className=" text-white font-bold text-center text-sm"
+                  onClick={() => {
+                    setsearchDate("");
+                  }}
+                >
+                  Clear
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className={classes.root}>
+            <Paper className={classes.paper}>
+              <TableContainer>
+                <Table
+                  className={classes.table}
+                  aria-labelledby="tableTitle"
+                  aria-label="enhanced table"
+                >
+                  <EnhancedTableHead
+                    classes={classes}
+                    order={order}
+                    orderBy={orderBy}
+                    onRequestSort={handleRequestSort}
+                    rowCount={regularOrders.length}
+                  />
+                  <TableBody>
+                    {stableSort(
+                      regularOrders,
+                      getComparator(order, orderBy),
+                      searchDate
+                    )
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .filter((val) => {
+                        if (val.buyerID === cusID) {
+                          return val;
+                        }
+                        return null;
+                      })
+                      .filter((val) => {
+                        if (searchDate === "") {
+                          return val;
+                        } else if (
+                          moment(val.purchasedDate)
+                            .format("YYYY-MM-DD")
+                            .includes(searchDate.toLowerCase())
+                        ) {
+                          return val;
+                        }
+                        return null;
+                      })
+                      .map((row, index) => {
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <TableRow hover tabIndex={-1} key={index}>
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                              align="left"
+                              style={{ paddingLeft: "20px" }}
+                            >
+                              <h1 className="font-bold text-md">{row._id}</h1>
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{ paddingLeft: "35px" }}
+                            >
+                              <h1 className="font-bold text-md">
+                                {row.orderData.length}
+                              </h1>
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{ paddingLeft: "28px" }}
+                            >
+                              <h1 className="font-bold text-md">
+                                Rs.{row.billAmount}
+                              </h1>
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{ paddingLeft: "28px" }}
+                            >
+                              <h1 className="font-bold text-md">
+                                {moment(row.purchasedDate).format("MM-DD-YYYY")}
+                              </h1>
+                            </TableCell>
+
+                            <TableCell
+                              align="left"
+                              style={{ paddingLeft: "20px" }}
+                            >
+                              {" "}
+                              <button
+                                type="submit"
+                                className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12"
+                                style={{
+                                  boxShadow:
+                                    "0px 10px 15px rgba(3, 17, 86, 0.25)",
+                                  float: "right",
+                                  color: "white",
+                                }}
+                                onClick={() => {
+                                  setRevenueModalOpen(true);
+                                  setCurrentOrder(row.orderData);
+                                }}
+                              >
+                                View More
+                              </button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={regularOrders.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </div>
         </div>
+        {revenueModalOpen && (
+          <RevenueModal
+            setModalVisible={setRevenueModalOpen}
+            modalVisible={revenueModalOpen}
+            currentOrder={currentOrder}
+          />
+        )}
       </div>
     </Modal>
   );

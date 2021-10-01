@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   userName: Yup.string().trim().uppercase().required("User Name is required"),
@@ -21,10 +23,54 @@ const validationSchema = Yup.object({
     .integer()
     .min(10, "Please enter a valid phone number")
     .required("Phone number is required"),
-  province: Yup.string().trim().uppercase().required("Province is required"),
 });
 
-const EditDPersonModal = ({ setModalVisible, modalVisible }) => {
+const EditDPersonModal = ({
+  setModalVisible,
+  modalVisible,
+  setFetchedRows,
+  setSelectedRows,
+  getalldata,
+}) => {
+  const [isAdded, setIsAdded] = useState(false);
+  const [failAdded, setfailAdded] = useState(false);
+
+  const updateDperson = async (values) => {
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editdp",
+        {
+          DPID: getalldata.userId,
+          username: values.userName,
+          email: values.email,
+          password: values.password,
+          phone: values.mobileNum,
+        }
+      );
+      const filterFunc = (rows) =>
+        rows.map((row) => {
+          if (row.userId === getalldata.userId)
+            return {
+              ...row,
+              name: values.userName,
+              email: values.email,
+              mobile: values.mobileNum,
+            };
+          else return row;
+        });
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
+      setFetchedRows(filterFunc);
+      setSelectedRows(filterFunc);
+    } catch (error) {
+      console.log(error);
+      setfailAdded(true);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -44,22 +90,22 @@ const EditDPersonModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-4 pt-6 pb-4 ">
         <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
-          Update User Details
+          Update {getalldata.name} Details
         </h6>
         <hr></hr>
 
         <Formik
           initialValues={{
-            userName: "",
-            email: "",
-            mobileNum: "",
-            province: "",
+            userName: getalldata.name,
+            email: getalldata.email,
+            mobileNum: getalldata.mobile,
             password: "",
             confirmpassword: "",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            updateDperson(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -158,49 +204,6 @@ const EditDPersonModal = ({ setModalVisible, modalVisible }) => {
                 </div>
 
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
-                  <div className=" my-1">
-                    <label
-                      className="block text-sm font-medium leading-149  md:text-lg"
-                      htmlFor={"province"}
-                    >
-                      Province :
-                    </label>
-                  </div>
-                  <div className=" col-span-2">
-                    <select
-                      className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
-                        errors.province && touched.province
-                          ? "border-red-500"
-                          : "border-gray-600"
-                      } text-base`}
-                      id="province"
-                      type="text"
-                      placeholder="Railway station name"
-                      onChange={handleChange("province")}
-                      value={values.province}
-                    >
-                      <option value="" disabled>
-                        Select your option
-                      </option>
-                      <option value="wp">Western Province</option>
-                      <option value="CP">Central Province</option>
-                      <option value="EP">Eastern Province</option>
-                      <option value="NP">Northern Province</option>
-                      <option value="SP">Southern Province</option>
-                      <option value="NWP">North Western Province</option>
-                      <option value="NCP">North Central Province</option>
-                      <option value="UP">Uva Province</option>
-                      <option value="SP">Sabaragamuwa Province</option>
-                    </select>
-                    {errors.province && touched.province ? (
-                      <div className="text-red-500 text-xs mt-1 md:text-sm">
-                        {errors.province}
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
                   <div className=" my-1">Password :</div>
                   <div className=" col-span-2">
                     <input
@@ -246,7 +249,16 @@ const EditDPersonModal = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
               </div>
-
+              {isAdded && (
+                <Alert severity="success">
+                  Successfully {getalldata.name} Update
+                </Alert>
+              )}
+              {failAdded && (
+                <Alert severity="error">
+                  {values.destination} Delivery Person already exists
+                </Alert>
+              )}
               <div className="text-center mb-0 mt-6">
                 <button
                   type="submit"

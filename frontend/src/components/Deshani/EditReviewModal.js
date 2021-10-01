@@ -3,17 +3,50 @@ import { Modal } from "react-responsive-modal";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Rating from '@material-ui/lab/Rating';
+import axios from "axios";
 
 const validationSchema = Yup.object({
-  bookName: Yup.string().trim().required("Book Name is required"),
-  comment:Yup.string().trim().required("Description is required"),
+  bkName: Yup.string().trim().required("Book Name is required"),
+  commentt:Yup.string().trim().required("Description is required"),
 
 
 })
 
-const EditReviewModal = ({ setModalVisible, modalVisible }) => {
-    const [value, setValue] = useState(2);
+const EditReviewModal = ({ setModalVisible, modalVisible,reviewID, productID, bName, rate, comments }) => {
+  const [rates,setRates] = useState(rate);
 
+  const updateReview = async (values) =>{
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+
+    let dataObject = {
+      reviewId: reviewID,
+      productId:productID,
+      bookName:values.bkName,
+      rating:rates,
+      comment:values.commentt,
+    };
+
+    try{
+      await axios
+          .put(
+            "http://localhost:6500/matrix/api/customer/updateReview",
+            dataObject,
+            config
+          )
+          .then((res)=>{
+            alert("Review updated successfully");
+          })
+          .catch((err) =>{
+            alert(err);
+          });
+    }catch(error){
+      alert("Error Occured-" + error);
+    }
+  };
   return (
     <Modal
       open={modalVisible}
@@ -33,10 +66,11 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
         <Formik
-          initialValues={{ bookName: "", rating: "", comment:"" }}
+          initialValues={{ bkName: bName, rating: "", commentt: comments}}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            updateReview(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -57,27 +91,27 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
                   </label>
                   <input
                   className={`focus:outline-none w-full pb-2 md:pb-3 border-b focus:border-blue-900 ${
-                    errors.bookName && touched.bookName
+                    errors.bkName && touched.bkName
                       ? "border-red-500"
                       : "border-gray-600"
                   }  text-base`}
                     id="email"
                     type="text"
-                    onChange={handleChange("bookName")}
-                    value={values.bookName}
+                    onChange={handleChange("bkName")}
+                    value={values.bkName}
                   />
-                  {errors.bookName && touched.bookName ? (
+                  {errors.bkName && touched.bkName ? (
                     <div className="text-red-500 text-xs mt-1 md:text-sm">
-                      {errors.bookName}
+                      {errors.bkName}
                     </div>
                   ) : null}
                 </div>
                 <div className="pb-6 md:pr-3 md:mb-0 w-full">
                 <Rating
                 name="simple-controlled"
-                value={value}
+                value={rates}
                 onChange={(event, newValue) => {
-                  setValue(newValue);
+                  setRates(newValue);
                 }}
               />
                 </div>
@@ -90,18 +124,18 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
                   </label>
                   <textarea
                   className={`focus:outline-none w-full pb-2 md:pb-3 border-b focus:border-blue-900 ${
-                    errors.comment && touched.comment
+                    errors.commentt && touched.commentt
                       ? "border-red-500"
                       : "border-gray-600"
                   }  text-base`}
                     id="comment"
                     type="text"
-                    onChange={handleChange("comment")}
-                    value={values.comment}
+                    onChange={handleChange("commentt")}
+                    value={values.commentt}
                   />
-                  {errors.comment && touched.comment ? (
+                  {errors.commentt && touched.commentt ? (
                     <div className="text-red-500 text-xs mt-1 md:text-sm">
-                      {errors.comment}
+                      {errors.commentt}
                     </div>
                   ) : null}
                 </div>
@@ -118,6 +152,9 @@ const EditReviewModal = ({ setModalVisible, modalVisible }) => {
                 type="submit"
                 className="focus:outline-none bg-gray-400 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
                 style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
+                onClick={()=>{
+                  setModalVisible(false);
+                }}
               >
                 Cancel
               </button>

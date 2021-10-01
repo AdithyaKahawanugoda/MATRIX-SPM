@@ -55,7 +55,25 @@ const CustomerSchema = new mongoose.Schema({
     {
       productID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
+        ref: "product",
+      },
+      unitPrice: {
+        type: Number,
+      },
+      proImg: {
+        type: String,
+      },
+      originalTitle: {
+        type: String,
+      },
+      originalAuthor: {
+        type: String,
+      },
+      aboutBook: {
+        type: String,
+      },
+      weight: {
+        type: Number,
       },
     },
   ],
@@ -63,7 +81,25 @@ const CustomerSchema = new mongoose.Schema({
     {
       productID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
+        ref: "product",
+      },
+      proName: {
+        type: String,
+      },
+      proImg: {
+        type: String,
+      },
+      unitPrice: {
+        type: Number,
+      },
+      originalAuthor: {
+        type: String,
+      },
+      aboutBook: {
+        type: String,
+      },
+      weight: {
+        type: Number,
       },
       createdAt: {
         type: Date,

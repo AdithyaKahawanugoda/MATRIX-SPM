@@ -1,13 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   categoryName: Yup.string().required("Category Name is required"),
 });
 
-const AddCategoryModal = ({ setModalVisible, modalVisible }) => {
+const AddCategoryModal = ({
+  setModalVisible,
+  modalVisible,
+  setSelectedRows,
+}) => {
+  const [isAdded, setIsAdded] = useState(false);
+  const [failAdded, setfailAdded] = useState(false);
+
+  const addcategory = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:6500/matrix/api/deliveryManager/addcategory",
+        { category: values.categoryName }
+      );
+      setSelectedRows((selectedRows) => [
+        ...selectedRows,
+        {
+          no: selectedRows.length + 1,
+          code: response.data.DocData._id,
+          categoryName: values.categoryName,
+        },
+      ]);
+
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+      console.log(response);
+      setIsAdded(true);
+    } catch (error) {
+      console.log(error);
+      setfailAdded(true);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -36,6 +71,7 @@ const AddCategoryModal = ({ setModalVisible, modalVisible }) => {
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            addcategory(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -76,7 +112,12 @@ const AddCategoryModal = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
               </div>
-
+              {isAdded && <Alert severity="success">Successfully added!</Alert>}
+              {failAdded && (
+                <Alert severity="error">
+                  {values.destination} cannot add this category!
+                </Alert>
+              )}
               <div className="text-center mb-4 mt-10">
                 <button
                   type="submit"

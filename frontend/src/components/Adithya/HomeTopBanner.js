@@ -3,10 +3,9 @@ import React from "react";
 const HomeTopBanner = () => {
   return (
     <div
-      className="bg-blue-200 bg-cover bg-fixed bg-center bg-no-repeat rounded-b-xl"
+      className="bg-blue-200 bg-cover bg-fixed bg-center bg-no-repeat rounded-b-xl px-0"
       style={{
         backgroundImage: `url("https://i.ibb.co/KWyrQLQ/bc625798239927-5ed7bc86159b6-1.jpg")`,
-        height: "50vh",
       }}
     >
       <div className="container flex justify-between align-bottom pt-80">

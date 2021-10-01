@@ -62,13 +62,13 @@ const headCells = [
     id: "col1",
     numeric: false,
     disablePadding: true,
-    label: "No",
+    label: "",
   },
-  { id: "col2", numeric: true, disablePadding: false, label: "BookID" },
+  { id: "col2", numeric: true, disablePadding: false, label: "BOOK ID" },
   { id: "col3", numeric: true, disablePadding: false, label: "ISBN" },
-  { id: "col4", numeric: true, disablePadding: false, label: "Title" },
-  { id: "col5", numeric: true, disablePadding: false, label: "Translator" },
-  { id: "col6", numeric: true, disablePadding: false, label: "Original Book" },
+  { id: "col4", numeric: true, disablePadding: false, label: "TITLE" },
+  { id: "col5", numeric: true, disablePadding: false, label: "TRANSLATOR" },
+  { id: "col6", numeric: true, disablePadding: false, label: "ORIGINAL BOOK" },
   { id: "col7", numeric: true, disablePadding: false, label: "" },
 ];
 
@@ -133,9 +133,9 @@ const useStyles = makeStyles((theme) => ({
 
 const InventoryInStock = () => {
   const classes = useStyles();
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("no");
-  const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
@@ -143,49 +143,25 @@ const InventoryInStock = () => {
 
   const [bookModalOpen, setBookModalOpen] = useState(false);
   const [bookID, setBookID] = useState("");
-  const [publishingTitle, setPublishingTitle] = useState("");
-  const [originalTitle, setOriginalTitle] = useState("");
-  const [translator, setTranslator] = useState("");
-  const [originalAuthor, setOriginalAuthor] = useState("");
   const [ISBN, setISBN] = useState("");
-  const [bookImage, setbookImage] = useState("");
-
-  // const [title, setTitle] = useState("");
-  // const [translator, setTranslator] = useState("");
-  // const [originalbook, setOriginalBook] = useState("");
 
   useEffect(() => {
     const getAllBooks = async () => {
       await axios
-        .get("http://localhost:6500/matrix/api/inventoryManager/getbooks")
+        .get("http://localhost:6500/matrix/api/inventoryManager/get-books")
         .then((res) => {
-          setTableData(res.data.allBooks);
-          console.log(tableData);
+          setTableData(res?.data?.allBooks);
         })
         .catch((err) => {
-          console.log(err);
+          alert(err?.response?.data?.desc);
         });
     };
     getAllBooks();
   }, []);
 
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelecteds = tableData.map((n) => n.name);
-  //     setSelected(newSelecteds);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(+event.target.value);
-  //   setPage(0);
-  // };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -272,10 +248,6 @@ const InventoryInStock = () => {
           </div>
         </Paper>
         <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
-          {/* <header className="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
-            ALL STOCKS
-          </header> */}
-
           <div className="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
             <div className="rounded-lg flex bg-gray-100">
               <div className="flex-initial  text-center  ml-4 mt-4 py-2 m-2">
@@ -293,14 +265,8 @@ const InventoryInStock = () => {
                   }}
                 ></input>
               </div>
-              {/* 
-              <div className=" flex-initial px-0 py-2 m-2">
-                <button className="bg-gamboge hover:bg-halloweenOrange text-white font-bold py-2 px-4 rounded-full">
-                  Search
-                </button>
-              </div> */}
 
-              <div className="text-black  px-0 py-2 m-4">
+              <div className="text-black  px-0 py-2 m-2">
                 <Icon
                   className="text-gray-500  hover:text-halloweenOrange"
                   onClick={() => {
@@ -321,7 +287,6 @@ const InventoryInStock = () => {
                   >
                     <EnhancedTableHead
                       classes={classes}
-                      numSelected={selected.length}
                       order={order}
                       orderBy={orderBy}
                       onRequestSort={handleRequestSort}
@@ -342,9 +307,6 @@ const InventoryInStock = () => {
                             return val;
                           } else if (
                             val.ISBN.includes(searchTerm) ||
-                            val._id
-                              .toLowerCase()
-                              .includes(searchTerm.toLowerCase()) ||
                             val.publishingTitle
                               .toLowerCase()
                               .includes(searchTerm.toLowerCase()) ||
@@ -357,6 +319,7 @@ const InventoryInStock = () => {
                           ) {
                             return val;
                           }
+                          return null;
                         })
                         .map((book, index) => {
                           const labelId = `enhanced-table-checkbox-${index}`;
@@ -372,29 +335,24 @@ const InventoryInStock = () => {
                               >
                                 {index + 1}
                               </TableCell>
-                              <TableCell align="center">{book._id}</TableCell>
-                              <TableCell align="center">{book.ISBN}</TableCell>
-                              <TableCell align="center">
+                              <TableCell align="left">{book._id}</TableCell>
+                              <TableCell align="left">{book.ISBN}</TableCell>
+                              <TableCell align="left">
                                 {book.publishingTitle}
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell align="left">
                                 {book.translator}
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell align="left">
                                 {book.originalTitle}
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell align="right">
                                 {" "}
                                 <button
                                   className="focus:outline-none bg-gamboge font-semibold rounded py-2 px-4"
                                   onClick={() => {
                                     setBookID(book._id);
-                                    setPublishingTitle(book.publishingTitle);
-                                    setOriginalTitle(book.originalTitle);
-                                    setTranslator(book.translator);
-                                    setOriginalAuthor(book.originalAuthor);
                                     setISBN(book.ISBN);
-                                    setbookImage(book.bookImage);
                                     setBookModalOpen(true);
                                   }}
                                 >
@@ -427,12 +385,7 @@ const InventoryInStock = () => {
           setModalVisible={setBookModalOpen}
           modalVisible={bookModalOpen}
           bookID={bookID}
-          publishingTitle={publishingTitle}
-          originalTitle={originalTitle}
-          Translator={translator}
-          originalAuthor={originalAuthor}
           ISBN={ISBN}
-          bookImage={bookImage}
         />
       )}
     </div>

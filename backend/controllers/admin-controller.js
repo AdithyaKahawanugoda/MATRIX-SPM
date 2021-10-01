@@ -2,6 +2,12 @@ const AdminModel = require("../models/admin-model");
 const RequestBook = require("../models/requestBook-model");
 const NewsletterModal = require("../models/newsletter-model");
 const ProductModel = require("../models/product-model");
+const InvoiceModel = require("../models/invoice-model");
+const OrdereModel = require("../models/order-model");
+const CustomerModel = require("../models/customer-model");
+const CusMessages = require("../models/contactUs-model");
+const sendEmail = require("../utils/SendEmail");
+
 const { cloudinary } = require("../utils/cloudinary");
 
 exports.getBookRequests = async (req, res) => {
@@ -11,7 +17,7 @@ exports.getBookRequests = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching book requests -" + err,
+      desc: "Error in fetching book requests -" + error,
     });
   }
 };
@@ -52,7 +58,7 @@ exports.getNewsletters = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching Newsletters -" + err,
+      desc: "Error in fetching Newsletters -" + error,
     });
   }
 };
@@ -131,7 +137,7 @@ exports.deleteNewsletter = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      desc: "Error delete newsletter - " + err,
+      desc: "Error delete newsletter - " + error,
     });
   }
 };
@@ -145,7 +151,7 @@ exports.getProducts = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching Products -" + err,
+      desc: "Error in fetching Products -" + error,
     });
   }
 };
@@ -312,6 +318,217 @@ exports.updateNewsletters = async (req, res) => {
     res.status(500).json({
       success: false,
       desc: "Error in updateProfilePicture controller-" + error,
+    });
+  }
+};
+
+exports.getBulkOrders = async (req, res) => {
+  try {
+    const bulkorders = await InvoiceModel.find().populate("items.productID");
+
+    res.status(200).send({ bulkorders: bulkorders });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in getBulkOrders -" + error,
+    });
+  }
+};
+
+exports.getRegularOrders = async (req, res) => {
+  try {
+    const orders = await OrdereModel.find().populate("orderData.productID");
+
+    res.status(200).send({ orders: orders });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in fetching Orders -" + error,
+    });
+  }
+};
+
+exports.getNewUsers = async (req, res) => {
+  try {
+    const customers = await CustomerModel.find();
+
+    res.status(200).send({ customers: customers });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in fetching customers -" + error,
+    });
+  }
+};
+
+exports.getCustomerMessages = async (req, res) => {
+  try {
+    const messages = await CusMessages.find();
+
+    res.status(200).send({ messages: messages });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in fetching customers -" + error,
+    });
+  }
+};
+
+exports.replyToCustomers = async (req, res) => {
+  const messageId = req.body.messageId;
+  const rep = req.body.reply;
+  const email = req.body.email;
+  console.log(email);
+  const reply = {
+    replynote: rep,
+  };
+  try {
+    const Result = await CusMessages.findOneAndUpdate(
+      { _id: messageId },
+      { $push: { reply: reply } },
+      {
+        new: true,
+        upsert: false,
+      }
+    );
+    console.log(Result);
+    sendEmail({
+      to: email,
+      subject: "Regarding Your Message To Matrix",
+      text: `<h5>Dear Customer,</h5>
+    <p>
+        ${rep}
+    </p>
+  `,
+    });
+    res.status(200).send({ message: Result });
+
+    return true;
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error reply to message -" + error,
+    });
+  }
+};
+
+exports.addToDos = async (req, res) => {
+  const toDoItem = req.body.toDoItem;
+  const id = req.user._id;
+  const toDo = {
+    toDoItem: toDoItem,
+  };
+  try {
+    const Result = await AdminModel.findOneAndUpdate(
+      { _id: id },
+      { $push: { toDos: toDo } },
+      {
+        new: true,
+        upsert: false,
+      }
+    );
+    res.status(200).send({ toDo: Result });
+
+    return true;
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in adding todo -" + error,
+    });
+  }
+};
+
+exports.removeToDos = async (req, res) => {
+  const toDoItem = req.body.toDoItem;
+  const id = req.user._id;
+
+  try {
+    const Result = await AdminModel.findOneAndUpdate(
+      { _id: id },
+      { $pull: { toDos: { toDoItem: toDoItem } } },
+      {
+        new: true,
+        upsert: false,
+      }
+    );
+    res.status(200).send({ toDo: Result });
+
+    return true;
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in adding todo -" + error,
+    });
+  }
+};
+
+exports.getAdmin = async (req, res) => {
+  const id = req.user._id;
+
+  try {
+    const Admin = await AdminModel.findById({ _id: id });
+    res.status(200).send({ Admin: Admin });
+
+    return true;
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in adding todo -" + error,
+    });
+  }
+};
+
+exports.updateAdmin = async (req, res) => {
+  const { username, email, fileEnc } = req.body;
+  let Admin;
+  try {
+    if (fileEnc) {
+      const uploadedResponse = await cloudinary.uploader.upload(fileEnc, {
+        upload_preset: "Newsletter_Covers",
+      });
+      Admin = await AdminModel.findByIdAndUpdate(
+        req.user._id,
+        {
+          $set: {
+            username,
+            email,
+            profilePicture: {
+              imagePublicId: uploadedResponse.public_id,
+              imageSecURL: uploadedResponse.secure_url,
+            },
+          },
+        },
+        {
+          new: true,
+          upsert: false,
+          omitUndefined: true,
+        }
+      );
+    } else {
+      Admin = await AdminModel.findByIdAndUpdate(
+        req.user._id,
+        {
+          $set: {
+            username,
+            email,
+          },
+        },
+        {
+          new: true,
+          upsert: false,
+          omitUndefined: true,
+        }
+      );
+    }
+    res.status(200).send({
+      success: true,
+      desc: "Admin account updated successfully",
+      Admin,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      desc: "Error in update Admin account " + error,
     });
   }
 };

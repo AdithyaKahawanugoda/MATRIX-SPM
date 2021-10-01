@@ -4,7 +4,11 @@ const OrderSchema = new mongoose.Schema({
   buyerID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "customers",
+    ref: "customer",
+  },
+  deiveryPersonID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "deliverypeople",
   },
   billAmount: {
     type: Number,
@@ -16,31 +20,26 @@ const OrderSchema = new mongoose.Schema({
   },
   deliveryFee: {
     type: Number,
-    required: true,
+    default: 200,
   },
   purchasedDate: {
     type: Date,
-    default: Date.now,
+    default: Date(),
   },
-  deliveryStatus: [
-    {
-      status: {
-        type: String,
-        default: "pending",
-      },
-      updatedTime: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
-
+  deliveryStatus: {
+    type: String,
+    default: "pending",
+  },
+  updatedTime: {
+    type: Date,
+    default: Date(),
+  },
   orderData: [
     {
       productID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "products",
+        ref: "product",
       },
       quantity: {
         type: Number,

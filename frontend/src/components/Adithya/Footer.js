@@ -21,6 +21,7 @@ const Footer = () => {
     footerSitemapLinks: [
       { labelName: "About", path: "/about" },
       { labelName: "Newsletter", path: "/newsletter" },
+      { labelName: "Offers", path: "/offers" },
       { labelName: "Support", path: "/support" },
     ],
   };

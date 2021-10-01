@@ -112,21 +112,6 @@ const DeliveryManagerProfile = () => {
             </div>
           </div>
         </div>
-
-        <div className="rounded-xl my-1 mx-2 px-5 py-5   shadow-md bg-prussianBlue bg-opacity-30">
-          <div className="grid grid-cols-2">
-            <div>
-              <h6 className="ml-4 mt-2 font-black text-lg">
-                Monthly Delivery Report
-              </h6>
-            </div>
-            <div className=" mt-0 mb-0 text-right">
-              <button className="bg-blueSapphire hover:bg-prussianBlue text-md text-white font-bold py-3 px-6 rounded-full">
-                Generate
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
       {editDmProfileOpen && (

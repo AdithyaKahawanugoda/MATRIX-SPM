@@ -49,7 +49,7 @@ InventoryManagerSchema.pre("save", async function (next) {
 
   //hash password before passing it to db save query through the model
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt); //this.password reffers to password that contains within request object
+  this.password = await bcrypt.hash(this.password, salt); //this.password refers to password that contains within request object
 
   next();
 });

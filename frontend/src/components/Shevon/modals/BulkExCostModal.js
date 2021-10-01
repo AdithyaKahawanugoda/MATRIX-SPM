@@ -1,14 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
-  destination: Yup.string().required("Destination is required"),
-  cost: Yup.number().required("Cost is required"),
+  bulkexpressprecentage: Yup.number().required(
+    "bulkexpressprecentage is required"
+  ),
 });
 
-const BulkExCostModal = ({ setModalVisible, modalVisible }) => {
+const BulkExCostModal = ({
+  setModalVisible,
+  modalVisible,
+  selectbulkExCost,
+  setBulkExCost,
+}) => {
+  const [isAdded, setIsAdded] = useState(false);
+
+  const updatePercentage = async (values) => {
+    console.log(values);
+    try {
+      await axios.put(
+        "http://localhost:6500/matrix/api/deliveryManager/editprecentage",
+
+        {
+          bulkexpressprecentage: values.bulkexpressprecentage,
+        }
+      );
+
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Modal
       open={modalVisible}
@@ -30,14 +60,13 @@ const BulkExCostModal = ({ setModalVisible, modalVisible }) => {
         <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
           Update Express Percentage
         </h6>
+
         <hr></hr>
 
         <Formik
-          initialValues={{ destination: "", cost: "" }}
+          initialValues={{ bulkexpressprecentage: selectbulkExCost }}
           validationSchema={validationSchema}
-          onSubmit={async (values) => {
-            console.log(values);
-          }}
+          onSubmit={updatePercentage}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
@@ -50,33 +79,36 @@ const BulkExCostModal = ({ setModalVisible, modalVisible }) => {
                 <div className="flex mt-4">
                   <div className=" mx-8 flex-initial">
                     <label className="block text-sm font-medium leading-149 mb-3 md:text-lg">
-                      Percentage(Rs) :
+                      Percentage(%) :
                     </label>
                   </div>
-                  <div
-                    className="flex-initial  "
-                    style={{ marginLeft: "20px" }}
-                  >
+                  <div className="flex-initial" style={{ marginLeft: "20px" }}>
                     <input
                       className={`focus:outline-none w-56 h-8 pl-2 border-2 rounded-lg focus:border-halloweenOrange border-lightSilver ${
-                        errors.cost && touched.cost
+                        errors.bulkexpressprecentage &&
+                        touched.bulkexpressprecentage
                           ? "border-red-500"
                           : "border-gray-600"
                       } text-base`}
-                      id="cost"
+                      id="bulkexpressprecentage"
                       type="Number"
                       placeholder="00.00"
-                      onChange={handleChange("cost")}
-                      value={values.cost}
+                      onChange={handleChange("bulkexpressprecentage")}
+                      value={values.bulkexpressprecentage}
                     />
-                    {errors.cost && touched.cost ? (
+                    {errors.bulkexpressprecentage &&
+                    touched.bulkexpressprecentage ? (
                       <div className="text-red-500 text-xs mt-1 md:text-sm">
-                        {errors.cost}
+                        {errors.bulkexpressprecentage}
                       </div>
                     ) : null}
                   </div>
                 </div>
               </div>
+
+              {isAdded && (
+                <Alert severity="success">This is a success message!</Alert>
+              )}
 
               <div className="text-center mb-4 mt-10">
                 <button
