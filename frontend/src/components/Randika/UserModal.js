@@ -215,6 +215,7 @@ const RegularOrders = ({ setModalVisible, modalVisible, cusID }) => {
       focusTrapped={true}
     >
       <div className="w-11/12 h-auto p-4 mt-2 m-auto pt-5 rounded-xl bg-blueSapphire bg-opacity-30">
+        <h1 className="font-bold text-lg font-boldTallFont">Placed Orders</h1>
         <div className="w-11/12 h-10  m-auto mb-2">
           <button
             type="submit"

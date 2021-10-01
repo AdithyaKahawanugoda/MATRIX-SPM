@@ -40,6 +40,7 @@ const RevenueModal = ({ setModalVisible, modalVisible, currentOrder }) => {
     >
       <div className="w-full pt-4 h-auto mb-5 bg-white shadow-2xl">
         <div className="w-full4/5 m-auto h-full  pt-3">
+          <h1 className="font-bold text-lg font-boldTallFont">Order Items</h1>
           <div className="w-full m-auto h-4/5 p-5">
             <TableContainer component={Paper}>
               <Table

@@ -21,7 +21,6 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
         )
 
         .then(() => {
-          
           window.location.reload(false);
         });
     } catch (err) {
@@ -53,9 +52,13 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
             reply();
           }}
         >
+          {" "}
+       
           <Grid container spacing={1}>
             <Grid item md={4}>
-              <div className="ml-10">Reply</div>
+              <div className="font-bold text-lg ml-10 font-boldTallFon">
+                Reply Message
+              </div>
             </Grid>
             <Grid item md={6}>
               <div>

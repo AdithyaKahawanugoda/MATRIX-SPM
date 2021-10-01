@@ -56,7 +56,7 @@ const AdminUserAccount = () => {
     }
   };
 
-  const UpdateNewsletter = async (values) => {
+  const UpdateAdmin = async (values) => {
     let dataObject = {
       username: values.username,
       email: values.email,
@@ -84,6 +84,7 @@ const AdminUserAccount = () => {
           config
         )
         .then(() => {
+          alert("Account Updated Suceesfully");
           window.location.reload(false);
         });
     } catch (err) {
@@ -96,7 +97,7 @@ const AdminUserAccount = () => {
   }, []);
 
   return (
-    <div >
+    <div>
       {username && email && (
         <div className="w-4/5 h-auto bg-lightSilver m-auto p-10 mt-10 mb-10">
           <div className="shadow-2xl bg-white mb-10 mt-10">
@@ -153,7 +154,7 @@ const AdminUserAccount = () => {
                                 }}
                                 validationSchema={validationSchema}
                                 onSubmit={async (values) => {
-                                  UpdateNewsletter(values);
+                                  UpdateAdmin(values);
                                 }}
                               >
                                 {({

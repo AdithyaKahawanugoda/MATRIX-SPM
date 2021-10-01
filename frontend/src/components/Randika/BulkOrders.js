@@ -365,7 +365,7 @@ const RegularOrders = () => {
                             {" "}
                             <button
                               type="submit"
-                              className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12"
+                              className="focus:outline-none bg-gamboge text-snow-900 text-base rounded border hover:border-transparent w-36 h-10 sm:w-80 sm:h-12"
                               style={{
                                 boxShadow:
                                   "0px 10px 15px rgba(3, 17, 86, 0.25)",
@@ -377,7 +377,7 @@ const RegularOrders = () => {
                                 setCurrentOrder(row);
                               }}
                             >
-                              View More
+                              View Order Items
                             </button>
                           </TableCell>
                         </TableRow>
