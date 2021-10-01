@@ -279,7 +279,7 @@ const AllProducts = () => {
           <div className="mb-4 w-full h-max ">{displayBooks}</div>
         )}
         {filterBooks.length <= 0 && (
-          <div>
+          <div style={{ height: "30vh" }}>
             {" "}
             <p className="font-fatKidFont text-4xl mb-3 text-center">
               No Item Awailable
@@ -287,19 +287,21 @@ const AllProducts = () => {
           </div>
         )}
 
-        <div className="w-max">
-          <ReactPaginate
-            previousLabel={"Previous"}
-            nextLabel={"Next"}
-            pageCount={pageCount}
-            onPageChange={changePage}
-            containerClassName={classes.paginationButton}
-            previousLinkClassName={classes.previousBttn}
-            nextLinkClassName={classes.nextBttn}
-            disabledClassName={classes.paginationDisabled}
-            activeLinkClassName={classes.paginationActive}
-          />
-        </div>
+        {filterBooks.length <= 0 && (
+          <div className="w-max">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              pageCount={pageCount}
+              onPageChange={changePage}
+              containerClassName={classes.paginationButton}
+              previousLinkClassName={classes.previousBttn}
+              nextLinkClassName={classes.nextBttn}
+              disabledClassName={classes.paginationDisabled}
+              activeLinkClassName={classes.paginationActive}
+            />
+          </div>
+        )}
       </div>
 
       <Footer />
