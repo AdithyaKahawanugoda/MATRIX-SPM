@@ -109,6 +109,7 @@ const SalesModal = ({ setModalVisible, modalVisible, currentBook }) => {
     >
       <div className="w-full pt-4 h-auto mb-5 bg-white shadow-2xl">
         <div className="w-full4/5 m-auto h-full  pt-3">
+        <h1 className="font-bold text-xl font-boldTallFont ml-10">Orders</h1>
           <div className="w-full m-auto h-4/5 p-5">
             {regularOrders.length > 0 && (
               <div className="p-3 m-1 bg-gray-500">

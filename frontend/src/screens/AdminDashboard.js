@@ -318,19 +318,17 @@ function ResponsiveDrawer(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap className={" text-3xl font-black "}>
-              Admin Dashboard
-            </Typography>
+            <h6 className={" text-3xl font-black "}>Admin Dashboard</h6>
           </Grid>
           <Grid container justifyContent="flex-end">
-            <Button
+            <button
               className="bg-gamboge hover:bg-halloweenOrange text-md text-white font-bold py-2 px-6 rounded-full"
               style={{
                 boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
               }}
             >
               LogOut
-            </Button>
+            </button>
           </Grid>
         </Toolbar>
       </AppBar>

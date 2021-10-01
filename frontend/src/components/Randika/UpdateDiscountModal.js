@@ -101,6 +101,9 @@ const SampleNewsletterModal = ({
     >
       {!removeModalOpen && (
         <div className="m-auto">
+          <h1 className="font-bold text-lg font-boldTallFont">
+            Update Discount
+          </h1>
           <Grid container spacing={1}>
             <Grid item xs={12} sm={6} md={12}>
               <div>
@@ -242,9 +245,6 @@ const SampleNewsletterModal = ({
                           </form>
                         )}
                       </Formik>
-                   
-                   
-                   
                     </div>
                   </div>
                 </div>
@@ -252,11 +252,6 @@ const SampleNewsletterModal = ({
             </Grid>
           </Grid>
         </div>
-      
-      
-      
-      
-      
       )}
       {removeModalOpen && (
         <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
