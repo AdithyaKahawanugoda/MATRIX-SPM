@@ -11,6 +11,7 @@ const SingleProductDetails = () => {
 
   const [triggerGetBookData, setTriggerGetBookData] = useState(false);
   const [value, setValue] = useState(4);
+  const [proID, setProID] = useState("");
   const [bookData, setBookData] = useState({
     publishingTitle: "",
     originalTitle: "",
@@ -39,6 +40,7 @@ const SingleProductDetails = () => {
     printCost: "",
   });
 
+  
   let hasToken;
   let hasRole;
 
@@ -87,6 +89,7 @@ const SingleProductDetails = () => {
                 printCost: res?.data?.book?.charges?.printCost,
               };
             });
+            setProID(res.data.book._id);
           })
           .catch((err) => {
             alert(err.response.data.desc);
@@ -96,6 +99,143 @@ const SingleProductDetails = () => {
     getBookData();
   }, [bookISBN, triggerGetBookData]);
 
+  const checkCart = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    await axios
+      .get(`http://localhost:6500/matrix/api/customer/getCartItems`, config)
+      .then((res) => {
+        response(res.data.cart);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        alert("Error occured -" + err);
+      });
+  };
+
+  const response = (cartData) => {
+    let alreadyOnCart = false;
+    if (cartData !== null) {
+      cartData.map((item) => {
+        if (item.productID === proID) {
+          alreadyOnCart = true;
+          alert(
+            "item allready in cart!! You can manage your order quantity on cart page :)"
+          );
+        }
+      });
+      if (alreadyOnCart === false) {
+        addToCart();
+      }
+    }
+  };
+
+  const addToCart = async () => {
+    let tot = bookData?.marketPrice;
+    let pImg = bookData?.imagePublicId;
+    let pName = bookData?.originalTitle;
+    let pDetails = bookData?.aboutBook;
+    let pAuthor = bookData?.originalAuthor;
+    let pWeight = bookData.weight;
+    let id = proID;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    let dataObject = {
+      productID: id,
+      price: tot,
+      img: pImg,
+      bName:pName,
+      bAuthor:pAuthor,
+      about:pDetails,
+      weight:pWeight
+
+    };
+
+    await axios
+      .put(
+        "http://localhost:6500/matrix/api/customer/addToCart",
+        dataObject,
+        config
+      )
+      .then((res) => {
+        alert("Item added to the Cart");
+        console.log(dataObject);
+      })
+      .catch((err) => {
+        alert("Error occured! " + err);
+      });
+  };
+
+
+
+  const checkWishList = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    await axios
+      .get(`http://localhost:6500/matrix/api/customer/getWishlist`, config)
+      .then((res) => {
+        responseToUser(res.data.wishlist);
+      })
+      .catch((err) => {
+        alert("Error occured -" + err);
+      });
+  };
+
+  const responseToUser = (wishlistData) => {
+    let alreadyOnWishList = false;
+    if (wishlistData !== null) {
+      wishlistData.map((item) => {
+        if (item.productID === proID) {
+          alreadyOnWishList = true;
+          alert("Item is already on the wishlist!");
+        }
+      });
+
+      if (alreadyOnWishList === false) {
+        addToWishList();
+      }
+    }
+  };
+
+  const addToWishList = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    let dataObject = {
+      productID:proID,
+      pName:bookData.originalTitle,
+      pimg:bookData.imagePublicId,
+      unitPrice:bookData.marketPrice,
+       bAuthor:bookData.originalAuthor,
+       about:bookData.aboutBook,
+       weight:bookData.weight,
+      
+    };
+
+    await axios
+      .put(
+        "http://localhost:6500/matrix/api/customer/addtoWishlist",
+        dataObject,
+        config
+      )
+      .then((res) => {
+        alert("Item added to the wishlist");
+      })
+      .catch((err) => {
+        alert("Error occured! " + err);
+      });
+  };
   return (
     <Grid
       container
@@ -170,13 +310,24 @@ const SingleProductDetails = () => {
             <div className="grid grid-cols-2 gap-3">
               {hasRole && hasToken ? (
                 <>
-                  <button className=" rounded px-6 py-1 my-2 text-white font-semibold border bg-halloweenOrange">
+                  <button className=" rounded px-6 py-1 my-2 text-white font-semibold border bg-halloweenOrange" onClick={()=>{
+                    checkCart();
+                  }}>
                     ADD TO CART
                   </button>
-                  <button className=" rounded px-6 py-1  my-2 text-white font-semibold border bg-blueSapphire">
+                  <button className=" rounded px-6 py-1  my-2 text-white font-semibold border bg-blueSapphire"
+                  onClick={()=>{
+                    checkCart();
+                  }}
+                  >
                     BUY NOW
                   </button>
-                  <button className=" rounded px-6 py-1 my-2 text-black font-semibold border bg-lightSilver">
+                  <button className=" rounded px-6 py-1 my-2 text-black font-semibold border bg-lightSilver"
+                  onClick={()=>{
+                    checkWishList();
+                    }
+                  }
+                  >
                     ADD TO WISHLIST
                   </button>
                 </>
