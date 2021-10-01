@@ -29,7 +29,6 @@ const InvoiceAddModal = ({ setModalVisible, modalVisible }) => {
       await axios
         .get("http://localhost:6500/matrix/api/inventoryManager/get-books")
         .then((res) => {
-          console.log(res?.data?.allBooks);
           setAllBooks(res?.data?.allBooks);
         })
         .catch((err) => {
@@ -78,7 +77,6 @@ const InvoiceAddModal = ({ setModalVisible, modalVisible }) => {
           validationSchema={validationSchema}
           onSubmit={async (values, { resetForm }) => {
             setLoading(true);
-            console.log(values);
             const config = {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -374,9 +372,6 @@ const InvoiceAddModal = ({ setModalVisible, modalVisible }) => {
               <div className="text-center mb-0 mt-6">
                 <button
                   type="submit"
-                  onClick={() => {
-                    console.log(values);
-                  }}
                   className=" bg-prussianBlue hover:opacity-80 text-md text-white font-bold py-2 px-6 rounded-full"
                   style={{
                     boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",

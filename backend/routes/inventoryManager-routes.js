@@ -32,7 +32,7 @@ router
   .route("/get-invoice/:invoiceId")
   .get(protectedInventoryManager, getInvoiceByID);
 router
-  .route("/delete-invoice/:invoiceId")
+  .route("/delete-invoice/:_id")
   .delete(protectedInventoryManager, deleteInvoiceByID);
 
 // profile

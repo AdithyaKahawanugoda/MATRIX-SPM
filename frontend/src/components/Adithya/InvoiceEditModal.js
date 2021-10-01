@@ -7,7 +7,11 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import PropagateLoader from "react-spinners/ScaleLoader";
-
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Alert from "@material-ui/lab/Alert";
+import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import Icon from "@material-ui/core/Icon";
 import axios from "axios";
 
 const validationSchema = Yup.object({
@@ -21,6 +25,7 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
   const [preview, setPreview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [invoiceData, setInvoiceData] = useState({
+    _id: "",
     retailShop: "",
     invoiceId: "",
     totalAmount: "",
@@ -29,10 +34,9 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
     notes: "",
     items: [],
   });
-  const [triggerGetInvoiceData, setTriggerGetInvoiceData] = useState(false);
   const [confirmationModalOpen, setConfirmationModelOpen] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     const getInvoice = async () => {
@@ -47,9 +51,9 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
           config
         )
         .then((res) => {
-          console.log(res?.data?.invoice);
           setInvoiceData((prevState) => {
             return {
+              _id: res?.data?.invoice?._id,
               retailShop: res?.data?.invoice?.retailShop,
               invoiceId: res?.data?.invoice?.invoiceId,
               totalAmount: res?.data?.invoice?.payment.totalAmount,
@@ -67,7 +71,7 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
     getInvoice();
   }, []);
 
-  const deleteBookHandler = async () => {
+  const deleteInvoiceHandler = async () => {
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -76,13 +80,15 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
 
     await axios
       .delete(
-        `http://localhost:6500/matrix/api/inventoryManager/delete-invoice/${invoiceId}`,
+        `http://localhost:6500/matrix/api/inventoryManager/delete-invoice/${invoiceData._id}`,
         config
       )
       .then((res) => {
-        alert(res.data?.desc);
-        setConfirmationModelOpen(false);
-        setModalVisible(false);
+        setIsDeleted(true);
+        setTimeout(() => {
+          setConfirmationModelOpen(false);
+          setModalVisible(false);
+        }, [2000]);
       })
       .catch((err) => {
         alert(err?.response?.data?.desc);
@@ -114,6 +120,7 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
 
         <Formik
           initialValues={{
+            _id: "",
             retailShop: "",
             invoiceId: "",
             notes: "",
@@ -128,9 +135,20 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
           }}
           validationSchema={validationSchema}
           onSubmit={async (values, { resetForm }) => {
+            values._id = invoiceData._id;
+            if (!values.totalAmount) {
+              values.totalAmount = invoiceData.totalAmount;
+            }
+            if (!values.status) {
+              values.status = invoiceData.status;
+            }
+            if (!values.retailShop) {
+              values.retailShop = invoiceData.retailShop;
+            }
+            if (!values.notes) {
+              values.notes = invoiceData.notes;
+            }
             setLoading(true);
-            console.log(values);
-
             const config = {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -147,6 +165,7 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
                 alert(res.data.desc);
                 resetForm();
                 setIsEdit(false);
+                setModalVisible(false);
               })
               .catch((err) => {
                 setLoading(false);
@@ -467,42 +486,60 @@ const InvoiceEditModal = ({ setModalVisible, modalVisible, invoiceId }) => {
         center
         styles={{
           modal: {
-            borderRadius: "10px",
-            maxWidth: "35vw",
-            marginTop: "10vh",
-            height: "23vh",
+            border: "1px solid  gray",
+            borderRadius: "8px",
+            maxWidth: "500px",
+            width: "50%",
           },
         }}
+        focusTrapped={true}
       >
-        <div className="py-4 mx-8">
-          <div className="my-8 font-semibold">
-            Are you sure you want to permanently remove this item from system?
+        <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
+          <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
+            Delete Invoice
+          </h6>
+          <hr></hr>
+          <div className="text-center text-ferrariRed m-5 ">
+            <Icon>
+              <HighlightOffOutlinedIcon style={{ fontSize: 60 }} />
+            </Icon>
           </div>
-          <div className="flex justify-between">
-            <button
-              type="submit"
-              className="px-8 focus:outline-none bg-ferrariRed text-white font-semibold text-lg rounded py-2 "
-              style={{
-                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-              }}
-              onClick={deleteBookHandler}
-            >
-              <div className="flex">
-                <div className="mx-2">CONFIRM</div>
-              </div>
-            </button>
-            <button
-              type="submit"
-              className="px-8 focus:outline-none bg-gray-400 text-white font-semibold text-lg rounded py-2 "
-              style={{
-                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-              }}
-              onClick={() => setConfirmationModelOpen(false)}
-            >
-              <div className="flex">
-                <div className="mx-2">CANCEL</div>
-              </div>
-            </button>
+
+          <h6 className="text-center text-lg">
+            Do you want to delete these data? This process cannot be undone.
+          </h6>
+          {isDeleted && (
+            <Alert severity="success">Item deleted successfully</Alert>
+          )}
+          <div className="text-center mt-8 grid grid-cols-2 gap-3">
+            <div className="text-right">
+              <Button
+                variant="contained"
+                style={{
+                  background: "#EA2300",
+                  color: "white",
+                  fontWeight: 700,
+                }}
+                startIcon={<DeleteIcon />}
+                onClick={deleteInvoiceHandler}
+              >
+                Agree
+              </Button>
+            </div>
+            <div className="text-left">
+              <Button
+                autoFocus
+                variant="contained"
+                style={{
+                  fontWeight: 700,
+                }}
+                onClick={() => {
+                  setConfirmationModelOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>

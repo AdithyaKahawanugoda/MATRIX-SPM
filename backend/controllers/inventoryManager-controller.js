@@ -220,10 +220,6 @@ exports.updateBookByISBN = async (req, res) => {
     printCost = undefined;
   }
   try {
-    // if (encImg) {
-    //   console.log("within upload cover img");
-    //   uploadRes = await uploadFiles(encImg, "Book_Covers");
-    // }
     const updatedBook = await ProductModel.findOneAndUpdate(
       { ISBN },
       {
@@ -385,10 +381,14 @@ exports.getInvoiceByID = async (req, res) => {
 
 // update specific invoice
 exports.updateInvoiceByID = async (req, res) => {
-  let { retailShop, invoiceId, notes, totalAmount, status, items } = req.body;
+  let { _id, retailShop, invoiceId, notes, totalAmount, status, items } =
+    req.body;
 
   if (!retailShop) {
     retailShop = undefined;
+  }
+  if (!invoiceId) {
+    invoiceId = undefined;
   }
   if (!totalAmount) {
     totalAmount = undefined;
@@ -404,7 +404,7 @@ exports.updateInvoiceByID = async (req, res) => {
   }
   try {
     const updatedInvoice = await InvoiceModel.updateOne(
-      { invoiceId },
+      { _id: _id },
       {
         $set: {
           retailShop,
@@ -419,7 +419,6 @@ exports.updateInvoiceByID = async (req, res) => {
         omitUndefined: true,
       }
     );
-    console.log(updatedInvoice);
     res.status(200).send({
       desc: "Invoice data updated successfully",
       updatedInvoice,
@@ -434,10 +433,10 @@ exports.updateInvoiceByID = async (req, res) => {
 
 // delete specific invoice
 exports.deleteInvoiceByID = async (req, res) => {
-  const invoiceId = req.params.invoiceId;
+  const _id = req.params._id;
   try {
-    await InvoiceModel.deleteOne({ invoiceId });
-    await logDeletes(invoiceId, "INVOICE", "DELETE NOTE", res);
+    await InvoiceModel.deleteOne({ _id: _id });
+    await logDeletes(_id, "INVOICE", "DELETE NOTE", res);
     res.status(202).json({ desc: "Invoice deleted successfully" });
   } catch (error) {
     res.status(500).json({

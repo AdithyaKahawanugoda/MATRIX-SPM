@@ -34,7 +34,6 @@ const InventoryManagerProfile = () => {
             )
           );
           setTableData(data);
-          console.log(tableData);
         })
         .catch((err) => {
           alert(err?.response?.data?.desc);
@@ -58,7 +57,6 @@ const InventoryManagerProfile = () => {
 
     //for each ticket pass all its data into an array
     tickets.forEach((ticket) => {
-      console.log(ticket);
       const ticketData = [
         ticket.col1,
         ticket.col2,

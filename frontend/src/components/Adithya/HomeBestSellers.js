@@ -3,60 +3,16 @@ import axios from "axios";
 import BookCard from "./BookCard";
 
 const HomeBestSellers = () => {
-  const [books, setBooks] = useState(null);
   const [regularOrders, setRegularOrders] = useState(null);
   const [bulkOrders, setBulkOrders] = useState(null);
 
   const [display, setDisplay] = useState(false);
   const [topSelling, setTopSelling] = useState([]);
-  // let topSelling = [];
 
   const [products, setProducts] = useState(null);
   let productSales = [];
 
   useEffect(() => {
-    const getAllBooks = async () => {
-      await axios
-        .get("http://localhost:6500/matrix/api/inventoryManager/get-books")
-        .then((res) => {
-          setBooks(res?.data?.allBooks);
-          console.log(res?.data?.allBooks);
-          getAllRegularOrders();
-        })
-        .catch((err) => {
-          alert(err?.response?.data?.desc);
-        });
-    };
-    const getAllRegularOrders = async () => {
-      await axios
-        .get("http://localhost:6500/matrix/api/admin/getRegularOrders")
-        .then((res) => {
-          setRegularOrders(res?.data?.orders);
-          console.log(res?.data?.orders);
-          getAllBulkOrders();
-        })
-        .catch((err) => {
-          alert(err?.response?.data?.desc);
-        });
-    };
-    const getAllBulkOrders = async () => {
-      await axios
-        .get("http://localhost:6500/matrix/api/admin/getBulkOrders")
-        .then((res) => {
-          setBulkOrders(res?.data?.bulkorders);
-          console.log(res?.data?.bulkorders);
-          findBestSellers();
-        })
-        .catch((err) => {
-          alert(err?.response?.data?.desc);
-        });
-    };
-    const findBestSellers = () => {
-      console.log(books);
-      console.log(regularOrders);
-      console.log(bulkOrders);
-    };
-    // getAllBooks();
     const getProducts = async () => {
       try {
         await axios
@@ -77,10 +33,10 @@ const HomeBestSellers = () => {
             getRegularOrders(productIds);
           })
           .catch((err) => {
-            alert(err.message);
+            console.log(err.message);
           });
       } catch (err) {
-        alert("error :" + err);
+        console.log("error :" + err);
       }
     };
     getProducts();
@@ -89,10 +45,8 @@ const HomeBestSellers = () => {
       try {
         await axios
           .get("http://localhost:6500/matrix/api/admin/getRegularOrders")
-
           .then((res) => {
             setRegularOrders(res.data.orders);
-
             for (let j = 0; j < book.length; j++) {
               let count = 0;
               for (let i = 0; i < res.data.orders.length; i++) {
@@ -117,14 +71,13 @@ const HomeBestSellers = () => {
 
               productSales.push(dataobject);
             }
-            console.log(productSales);
             getBulkOrders();
           })
           .catch((err) => {
-            alert(err.message);
+            console.log(err.message);
           });
       } catch (err) {
-        alert("error :" + err);
+        console.log("error :" + err);
       }
     };
 
@@ -151,15 +104,14 @@ const HomeBestSellers = () => {
               productSales[x].count = newCount;
             }
 
-            console.log(productSales);
             setBulkOrders(res.data.bulkorders);
             getTopSellingItems();
           })
           .catch((err) => {
-            alert(err.message);
+            console.log(err.message);
           });
       } catch (err) {
-        alert("error :" + err);
+        console.log("error :" + err);
       }
     };
 
@@ -174,7 +126,6 @@ const HomeBestSellers = () => {
           }
         }
       }
-      console.log("productSales", productSales);
       getBookData();
     };
 
@@ -194,63 +145,16 @@ const HomeBestSellers = () => {
 
         if (index === 4) {
           setDisplay(true);
-          console.log(display);
-          console.log("top", topSelling);
         }
       });
     };
   }, []);
-
-  const dummyBooks = [
-    {
-      imgSrc: "https://i.ibb.co/LxXwdgQ/Untitled-3-1.jpg",
-      title: "Fantastic Mr.Fox",
-      description:
-        "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: " 850",
-      label2: "Summer OFF 20%",
-    },
-    {
-      imgSrc: "https://i.ibb.co/NSgffqn/Untitled-4-1.jpg",
-      title: "Fantastic Mr.Fox",
-      description:
-        "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: " 850",
-      label2: "Summer OFF 20%",
-    },
-    {
-      imgSrc: "https://i.ibb.co/ZHfGjyf/Untitled-2-1.jpg",
-      title: "Fantastic Mr.Fox",
-      description:
-        "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: " 850",
-      label2: "Summer OFF 20%",
-    },
-    {
-      imgSrc: "https://i.ibb.co/gR94Dtp/Untitled-1-2-1.jpg",
-      title: "Fantastic Mr.Fox",
-      description:
-        "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: " 850",
-      label2: "Summer OFF 20%",
-    },
-    {
-      imgSrc:
-        "https://i.ibb.co/SyWbtsP/fantasticmrfoxbookcover-0-005ba5ba5ba5ba-733-733.jpg",
-      title: "Fantastic Mr.Fox",
-      description:
-        "On a hill above the valley there was a wood. In the wood there was a huge tree. Under the tree there was a hole. In the hole lived Mr Fox and Mrs Fox and their four Small Foxes.",
-      label1: " 850",
-      label2: "Summer OFF 20%",
-    },
-  ];
 
   return (
     <>
       {display ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5  lg:gap-6 md:gap-4 sm:gap-3">
           {topSelling.map((item) => {
-            console.log(item);
             return (
               <div
                 key={item.ISBN}

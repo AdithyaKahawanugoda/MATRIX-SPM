@@ -166,7 +166,7 @@ const Wholesales = () => {
         });
     };
     getAllInvoices();
-  }, [invoiceAddModalOpen]);
+  }, [invoiceAddModalOpen, invoiceEditModalOpen]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
