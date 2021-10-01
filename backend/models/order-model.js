@@ -4,7 +4,7 @@ const OrderSchema = new mongoose.Schema({
   buyerID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "customers",
+    ref: "customer",
   },
   deiveryPersonID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -39,7 +39,7 @@ const OrderSchema = new mongoose.Schema({
       productID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "products",
+        ref: "product",
       },
       quantity: {
         type: Number,

@@ -9,13 +9,15 @@ import axios from "axios";
 import { Image } from "cloudinary-react";
 import Checkout from "./Checkout";
 
-const ShoppingCart = () => {
+
+const ShoppingCart = (props) => {
 
   const [emptyStorage, setEmptyStorage] = useState(true);
   const [cusCart, setCusCart] = useState(null);
   const [finalOrder, setFinalOrder] = useState([]);
   const [totAmount, setTotAmount] = useState(0);
- 
+  
+  const [checkout,setCheckout] = useState(false);
  
   useEffect(() => {
     setEmptyStorage(true);
@@ -86,10 +88,10 @@ const ShoppingCart = () => {
     
   };
 
-  const proceedCheckout = (finalOrder,totAmount) =>{
-    <Checkout orderDetails={finalOrder} totalAmount={totAmount} />
-    window.location.href = "/checkout";
-  }
+  // const proceedCheckout = (finalOrder,totAmount) =>{
+  
+  
+  // }
 
   const removeFromCart = async (pID) => {
     const config = {
@@ -136,7 +138,7 @@ const ShoppingCart = () => {
                  <>
                  <div className="flex flex-row mt-3">
                  <div key={item.productID}
-                 className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+                 className=" h-96 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
                  title="Mountain"
                >
               <Image cloudName="grid1234" publicId={item.proImg}/>
@@ -220,7 +222,11 @@ const ShoppingCart = () => {
                 color="primary"
                 style={{ marginLeft: "13rem", marginTop: "7rem", marginBotton:"2rem" }}
                 onClick={() => {
-                  proceedCheckout(finalOrder,totAmount);
+                  props.history.push({
+                    pathname: '/checkout',
+                    finalOrder,
+                    totAmount
+                  });
                 }}
               >
                 Proceed to pay
@@ -228,7 +234,7 @@ const ShoppingCart = () => {
               </div>
               )}
             </div>
-
+           
 
           </div>
         </div>

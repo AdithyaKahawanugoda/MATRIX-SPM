@@ -87,6 +87,41 @@ const Wishlist = () => {
       });
   };
 
+  const checkCart = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    await axios
+      .get(`http://localhost:6500/matrix/api/customer/getCartItems`, config)
+      .then((res) => {
+        response(res.data.cart);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        alert("Error occured -" + err);
+      });
+  };
+
+  const response = (cartData) => {
+    let alreadyOnCart = false;
+    if (cartData !== null) {
+      cartData.map((item) => {
+        if (item.productID === proID) {
+          alreadyOnCart = true;
+          alert(
+            "item allready in cart!! You can manage your order quantity on cart page :)"
+          );
+        }
+      });
+      if (alreadyOnCart === false) {
+        addToCart();
+      }
+    }
+  };
+
+
   const addToCart = async () => {
     let tot = unitPrice;
     let pImg = productImage;
@@ -102,11 +137,11 @@ const Wishlist = () => {
     };
     let dataObject = {
       productID: id,
-      unitPrice: tot,
-      proImg: pImg,
-      originalTitle:pName,
-      originalAuthor:pAuthor,
-      aboutBook:pDetails,
+      price: tot,
+      img: pImg,
+      bName:pName,
+      bAuthor:pAuthor,
+      about:pDetails,
       weight:pWeight
 
     };
@@ -150,7 +185,7 @@ const Wishlist = () => {
               <TableCell align="right">{x.unitPrice}</TableCell>
               <TableCell align="right">
                 <IconButton color="primary" aria-label="add to shopping cart" onClick={()=>{
-                  addToCart();
+                  checkCart();
                 }}>
                     <AddShoppingCartIcon />
                 </IconButton>

@@ -55,7 +55,7 @@ const CustomerSchema = new mongoose.Schema({
     {
       productID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
+        ref: "product",
       },
       unitPrice: {
         type: Number,
@@ -81,7 +81,7 @@ const CustomerSchema = new mongoose.Schema({
     {
       productID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
+        ref: "product",
       },
       proName: {
         type: String,
