@@ -24,7 +24,7 @@ const generatePDF = (orders, type) => {
         order.buyerID,
         order.orderData.length,
         order.billAmount,
-        order.purchasedDate,
+        moment(order.purchasedDate).format("DD/MM/YYYY"),
       ];
 
       tableRows.push(reportData);
@@ -38,18 +38,15 @@ const generatePDF = (orders, type) => {
         order.retailShop,
         order.items.length,
         order.payment.totalAmount,
-        order.placedAt,
+        moment(order.placedAt).format("DD/MM/YYYY"),
       ];
 
       tableRows.push(reportData);
     });
   }
-  // startY is basically margin-top
   doc.autoTable(tableColumn, tableRows, { startY: 20 });
   const date = Date().split(" ");
-  // we use a date string to generate our filename.
   const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-  // ticket title. and margin-top + margin-left
   const formatedDate = moment(new Date()).format("DD/MM/YYYY");
   if (type === "regular") {
     doc.text("Regular Orders ( Generated " + formatedDate + ")", 14, 15);
@@ -57,7 +54,6 @@ const generatePDF = (orders, type) => {
   if (type === "bulk") {
     doc.text("Bulk Orders ( Generated " + formatedDate + ")", 14, 15);
   }
-  // we define the name of our PDF file.
   doc.save(`report_${dateStr}.pdf`);
 };
 

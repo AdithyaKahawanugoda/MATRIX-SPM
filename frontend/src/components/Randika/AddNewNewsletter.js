@@ -23,7 +23,6 @@ const AddNewNewsletter = () => {
   const [file, setFile] = useState([]);
 
   const CreateNewsItem = async () => {
-    alert("done");
     const img = "data:image/jpeg;base64," + file[0].getFileEncodeBase64String();
 
     let dataObject = {
@@ -48,7 +47,7 @@ const AddNewNewsletter = () => {
         )
 
         .then(() => {
-          alert("done2");
+          alert("New Item Added");
           window.location.reload(false);
         });
     } catch (err) {

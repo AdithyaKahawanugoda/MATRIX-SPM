@@ -391,6 +391,7 @@ exports.replyToCustomers = async (req, res) => {
         upsert: false,
       }
     );
+    console.log(Result);
     sendEmail({
       to: email,
       subject: "Regarding Your Message To Matrix",
@@ -400,7 +401,7 @@ exports.replyToCustomers = async (req, res) => {
     </p>
   `,
     });
-    res.status(200).send({ toDo: Result });
+    res.status(200).send({ message: Result });
 
     return true;
   } catch (error) {
