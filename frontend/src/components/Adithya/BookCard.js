@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
+import { Image } from "cloudinary-react";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -15,28 +16,38 @@ const BookCard = (props) => {
       ${props.shadow === "md" && "shadow-md"}
       `}
     >
-      <Card style={{ maxWidth: props.maxWidth | 250 }}>
+      <Card style={{ maxWidth: props.maxWidth | 250, height: 680 }}>
         <CardActionArea>
           {props?.imgSrc && (
-            <CardMedia
-              style={{ height: props.imgHeight | 300 }}
-              image={props.imgSrc}
-              title="bookCardImage"
+            <Image
+              style={{
+                height: 400,
+                width: props.maxWidth,
+              }}
+              cloudName="grid1234"
+              publicId={props.imgSrc}
             />
+            // <CardMedia
+            //   style={{ height: props.imgHeight | 300 }}
+            //   image={props.imgSrc}
+            //   title="bookCardImage"
+            // />
           )}
 
           <CardContent>
             {props?.title && (
               <Typography
                 gutterBottom
-                style={{ fontWeight: 600, fontSize: "1.4rem" }}
+                style={{ fontWeight: 600, fontSize: "1.2rem" }}
               >
                 {props.title}
               </Typography>
             )}
             {props?.description && (
               <Typography variant="body2" color="textSecondary">
-                {props.description}
+                <p className=" h-36 font-contentFont font-semibold overflow-ellipsis overflow-hidden">
+                  {props.description}
+                </p>
               </Typography>
             )}
           </CardContent>
