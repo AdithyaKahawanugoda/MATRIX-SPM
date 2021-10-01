@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Modal } from "react-responsive-modal";
 import Grid from '@material-ui/core/Grid';
 import { Formik } from "formik";
+import axios from "axios";
+
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -21,7 +23,38 @@ registerPlugin(
 
 const EditPpModal = ({ setModalVisible, modalVisible }) => {
 
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState("");
+   
+
+
+    const updatePPictureHandler = async (values) =>{
+      const config = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        };
+
+        let dataObject = {
+          fileEnc:values.ppEnc
+        };
+  try{
+      await axios
+      .put(
+          "http://localhost:6500/matrix/api/customer/updatePP",
+          dataObject,
+          config
+      )
+      .then((res) =>{
+          alert("Profile Picture updated Successfully");
+          window.location.reload();
+      })
+      .catch((err) =>{
+          alert(err);
+      });
+  }catch(error){
+      alert("Error Occured-" + error);
+  }
+  };
 
     return (
       
@@ -66,15 +99,21 @@ const EditPpModal = ({ setModalVisible, modalVisible }) => {
         </Grid>
       
       <Grid item xs={12} md={6} style={{marginLeft:"4.5rem"}}>
-        <Formik          
+        <Formik
+          initialValues={{
+            ppEnc:""
+          }}          
           onSubmit={async (values) => {
             console.log(values);
+            updatePPictureHandler(values);
+           
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
             <form
               onSubmit={(event) => {
                 event.preventDefault();
+                values.ppEnc = file[0].getFileEncodeDataURL();
                 handleSubmit();
               }}
             >
@@ -88,11 +127,14 @@ const EditPpModal = ({ setModalVisible, modalVisible }) => {
                 >
                   SAVE
                 </button>
-       
+                
                 <button
                 type="cancel"
                 className="focus:outline-none bg-gray-400 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
                 style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)", }}
+                onClick={() => {
+                  setModalVisible(false);
+                }}
               >
                 CANCEL
               </button>

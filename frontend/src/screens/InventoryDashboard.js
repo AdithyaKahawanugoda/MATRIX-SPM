@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -15,11 +17,9 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 
 import InventoryAddNew from "../components/Adithya/InventoryAddNew";
-import InventoryEdit from "../components/Adithya/InventoryEdit";
 import InventoryInStock from "../components/Adithya/InventoryInStock";
 import InventoryManagerProfile from "../components/Adithya/InventoryManagerProfile";
 import Wholesales from "../components/Adithya/Wholesales";
-import WholesaleEdit from "../components/Adithya/WholesaleEdit";
 
 const drawerWidth = 300;
 
@@ -57,19 +57,62 @@ const InventoryDashboardStyles = makeStyles((theme) => ({
 
 const InventoryDashboard = (props) => {
   const { window } = props;
-  const classes = InventoryDashboardStyles();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
+  const history = useHistory();
+  const theme = useTheme();
+  const classes = InventoryDashboardStyles();
+
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(true);
   const [inventoryAddNewOpen, setInventoryAddNewOpen] = useState(false);
-  const [inventoryEditOpen, setInventoryEditOpen] = useState(false);
   const [wholesalesOpe, setWholesalesOpen] = useState(false);
-  const [wholesalesEditOpen, setWholesalesEditOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  const [profileName, setProfileName] = useState("");
+
+  useEffect(() => {
+    if (
+      !localStorage.getItem("authToken") ||
+      localStorage.getItem("userRole") !== "inventoryManager"
+    ) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userRole");
+      history.push("/admin-login");
+    }
+  }, [history]);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
+      await axios
+        .get(
+          "http://localhost:6500/matrix/api/inventoryManager/get-profile",
+          config
+        )
+        .then((res) => {
+          setProfileName(res?.data?.profile?.username);
+        })
+        .catch((err) => {
+          alert(err?.response?.data?.desc);
+        });
+    };
+    if (localStorage.getItem("userRole") === "inventoryManager") {
+      getProfile();
+    }
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const logOutHandler = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole");
+    history.push("/admin-login");
   };
 
   const drawer = (
@@ -87,7 +130,7 @@ const InventoryDashboard = (props) => {
       </div>
       <div className="mt-2 mx-5 mb-8">
         <Typography variant="h6" noWrap className="font-extrabold text-xl ml-2">
-          Mr. Adithya Kahawanugoda
+          {profileName.length > 1 ? `${profileName}` : "Inventory Manager"}
         </Typography>
       </div>
       <List>
@@ -95,9 +138,9 @@ const InventoryDashboard = (props) => {
           button
           onClick={() => {
             setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
+
             setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
+
             setProfileOpen(false);
             setInventoryOpen(true);
           }}
@@ -108,37 +151,21 @@ const InventoryDashboard = (props) => {
         <ListItem
           button
           onClick={() => {
-            setInventoryEditOpen(false);
             setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
+
             setProfileOpen(false);
             setInventoryOpen(false);
             setInventoryAddNewOpen(true);
           }}
         >
-          <ListItemText primary={"Add New"} />
+          <ListItemText primary={"Add Books"} />
         </ListItem>
         <Divider />
         <ListItem
           button
           onClick={() => {
             setInventoryAddNewOpen(false);
-            setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
-            setProfileOpen(false);
-            setInventoryOpen(false);
-            setInventoryEditOpen(true);
-          }}
-        >
-          <ListItemText primary={"Inventory Edit / Delete"} />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
-            setWholesalesEditOpen(false);
+
             setProfileOpen(false);
             setInventoryOpen(false);
             setWholesalesOpen(true);
@@ -151,23 +178,9 @@ const InventoryDashboard = (props) => {
           button
           onClick={() => {
             setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
+
             setWholesalesOpen(false);
-            setProfileOpen(false);
-            setInventoryOpen(false);
-            setWholesalesEditOpen(true);
-          }}
-        >
-          <ListItemText primary={"Wholesales Edit / Delete"} />
-        </ListItem>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            setInventoryAddNewOpen(false);
-            setInventoryEditOpen(false);
-            setWholesalesOpen(false);
-            setWholesalesEditOpen(false);
+
             setInventoryOpen(false);
             setProfileOpen(true);
           }}
@@ -206,6 +219,7 @@ const InventoryDashboard = (props) => {
               style={{
                 boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
               }}
+              onClick={logOutHandler}
             >
               LogOut
             </button>
@@ -247,9 +261,7 @@ const InventoryDashboard = (props) => {
         <div className={classes.toolbar} />
         {inventoryOpen && <InventoryInStock />}
         {inventoryAddNewOpen && <InventoryAddNew />}
-        {inventoryEditOpen && <InventoryEdit />}
         {wholesalesOpe && <Wholesales />}
-        {wholesalesEditOpen && <WholesaleEdit />}
         {profileOpen && <InventoryManagerProfile />}
       </main>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
-
+import axios from "axios";
 
 const validationSchema = Yup.object({
     address: Yup.string().trim().required("Address is required"),
@@ -10,8 +10,35 @@ const validationSchema = Yup.object({
 
 })
 
-const ChangeAddressModal = ({ setModalVisible, modalVisible }) => {
-    
+const ChangeAddressModal = ({ setModalVisible, modalVisible,cusAddress }) => {
+  const updateCustomerHandler = async (values) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+
+    let dataObject = {
+  
+      address: values.address,
+     
+    };
+   
+    try {
+      await axios
+        .put(
+          "http://localhost:6500/matrix/api/customer/updateProfile",
+          dataObject,
+          config
+        )
+        .then((res) => {
+          alert("Customer Update Successfully!");
+          window.location.reload(false);
+        });
+    } catch (error) {
+      alert("Error Occured-" + error);
+    }
+  };
 
   return (
     <Modal
@@ -32,10 +59,11 @@ const ChangeAddressModal = ({ setModalVisible, modalVisible }) => {
     >
       <div className="px-2 pt-8 pb-4 md:pb-7 md:px-8">
         <Formik
-          initialValues={{ address:'' }}
+          initialValues={{ address: cusAddress}}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             console.log(values);
+            updateCustomerHandler(values);
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -87,6 +115,9 @@ const ChangeAddressModal = ({ setModalVisible, modalVisible }) => {
                 type="submit"
                 className="focus:outline-none bg-gray-400 text-snow-900 text-base rounded border hover:border-transparent w-64 h-10 sm:w-80 sm:h-12"
                 style={{ boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)" }}
+                onClick={() => {
+                  setModalVisible(false);
+                }}
               >
                 Cancel
               </button>

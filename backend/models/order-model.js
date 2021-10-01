@@ -32,7 +32,7 @@ const OrderSchema = new mongoose.Schema({
   },
   updatedTime: {
     type: Date,
-    default: Date.now,
+    default: Date(),
   },
   orderData: [
     {

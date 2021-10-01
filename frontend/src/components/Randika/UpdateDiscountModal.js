@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import Button from "@material-ui/core/Button";
+import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Alert from "@material-ui/lab/Alert";
+import Icon from "@material-ui/core/Icon";
 
 const validationSchema = Yup.object({
   lable: Yup.string()
@@ -31,9 +36,9 @@ const SampleNewsletterModal = ({
   bookID,
   removeModalOpen,
 }) => {
+  const [isAdded, setIsAdded] = useState(false);
   const removeDiscount = async () => {
     let dataObject = {
-
       BID: bookID,
     };
 
@@ -44,7 +49,11 @@ const SampleNewsletterModal = ({
           dataObject
         )
         .then(() => {
-          window.location.reload(false);
+          setIsAdded(true);
+          setTimeout(() => {
+            setModalVisible(false);
+            window.location.reload(false);
+          }, 3000);
         });
     } catch (err) {
       alert("error :" + err);
@@ -56,7 +65,7 @@ const SampleNewsletterModal = ({
       regular: values.regularPercentage,
       bulk: values.bulkPercentage,
       label: values.lable.toUpperCase(),
-      BID: bookID, 
+      BID: bookID,
     };
 
     try {
@@ -92,6 +101,9 @@ const SampleNewsletterModal = ({
     >
       {!removeModalOpen && (
         <div className="m-auto">
+          <h1 className="font-bold text-lg font-boldTallFont">
+            Update Discount
+          </h1>
           <Grid container spacing={1}>
             <Grid item xs={12} sm={6} md={12}>
               <div>
@@ -242,39 +254,47 @@ const SampleNewsletterModal = ({
         </div>
       )}
       {removeModalOpen && (
-        <div className="w-96 m-auto mt-7 h-40">
-          <h1 className="text-lg text-center text-red-700 font-bold mb-2">
-            Do you need to remove discount from this item?
-          </h1>
-          <button
-            type="submit"
-            className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12 bg-gamboge"
-            style={{
-              boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-              float: "right",
-              color: "white",
-            }}
-            onClick={() => {
-              setModalVisible(false);
-            }}
-          >
-            CANCEL
-          </button>
-          <button
-            type="submit"
-            className="focus:outline-none text-snow-900 text-base rounded border hover:border-transparent w-32 h-10 sm:w-80 sm:h-12 bg-gamboge"
-            style={{
-              boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-              float: "right",
-              color: "white",
-            }}
-            onClick={() => {
-              removeDiscount();
-              setModalVisible(false);
-            }}
-          >
-            DELETE
-          </button>
+        <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
+          <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
+            Remove Discounts
+          </h6>
+          <hr></hr>
+          <div className="text-center text-ferrariRed m-5 ">
+            <Icon>
+              <HighlightOffOutlinedIcon style={{ fontSize: 60 }} />
+            </Icon>
+          </div>
+
+          <h6 className="text-center text-lg">
+            Do you need to remove discount from this item?? This process cannot
+            be undone.
+          </h6>
+          {isAdded && <Alert severity="success">Discount Removed</Alert>}
+          <div className="text-center mt-8 grid grid-cols-2 gap-3">
+            <div className="text-right">
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<DeleteIcon />}
+                onClick={() => {
+                  removeDiscount();
+                }}
+              >
+                Agree
+              </Button>
+            </div>
+            <div className="text-left">
+              <Button
+                autoFocus
+                variant="contained"
+                onClick={() => {
+                  setModalVisible(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </Modal>

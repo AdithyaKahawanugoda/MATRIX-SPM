@@ -27,7 +27,12 @@ const HomeCategories = () => {
       <div className=" w-11/12 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  lg:gap-6 md:gap-4 sm:gap-3 m-auto">
         {dummyBooks.map((item, index) => (
           <div key={index} className="text-center m-6 ">
-            <Card className="bg-gradient-to-t from-blueSapphire to-prussianBlue opacity-90 hover:opacity-100">
+            <Card
+              onClick={() => {
+                window.location = `category/books/${item.title}`;
+              }}
+              className="bg-gradient-to-t from-blueSapphire to-prussianBlue opacity-90 hover:opacity-100"
+            >
               <CardActionArea
                 style={{
                   maxWidth: 350,

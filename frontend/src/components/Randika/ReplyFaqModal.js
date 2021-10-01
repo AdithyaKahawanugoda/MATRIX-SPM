@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import Grid from "@material-ui/core/Grid";
 
-const ReplyFaqModal = ({ setModalVisible, modalVisible }) => {
+const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
+  const [message, setmessage] = useState("");
+
+  const reply = async () => {
+    let dataObject = {
+      messageId: messageID,
+      reply: message,
+      email: email,
+    };
+
+    try {
+      await axios
+        .put(
+          "http://localhost:6500/matrix/api/admin/replyToCustomers",
+          dataObject
+        )
+
+        .then(() => {
+          window.location.reload(false);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
   return (
     <Modal
       open={modalVisible}
@@ -24,11 +49,16 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible }) => {
         <form
           onSubmit={(event) => {
             event.preventDefault();
+            reply();
           }}
         >
+          {" "}
+       
           <Grid container spacing={1}>
-            <Grid item md={4} >
-              <div className="ml-10">Reply Message</div>
+            <Grid item md={4}>
+              <div className="font-bold text-lg ml-10 font-boldTallFon">
+                Reply Message
+              </div>
             </Grid>
             <Grid item md={6}>
               <div>
@@ -36,9 +66,12 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible }) => {
                   className="focus:outline-none w-full pb-2 md:pb-3 border-gray-400 border-2 focus:border-blue-900 text-base bg-white"
                   id="description"
                   type="text"
-                  value={""}
+                  value={message}
                   rows={5}
                   cols={5}
+                  onChange={(event) => {
+                    setmessage(event.target.value);
+                  }}
                 />
               </div>
             </Grid>
