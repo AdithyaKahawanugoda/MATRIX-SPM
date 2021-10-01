@@ -20,20 +20,20 @@ const OrderSchema = new mongoose.Schema({
   },
   deliveryFee: {
     type: Number,
-	  default: 200,
+    default: 200,
   },
   purchasedDate: {
     type: Date,
     default: Date(),
   },
-  deliveryStatus:{
-		type: String,
-		default: "pending",
-	},
-	updatedTime: {
-        type: Date,
-        default: Date.now,
-  }, 
+  deliveryStatus: {
+    type: String,
+    default: "pending",
+  },
+  updatedTime: {
+    type: Date,
+    default: Date(),
+  },
   orderData: [
     {
       productID: {
@@ -51,7 +51,6 @@ const OrderSchema = new mongoose.Schema({
       },
     },
   ],
- 
 });
 
 const Order = mongoose.model("order", OrderSchema);

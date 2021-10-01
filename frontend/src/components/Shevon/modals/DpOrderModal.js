@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Modal } from "react-responsive-modal";
+import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,7 +11,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Icon from "@material-ui/core/Icon";
-import axios from "axios";
 import moment from "moment";
 
 const columns = [
@@ -18,7 +19,7 @@ const columns = [
   { id: "buyerId", label: "buyerId", minWidth: 50 },
   { id: "address", label: "Address", minWidth: 20 },
   { id: "price", label: "price", minWidth: 30 },
-  { id: "purchasedDate", label: "purchasedDate", minWidth: 100 },
+  { id: "UpdateDate", label: "UpdateDate", minWidth: 100 },
   { id: "deliveryType", label: "DeliveryStatus", minWidth: 100 },
 ];
 
@@ -29,7 +30,7 @@ function createData(
   buyerId,
   address,
   price,
-  purchasedDate,
+  UpdateDate,
   deliveryType
 ) {
   return {
@@ -38,30 +39,32 @@ function createData(
     buyerId,
     address,
     price,
-    purchasedDate,
+    UpdateDate,
     deliveryType,
   };
 }
 
-const InTransitOrders = () => {
+const DpOrderModal = ({
+  setModalVisible,
+  modalVisible,
+  getalldata,
+  Orderdata,
+}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
   const [fetchedRows, setFetchedRows] = useState([]);
   const [searchKey, setSearchKey] = useState("");
 
+  console.log(Orderdata);
+
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:6500/matrix/api/deliveryManager/getallorders"
-        );
-        const data = response.data.Order.filter(
-          (data) => data.deliveryStatus === "inTransit"
-        ).map((order, index) =>
+        const data = Orderdata.map((order, index) =>
           createData(
             index + 1,
-            order._id,
+            order.orderID,
             order.buyerID,
             order.deliveryAddress,
             order.billAmount,
@@ -69,7 +72,6 @@ const InTransitOrders = () => {
             order.deliveryStatus
           )
         );
-
         setFetchedRows(data);
         setSelectedRows(data);
       } catch (error) {
@@ -77,7 +79,6 @@ const InTransitOrders = () => {
       }
     })();
   }, []);
-
   const search = () => {
     setSelectedRows(
       fetchedRows.filter((row) => !row.code.indexOf(searchKey.trim()))
@@ -99,10 +100,25 @@ const InTransitOrders = () => {
   };
 
   return (
-    <div>
+    <Modal
+      open={modalVisible}
+      onClose={() => {
+        setModalVisible(false);
+      }}
+      center
+      styles={{
+        modal: {
+          border: "1px solid  gray",
+          borderRadius: "8px",
+          maxWidth: "1500px",
+          width: "60%",
+        },
+      }}
+      focusTrapped={true}
+    >
       <div className=" rounded-lg  mt-3 mx-0 px-3 py-3 text-center border-0  shadow-md bg-blueSapphire bg-opacity-30">
         <header className="font-contentFont text-2xl my-4 font-bold text-prussianBlue ">
-          IN TRANSIT ORDERS
+          {getalldata.name} order delivery details
         </header>
 
         <div className="rounded-xl   mt-8 mx-0 px-3 py-3 text-center border-0  shadow-md bg-white ">
@@ -141,7 +157,7 @@ const InTransitOrders = () => {
           </div>
 
           <Paper className="mt-2">
-            <TableContainer style={{ maxHeight: "440px" }}>
+            <TableContainer style={{ maxHeight: "220px" }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
@@ -200,8 +216,8 @@ const InTransitOrders = () => {
           </Paper>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
-export default InTransitOrders;
+export default DpOrderModal;

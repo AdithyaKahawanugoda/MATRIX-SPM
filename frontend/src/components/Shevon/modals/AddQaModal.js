@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   question: Yup.string().required("Question is required"),
   answer: Yup.string().required("Answer is required"),
 });
 
-const AddQaModal = ({ setModalVisible, modalVisible }) => {
+const AddQaModal = ({ setModalVisible, modalVisible, addQuestion }) => {
+  const [qaIsAdded, setqaIsAdded] = useState(false);
   return (
     <Modal
       open={modalVisible}
@@ -36,7 +38,18 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
           initialValues={{ question: "", answer: "" }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            console.log(values);
+            try {
+              addQuestion(values);
+              setqaIsAdded(true);
+              setTimeout(() => {
+                setqaIsAdded(true);
+              }, 2000);
+              setTimeout(() => {
+                setModalVisible(false);
+              }, 3000);
+            } catch (error) {
+              console.log(error);
+            }
           }}
         >
           {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -109,6 +122,9 @@ const AddQaModal = ({ setModalVisible, modalVisible }) => {
                   </div>
                 </div>
               </div>
+              {qaIsAdded && (
+                <Alert severity="success">Successfully added</Alert>
+              )}
 
               <div className="text-center mb-0 mt-4">
                 <button
