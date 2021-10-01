@@ -112,7 +112,7 @@ const AllProducts = () => {
               <div
                 className=" h-52 w-48  m-auto "
                 onClick={() => {
-                  window.location = `/book/${book._id}`;
+                  window.location = `/book/${book.ISBN}`;
                 }}
               >
                 {book.bookImage && (
@@ -247,9 +247,7 @@ const AllProducts = () => {
                 ALL OFFERS
               </p>
             </div>
-            
-            
-            
+
             {options.map((offers, index) => {
               return (
                 <div>
@@ -305,8 +303,6 @@ const AllProducts = () => {
               );
             })}
           </div>
-       
-       
         </Hidden>
 
         <div className="mb-4 w-full h-max ">{displayBooks}</div>
