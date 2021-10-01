@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { Modal } from "react-responsive-modal";
 import { Image } from "cloudinary-react";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
-import DeleteForever from "@material-ui/icons/DeleteForever";
-import CancelIcon from "@material-ui/icons/Cancel";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Alert from "@material-ui/lab/Alert";
+import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import Icon from "@material-ui/core/Icon";
 
 const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
-  const history = useHistory();
   const [isEdit, setIsEdit] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const [confirmationModalOpen, setConfirmationModelOpen] = useState(false);
   const [triggerGetBookData, setTriggerGetBookData] = useState(false);
   const [bookData, setBookData] = useState({
@@ -101,10 +102,11 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
         config
       )
       .then((res) => {
-        alert(res.data?.desc);
-        setConfirmationModelOpen(false);
-        setModalVisible(false);
-        history.go(0);
+        setIsDeleted(true);
+        setTimeout(() => {
+          setConfirmationModelOpen(false);
+          setModalVisible(false);
+        }, [2000]);
       })
       .catch((err) => {
         alert(err?.response?.data?.desc);
@@ -521,44 +523,60 @@ const BookModal = ({ setModalVisible, modalVisible, bookID, ISBN }) => {
         center
         styles={{
           modal: {
-            borderRadius: "10px",
-            maxWidth: "35vw",
-            marginTop: "10vh",
-            height: "23vh",
+            border: "1px solid  gray",
+            borderRadius: "8px",
+            maxWidth: "500px",
+            width: "50%",
           },
         }}
+        focusTrapped={true}
       >
-        <div className="py-4 mx-8">
-          <div className="my-8 font-semibold">
-            Are you sure you want to permanently remove this item from system?
+        <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
+          <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
+            Delete Book
+          </h6>
+          <hr></hr>
+          <div className="text-center text-ferrariRed m-5 ">
+            <Icon>
+              <HighlightOffOutlinedIcon style={{ fontSize: 60 }} />
+            </Icon>
           </div>
-          <div className="flex justify-between">
-            <button
-              type="submit"
-              className="px-8 focus:outline-none bg-ferrariRed text-white font-semibold text-lg rounded py-2 "
-              style={{
-                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-              }}
-              onClick={deleteBookHandler}
-            >
-              <div className="flex">
-                <DeleteForever />
-                <div className="mx-2">CONFIRM</div>
-              </div>
-            </button>
-            <button
-              type="submit"
-              className="px-8 focus:outline-none bg-gray-400 text-white font-semibold text-lg rounded py-2 "
-              style={{
-                boxShadow: "0px 10px 15px rgba(3, 17, 86, 0.25)",
-              }}
-              onClick={() => setConfirmationModelOpen(false)}
-            >
-              <div className="flex">
-                <CancelIcon />
-                <div className="mx-2">CANCEL</div>
-              </div>
-            </button>
+
+          <h6 className="text-center text-lg">
+            Do you want to delete these data? This process cannot be undone.
+          </h6>
+          {isDeleted && (
+            <Alert severity="success">Item deleted successfully</Alert>
+          )}
+          <div className="text-center mt-8 grid grid-cols-2 gap-3">
+            <div className="text-right">
+              <Button
+                variant="contained"
+                style={{
+                  background: "#EA2300",
+                  color: "white",
+                  fontWeight: 700,
+                }}
+                startIcon={<DeleteIcon />}
+                onClick={deleteBookHandler}
+              >
+                Agree
+              </Button>
+            </div>
+            <div className="text-left">
+              <Button
+                autoFocus
+                variant="contained"
+                style={{
+                  fontWeight: 700,
+                }}
+                onClick={() => {
+                  setConfirmationModelOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>

@@ -91,7 +91,6 @@ const RegistrationForm = () => {
             }}
             validationSchema={validationSchema}
             onSubmit={async (values) => {
-              console.log(values);
               await axios
                 .post("http://localhost:6500/matrix/api/auth/customer", values)
                 .then((res) => {

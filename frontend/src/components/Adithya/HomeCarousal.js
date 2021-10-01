@@ -5,7 +5,6 @@ import axios from "axios";
 
 const HomeCarousal = () => {
   const [bookData, setBookData] = useState(null);
-  const newArrivals = [];
 
   useEffect(() => {
     const getAllBooks = async () => {
@@ -13,7 +12,6 @@ const HomeCarousal = () => {
         .get("http://localhost:6500/matrix/api/inventoryManager/get-books")
         .then((res) => {
           setBookData(res?.data?.allBooks);
-          // filterImages();
         })
         .catch((err) => {
           alert(err?.response?.data?.desc);
@@ -46,7 +44,7 @@ const HomeCarousal = () => {
                       cloudName="grid1234"
                       publicId={item.bookImage.imagePublicId}
                       onClick={() => {
-                        alert(item._id);
+                        window.location = `/book/${item.ISBN}`;
                       }}
                     />
                   </div>

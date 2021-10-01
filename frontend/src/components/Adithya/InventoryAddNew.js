@@ -119,9 +119,7 @@ const InventoryAddNew = () => {
           }}
           validationSchema={validationSchema}
           onSubmit={async (values, { resetForm }) => {
-            // values.encImg = file[0].getFileEncodeDataURL();
             setLoading(true);
-            console.log(values);
             const config = {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
