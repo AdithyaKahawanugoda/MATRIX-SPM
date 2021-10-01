@@ -113,7 +113,7 @@ const AllProducts = () => {
               <div
                 className=" h-52 w-48  m-auto "
                 onClick={() => {
-                  window.location = `/book/${book._id}`;
+                  window.location = `/book/${book.ISBN}`;
                 }}
               >
                 {book.bookImage && (
