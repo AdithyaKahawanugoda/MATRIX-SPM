@@ -58,7 +58,7 @@ exports.getNewsletters = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching Newsletters -" + err,
+      desc: "Error in fetching Newsletters -" + error,
     });
   }
 };
@@ -137,7 +137,7 @@ exports.deleteNewsletter = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      desc: "Error delete newsletter - " + err,
+      desc: "Error delete newsletter - " + error,
     });
   }
 };
@@ -151,7 +151,7 @@ exports.getProducts = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching Products -" + err,
+      desc: "Error in fetching Products -" + error,
     });
   }
 };
@@ -330,7 +330,7 @@ exports.getBulkOrders = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in getBulkOrders -" + err,
+      desc: "Error in getBulkOrders -" + error,
     });
   }
 };
@@ -343,7 +343,7 @@ exports.getRegularOrders = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching Orders -" + err,
+      desc: "Error in fetching Orders -" + error,
     });
   }
 };
@@ -356,7 +356,7 @@ exports.getNewUsers = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching customers -" + err,
+      desc: "Error in fetching customers -" + error,
     });
   }
 };
@@ -369,7 +369,7 @@ exports.getCustomerMessages = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      desc: "Error in fetching customers -" + err,
+      desc: "Error in fetching customers -" + error,
     });
   }
 };
