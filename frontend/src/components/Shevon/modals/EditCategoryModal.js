@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import Icon from "@material-ui/core/Icon";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   categoryName: Yup.string().required("CategoryName required"),
@@ -34,6 +35,7 @@ const EditFaqModal = ({
   const [QAID, setQAID] = useState();
   const [getq, setgetq] = useState();
   const [geta, setgeta] = useState();
+  const [isAdded, setIsAdded] = useState(false);
 
   const updateCategory = async (values) => {
     try {
@@ -50,6 +52,10 @@ const EditFaqModal = ({
             return { ...row, categoryName: values.categoryName };
           else return row;
         });
+      setTimeout(() => {
+        setIsAdded(false);
+      }, 3000);
+      setIsAdded(true);
       setFetchedRows(filterFunc);
       setSelectedRows(filterFunc);
     } catch (error) {
@@ -67,6 +73,7 @@ const EditFaqModal = ({
           answer: values.answer,
         }
       );
+
       setQuestions((questions) => [...questions, { ...values }]);
     } catch (error) {
       console.log(error);
@@ -193,6 +200,7 @@ const EditFaqModal = ({
               </form>
             )}
           </Formik>
+          {isAdded && <Alert severity="success">Successfully added</Alert>}
 
           <div className="  mt-4">
             <div

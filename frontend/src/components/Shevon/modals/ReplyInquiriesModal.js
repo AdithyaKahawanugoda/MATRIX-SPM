@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -17,6 +18,7 @@ const ReplyInquiriesModal = ({
   rowid,
   getemail,
 }) => {
+  const [isAdded, setIsAdded] = useState(false);
   const addreply = async (values) => {
     try {
       await axios.put(
@@ -27,6 +29,12 @@ const ReplyInquiriesModal = ({
           email: getemail,
         }
       );
+
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
     } catch (error) {
       console.log(error);
     }
@@ -133,7 +141,9 @@ const ReplyInquiriesModal = ({
                   </div>
                 </div>
               </div>
-
+              {isAdded && (
+                <Alert severity="success">Successfully Send Email</Alert>
+              )}
               <div className="text-center mb-0 mt-4">
                 <button
                   type="submit"

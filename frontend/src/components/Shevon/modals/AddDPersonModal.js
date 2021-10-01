@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   userName: Yup.string().trim().uppercase().required("User Name is required"),
@@ -29,27 +30,40 @@ const AddDPersonModal = ({
   modalVisible,
   setSelectedRows,
 }) => {
+  const [isAdded, setIsAdded] = useState(false);
+  const [failAdded, setfailAdded] = useState(false);
+
   const addDperson = async (values) => {
-    const response = await axios.post(
-      "http://localhost:6500/matrix/api/auth/deliveryperson",
-      {
-        username: values.userName,
-        email: values.email,
-        password: values.confirmpassword,
-        phone: values.mobileNum,
-      }
-    );
-    setSelectedRows((selectedRows) => [
-      ...selectedRows,
-      {
-        no: selectedRows.length + 1,
-        userId: response.data.deliveryPerson._id,
-        name: values.userName,
-        email: values.email,
-        mobile: values.mobileNum,
-      },
-    ]);
-    console.log(response);
+    try {
+      const response = await axios.post(
+        "http://localhost:6500/matrix/api/auth/deliveryperson",
+        {
+          username: values.userName,
+          email: values.email,
+          password: values.confirmpassword,
+          phone: values.mobileNum,
+        }
+      );
+      setSelectedRows((selectedRows) => [
+        ...selectedRows,
+        {
+          no: selectedRows.length + 1,
+          userId: response.data.deliveryPerson._id,
+          name: values.userName,
+          email: values.email,
+          mobile: values.mobileNum,
+        },
+      ]);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      console.log(response);
+      setIsAdded(true);
+    } catch (error) {
+      console.log(error);
+      setfailAdded(true);
+    }
   };
 
   return (
@@ -230,7 +244,12 @@ const AddDPersonModal = ({
                   </div>
                 </div>
               </div>
-
+              {isAdded && <Alert severity="success">Successfully added</Alert>}
+              {failAdded && (
+                <Alert severity="error">
+                  {values.destination} Delivery Person already exists
+                </Alert>
+              )}
               <div className="text-center mb-0 mt-6">
                 <button
                   type="submit"

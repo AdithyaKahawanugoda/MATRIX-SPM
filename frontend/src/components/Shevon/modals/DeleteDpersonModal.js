@@ -11,6 +11,7 @@ const DeleteDpersonModal = ({
   setModalVisible,
   modalVisible,
   DPID,
+  dpname,
   setFetchedRows,
   setSelectedRows,
 }) => {
@@ -55,7 +56,7 @@ const DeleteDpersonModal = ({
     >
       <div className="px-4 pt-6 pb-4 md:pb-7 md:px-8">
         <h6 className="ml-4 mt-0 mb-1 font-black text-2xl text-center">
-          Delete category
+          Delete {dpname} user
         </h6>
         <hr></hr>
         <div className="text-center text-ferrariRed m-5 ">
@@ -68,7 +69,7 @@ const DeleteDpersonModal = ({
           Do you want to delete these data? This process cannot be undone.
         </h6>
         {isAdded && (
-          <Alert severity="success">This is a success message!</Alert>
+          <Alert severity="success">Successfully deleted {dpname} user!</Alert>
         )}
         <div className="text-center mt-8 grid grid-cols-2 gap-3">
           <div className="text-right">

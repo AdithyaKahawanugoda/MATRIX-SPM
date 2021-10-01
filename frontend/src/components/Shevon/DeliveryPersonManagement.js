@@ -52,6 +52,7 @@ const DeliveryPersonManagement = () => {
   const [searchKey, setSearchKey] = useState("");
   const [fetchedRows, setFetchedRows] = useState([]);
   const [DPID, setDPID] = useState();
+  const [dpname, setdpname] = useState();
   const [getalldata, setgetalldata] = useState([]);
 
   useEffect(() => {
@@ -236,6 +237,7 @@ const DeliveryPersonManagement = () => {
                                       setEditDPersonOpen(false);
                                       setdeleteOpen(true);
                                       setDPID(row.userId);
+                                      setdpname(row.name);
                                     }}
                                   >
                                     <DeleteForeverIcon />
@@ -284,6 +286,7 @@ const DeliveryPersonManagement = () => {
           modalVisible={deleteOpen}
           setModalVisible={setdeleteOpen}
           DPID={DPID}
+          dpname={dpname}
           setSelectedRows={setSelectedRows}
           setFetchedRows={setFetchedRows}
         />

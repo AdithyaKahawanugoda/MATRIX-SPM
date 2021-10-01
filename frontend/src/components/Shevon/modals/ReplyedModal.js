@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import AddQaModal from "./AddQaModal";
 import EditQaModal from "./EditQaModal";
+import moment from "moment";
 
 const ReplyedModal = ({
   setModalVisible,
@@ -44,7 +45,7 @@ const ReplyedModal = ({
 
             <p className="ml-4 mt-4 text-left">{getinqiur.message}</p>
             <p className="ml-0  font-black text-xs text-right">
-              Created Date: {getinqiur.cDate}
+              Created Date: {moment(getinqiur.cDate).format("LLLL")}
             </p>
           </div>
 
@@ -69,7 +70,7 @@ const ReplyedModal = ({
                   <hr></hr>
 
                   <div className="text-right py-2 px-2 font-black text-xs">
-                    Replyed Date: {rep.replyedAt}
+                    Replyed Date: {moment(rep.replyedAt).format("LLLL")}
                   </div>
                 </div>
               ))}

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 
 const validationSchema = Yup.object({
   userName: Yup.string().trim().uppercase().required("User Name is required"),
@@ -31,6 +32,9 @@ const EditDPersonModal = ({
   setSelectedRows,
   getalldata,
 }) => {
+  const [isAdded, setIsAdded] = useState(false);
+  const [failAdded, setfailAdded] = useState(false);
+
   const updateDperson = async (values) => {
     try {
       await axios.put(
@@ -54,10 +58,16 @@ const EditDPersonModal = ({
             };
           else return row;
         });
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 3000);
+
+      setIsAdded(true);
       setFetchedRows(filterFunc);
       setSelectedRows(filterFunc);
     } catch (error) {
       console.log(error);
+      setfailAdded(true);
     }
   };
 
@@ -239,7 +249,16 @@ const EditDPersonModal = ({
                   </div>
                 </div>
               </div>
-
+              {isAdded && (
+                <Alert severity="success">
+                  Successfully {getalldata.name} Update
+                </Alert>
+              )}
+              {failAdded && (
+                <Alert severity="error">
+                  {values.destination} Delivery Person already exists
+                </Alert>
+              )}
               <div className="text-center mb-0 mt-6">
                 <button
                   type="submit"

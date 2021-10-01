@@ -2,12 +2,34 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-responsive-modal";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import axios from "axios";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 
 const validationSchema = Yup.object({
-  userName: Yup.string().trim().uppercase().required("User Name is required"),
+  dpID: Yup.string().trim().uppercase().required("delivery person is required"),
 });
 
 const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
+  const [setDp, setsetDp] = useState([]);
+  useEffect(() => {
+    const getAllDp = async () => {
+      await axios
+        .get("http://localhost:6500/matrix/api/deliveryManager/getalldp")
+        .then((res) => {
+          console.log(res.data.DeliveryPerson);
+          setsetDp(res.data.DeliveryPerson);
+        })
+        .catch((err) => {
+          alert(err?.response?.data?.desc);
+        });
+    };
+    getAllDp();
+  }, []);
+
   return (
     <Modal
       open={modalVisible}
@@ -33,7 +55,7 @@ const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
 
         <Formik
           initialValues={{
-            userName: "",
+            dpID: "",
           }}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
@@ -49,7 +71,7 @@ const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
             >
               <div className="grid grid-rows-7 gap-y-2 mt-2 justify-center ml-2">
                 <div className=" py-2 px-2 grid grid-cols-3 gap-x-2">
-                  <div className=" my-1">
+                  <div className=" my-2">
                     <label
                       className="block text-sm font-medium leading-149  md:text-lg"
                       htmlFor={"province"}
@@ -58,36 +80,29 @@ const EditDeliveryStatus = ({ setModalVisible, modalVisible }) => {
                     </label>
                   </div>
                   <div className=" col-span-2">
-                    <select
-                      className={`focus:outline-none w-60 h-8 pl-2 border-2 rounded-lg border-lightSilver focus:border-halloweenOrange  ${
-                        errors.province && touched.province
-                          ? "border-red-500"
-                          : "border-gray-600"
-                      } text-base`}
-                      id="province"
-                      type="text"
-                      placeholder="Railway station name"
-                      onChange={handleChange("province")}
-                      value={values.province}
-                    >
-                      <option value="" disabled selected>
-                        Select your option
-                      </option>
-                      <option value="wp">Western Province</option>
-                      <option value="CP">Central Province</option>
-                      <option value="EP">Eastern Province</option>
-                      <option value="NP">Northern Province</option>
-                      <option value="SP">Southern Province</option>
-                      <option value="NWP">North Western Province</option>
-                      <option value="NCP">North Central Province</option>
-                      <option value="UP">Uva Province</option>
-                      <option value="SP">Sabaragamuwa Province</option>
-                    </select>
-                    {errors.province && touched.province ? (
-                      <div className="text-red-500 text-xs mt-1 md:text-sm">
-                        {errors.province}
-                      </div>
-                    ) : null}
+                    <Box>
+                      <FormControl fullWidth size="small">
+                        <InputLabel id="DeliveryPersonID">
+                          DeliveryPersonID
+                        </InputLabel>
+                        {setDp.length > 0 && (
+                          <Select
+                            id="dpID"
+                            value={values.dpID}
+                            label="devlivery Person"
+                            onChange={handleChange("dpID")}
+                          >
+                            {setDp.map((item) => {
+                              return (
+                                <MenuItem key={item._id} value={item._id}>
+                                  {item.username}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        )}
+                      </FormControl>
+                    </Box>
                   </div>
                 </div>
               </div>
