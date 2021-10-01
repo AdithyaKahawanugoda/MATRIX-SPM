@@ -13,21 +13,15 @@ const ReplyFaqModal = ({ setModalVisible, modalVisible, messageID, email }) => {
       email: email,
     };
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      },
-    };
-
     try {
       await axios
         .put(
           "http://localhost:6500/matrix/api/admin/replyToCustomers",
-          dataObject,
-          config
+          dataObject
         )
 
         .then(() => {
+          
           window.location.reload(false);
         });
     } catch (err) {

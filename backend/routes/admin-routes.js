@@ -26,7 +26,7 @@ const {
 
 router.route("/createNewsletter").post(createNewsletter);
 router.route("/updateNewsletter").put(updateNewsletter);
-router.route("/getNewsletters").get(protectedAdmin, getNewsletters);
+router.route("/getNewsletters").get(getNewsletters);
 router.route("/deleteNewsletter/:id").delete(deleteNewsletter);
 router.route("/getProducts").get(getProducts);
 router.route("/updateDiscounts").put(updateDiscounts);
@@ -40,7 +40,7 @@ router.route("/getCustomerMessages").get(getCustomerMessages);
 router.route("/addToDos").put(protectedAdmin, addToDos);
 router.route("/removeToDos").put(protectedAdmin, removeToDos);
 router.route("/getAdmin").get(protectedAdmin, getAdmin);
-router.route("/replyToCustomers").put(protectedAdmin, replyToCustomers);
+router.route("/replyToCustomers").put(replyToCustomers);
 router.route("/updateAdmin").put(protectedAdmin, updateAdmin);
 
 module.exports = router;

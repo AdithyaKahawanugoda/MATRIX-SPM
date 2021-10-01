@@ -13,7 +13,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import ReplayIcon from "@material-ui/icons/Replay";
 
 import TextField from "@material-ui/core/TextField";
 import RevenueModal from "./RevenueModal";
@@ -158,7 +157,7 @@ const RegularOrders = ({ setModalVisible, modalVisible, cusID }) => {
   const [orderBy, setOrderBy] = React.useState("calories");
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
   const [searchDate, setsearchDate] = useState("");
   const [regularOrders, setregularOrders] = useState([]);
   const [currentOrder, setCurrentOrder] = useState("");
@@ -387,7 +386,7 @@ const RegularOrders = ({ setModalVisible, modalVisible, cusID }) => {
                                 }}
                                 onClick={() => {
                                   setRevenueModalOpen(true);
-                                  setCurrentOrder(row);
+                                  setCurrentOrder(row.orderData);
                                 }}
                               >
                                 View More

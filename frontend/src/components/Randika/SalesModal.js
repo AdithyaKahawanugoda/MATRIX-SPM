@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -24,16 +25,22 @@ const useStyles = makeStyles({
 const SalesModal = ({ setModalVisible, modalVisible, currentBook }) => {
   const classes = useStyles();
   const [regularOrders, setregularOrders] = useState([]);
+  const [bulkOrders, setBulkOrders] = useState([]);
   const getRegularOrders = async () => {
     try {
       await axios
         .get("http://localhost:6500/matrix/api/admin/getRegularOrders")
         .then((res) => {
           let temp = [];
-
           for (let i = 0; i < res.data.orders.length; i++) {
-            if (currentBook === res.data.orders[i].productID) {
-              temp.push(res.data.orders[i]);
+            for (let x = 0; x < res.data.orders[i].orderData.length; x++) {
+              if (res.data.orders[i].orderData[x].productID) {
+                if (
+                  currentBook === res.data.orders[i].orderData[x].productID._id
+                ) {
+                  temp.push(res.data.orders[i]);
+                }
+              }
             }
           }
           setregularOrders(temp);
@@ -46,8 +53,42 @@ const SalesModal = ({ setModalVisible, modalVisible, currentBook }) => {
     }
   };
 
+  const getBulkOrders = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    };
+    try {
+      await axios
+        .get("http://localhost:6500/matrix/api/admin/getBulkOrders", config)
+        .then((res) => {
+          let bulk = [];
+          for (let i = 0; i < res.data.bulkorders.length; i++) {
+            for (let j = 0; j < res.data.bulkorders[i].items.length; j++) {
+              if (res.data.bulkorders[i].items[j].productID) {
+                if (
+                  currentBook === res.data.bulkorders[i].items[j].productID._id
+                ) {
+                  bulk.push(res.data.bulkorders[i]);
+                }
+              }
+            }
+          }
+
+          setBulkOrders(bulk);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } catch (err) {
+      alert("error :" + err);
+    }
+  };
+
   useEffect(() => {
     getRegularOrders();
+    getBulkOrders();
   }, []);
 
   return (
@@ -69,49 +110,104 @@ const SalesModal = ({ setModalVisible, modalVisible, currentBook }) => {
       <div className="w-full pt-4 h-auto mb-5 bg-white shadow-2xl">
         <div className="w-full4/5 m-auto h-full  pt-3">
           <div className="w-full m-auto h-4/5 p-5">
-            <TableContainer component={Paper}>
-              <Table
-                className={classes.table}
-                size="small"
-                aria-label="a dense table"
-              >
-                <TableHead className="bg-prussianBlue font-white">
-                  <TableRow>
-                    <TableCell align="center" style={{ color: "white" }}>
-                      Index
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "white" }}>
-                    Order ID
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "white" }}>
-                      Buyer
-                    </TableCell>
-                    <TableCell align="center" style={{ color: "white" }}>
-                      Date
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {regularOrders.map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">
-                        <h1 className="font-bold text-md">{row._id}</h1>
-                      </TableCell>
-                      <TableCell align="center">
-                        {" "}
-                        <h1 className="font-bold text-md">{row.buyerID}</h1>
-                      </TableCell>
-                      <TableCell align="center">
-                        <h1 className="font-bold text-md">
-                          {moment(row.purchasedDate).format("MM-DD-YYYY")}
-                        </h1>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            {regularOrders.length > 0 && (
+              <div className="p-3 m-1 bg-gray-500">
+                <h1 className="font-bold text-lg text-white">Regular Orders</h1>
+                <TableContainer component={Paper}>
+                  <Table
+                    className={classes.table}
+                    size="small"
+                    aria-label="a dense table"
+                  >
+                    <TableHead className="bg-prussianBlue font-white">
+                      <TableRow>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Index
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Order ID
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Buyer
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Date
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {regularOrders.map((row, index) => (
+                        <TableRow key={index}>
+                          <TableCell align="center">{index + 1}</TableCell>
+                          <TableCell align="center">
+                            <h1 className="font-bold text-md">{row._id}</h1>
+                          </TableCell>
+                          <TableCell align="center">
+                            {" "}
+                            <h1 className="font-bold text-md">{row.buyerID}</h1>
+                          </TableCell>
+                          <TableCell align="center">
+                            <h1 className="font-bold text-md">
+                              {moment(row.purchasedDate).format("MM-DD-YYYY")}
+                            </h1>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+            )}
+            {bulkOrders.length > 0 && (
+              <div className="p-3 m-1 bg-gray-500">
+                <h1 className="font-bold text-lg text-white">Bulk Orders</h1>
+                <TableContainer component={Paper}>
+                  <Table
+                    className={classes.table}
+                    size="small"
+                    aria-label="a dense table"
+                  >
+                    <TableHead className="bg-prussianBlue font-white">
+                      <TableRow>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Index
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Order ID
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Buyer
+                        </TableCell>
+                        <TableCell align="center" style={{ color: "white" }}>
+                          Date
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {bulkOrders.map((row, index) => (
+                        <TableRow key={index}>
+                          <TableCell align="center">{index + 1}</TableCell>
+                          <TableCell align="center">
+                            <h1 className="font-bold text-md">{row._id}</h1>
+                          </TableCell>
+                          <TableCell align="center">
+                            {" "}
+                            <h1 className="font-bold text-md">
+                              {row.retailShop}
+                            </h1>
+                          </TableCell>
+                          <TableCell align="center">
+                            <h1 className="font-bold text-md">
+                              {moment(row.placedAt).format("MM-DD-YYYY")}
+                            </h1>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+            )}
           </div>
         </div>
       </div>

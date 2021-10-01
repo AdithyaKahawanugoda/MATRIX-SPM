@@ -86,9 +86,11 @@ const RevenueModal = ({ setModalVisible, modalVisible, currentOrder }) => {
                         )}
                       </TableCell>
                       <TableCell align="center">
-                        <h1 className="font-bold text-md">
-                          {row.productID.publishingTitle}
-                        </h1>
+                        {row.productID && (
+                          <h1 className="font-bold text-md">
+                            {row.productID.publishingTitle}
+                          </h1>
+                        )}
                       </TableCell>
                       <TableCell align="center">
                         <h1 className="font-bold text-md">{row.quantity}</h1>

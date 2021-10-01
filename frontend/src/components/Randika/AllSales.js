@@ -198,10 +198,13 @@ const AllSales = () => {
             let count = 0;
             for (let i = 0; i < res.data.orders.length; i++) {
               for (let x = 0; x < res.data.orders[i].orderData.length; x++) {
-                if (
-                  book[j].book === res.data.orders[i].orderData[x].productID._id
-                ) {
-                  count += res.data.orders[i].orderData[x].quantity;
+                if (res.data.orders[i].orderData[x].productID) {
+                  if (
+                    book[j].book ===
+                    res.data.orders[i].orderData[x].productID._id
+                  ) {
+                    count += res.data.orders[i].orderData[x].quantity;
+                  }
                 }
               }
             }
@@ -431,7 +434,7 @@ const AllSales = () => {
                                 }}
                                 onClick={() => {
                                   setSalesModalOpen(true);
-                                  setCurrentBook(row._id);
+                                  setCurrentBook(row.book);
                                 }}
                               >
                                 View Orders
@@ -460,7 +463,7 @@ const AllSales = () => {
           <SalesModal
             setModalVisible={setSalesModalOpen}
             modalVisible={salesModalOpen}
-            currentOrder={currentBook}
+            currentBook={currentBook}
           />
         )}
       </div>

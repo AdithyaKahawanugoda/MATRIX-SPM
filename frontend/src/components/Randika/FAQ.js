@@ -158,7 +158,7 @@ const FAQ = () => {
 
   const [messages, setMessages] = useState([]);
 
-  const getCustomers = async () => {
+  const getCustomersMessages = async () => {
     try {
       await axios
         .get("http://localhost:6500/matrix/api/admin/getCustomerMessages")
@@ -174,7 +174,7 @@ const FAQ = () => {
   };
 
   useEffect(() => {
-    getCustomers();
+    getCustomersMessages();
   }, []);
 
   const handleRequestSort = (event, property) => {
@@ -214,16 +214,6 @@ const FAQ = () => {
           </div>
 
           {searchTerm && (
-            // <div className="cursor-pointer w-max mt-1 h-9 bg-red rounded-3xl bg-black p-2 pl-4 pr-4 float-left ml-3 transform hover:scale-110 motion-reduce:transform-none">
-            //   <p
-            //     className=" text-white font-bold text-center text-sm"
-            //     onClick={() => {
-            //       setsearchTerm("");
-            //     }}
-            //   >
-            //     Clear
-            //   </p>
-            // </div>
             <ReplayIcon
               style={{ float: "left" }}
               className="m-3"
