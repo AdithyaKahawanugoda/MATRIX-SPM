@@ -11,13 +11,13 @@ IT19246024 - Warnakulasuriya D.A
 -------------------------------------
 
 -------------------------------------
-**Project Description-**
+Project Description-
 
 A web application, which can manage both customer side and the admin side in a book publishing and selling online platform.
 -------------------------------------
 
 -------------------------------------
-**Technologies-**
+Technologies-
 
 Mainly based on JavaScript **MERN** stack,
 along with **Cloudinary** and **SendGrid** services.
@@ -27,8 +27,8 @@ Frontend - ReactJS
 -------------------------------------
 
 -------------------------------------
-**How to get started-**
-  **Prerequisites**-
+How to get started-
+  Prerequisites-
     1. NodeJS installed working environment
     2. Project specific .env file
     3. Project specific admin user credentials
